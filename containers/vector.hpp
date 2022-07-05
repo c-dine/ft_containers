@@ -6,6 +6,7 @@
 # include "../utils/is_integral.hpp"
 # include <string>
 # include <iostream>
+# include <exception>
 
 namespace ft {
 
@@ -111,14 +112,6 @@ template < class T, class Alloc = std::allocator<T> >
 		
 		/** OPERATOR **/
 
-		reference operator[] (size_type n) {
-			return (*(_start + n));
-		}
-
-		const reference operator[] (size_type n) const {
-			return (*(_start + n));
-		}
-
 		vector& operator= (const vector& x) {
 			if (this != &x) {
 				if (_start)
@@ -147,6 +140,35 @@ template < class T, class Alloc = std::allocator<T> >
 			return (_alloc.max_size());
 		}
 
+	private:
+		void	reallocate(size_type n)
+		{
+			allocator_type	new_alloc;
+			size_type		coeff_alloc;
+			size_type		new_storage;
+			pointer			new_start;
+			pointer			new_finish;
+
+			coeff_alloc = 2;
+			while (n > coeff_alloc * capacity())
+				coeff_alloc++;
+			
+			new_start = new_alloc.allocate(coeff_alloc * capacity());
+			new_storage = coeff_alloc * capacity();
+			new_finish = new_start;
+			for (size_type i = 0; i < size(); i++){
+				new_alloc.construct(new_finish, _start[i]);
+				if (i < size() - 1)
+					new_finish++;
+			}
+			clear();
+			_alloc = new_alloc;
+			_start = new_start;
+			_finish = new_finish;
+			_end_of_storage = _finish + new_storage;
+		}
+
+	public:
 		void resize (size_type n, value_type val = value_type()) {
 			if (n < size())
 			{
@@ -159,31 +181,7 @@ template < class T, class Alloc = std::allocator<T> >
 				_finish = _start + n - 1;
 			}
 			if (n > capacity())
-			{
-				allocator_type	new_alloc;
-				size_type		coeff_alloc;
-				size_type		new_storage;
-				pointer			new_start;
-				pointer			new_finish;
-
-				coeff_alloc = 2;
-				while (n > coeff_alloc * capacity())
-					coeff_alloc++;
-				
-				new_start = new_alloc.allocate(coeff_alloc * capacity());
-				new_storage = coeff_alloc * capacity();
-				new_finish = new_start;
-				for (size_type i = 0; i < size(); i++){
-					new_alloc.construct(new_finish, _start[i]);
-					if (i < size() - 1)
-						new_finish++;
-				}
-				clear();
-				_alloc = new_alloc;
-				_start = new_start;
-				_finish = new_finish;
-				_end_of_storage = _finish + new_storage;
-			}
+				reallocate(n);
 			if (n > size())
 			{
 				for (size_type i = 0; i < n - size(); i++) {
@@ -202,7 +200,46 @@ template < class T, class Alloc = std::allocator<T> >
 		}
 
 		void reserve (size_type n) {
-			
+			if (n > max_size())
+				throw std::length_error;
+			if (n > capacity())
+				reallocate(n);
+		}
+
+	/** ELEMENT ACCESS **/
+
+		reference operator[] (size_type n) {
+			return (*(_start + n));
+		}
+
+		const_reference operator[] (size_type n) const {
+			return (*(_start + n));
+		}
+
+		reference at (size_type n) {
+			if (n < 0 || n >= size())
+				throw std::out_of_range;
+			return (*(_start + n));
+		}
+		const_reference at (size_type n) const {
+			if (n < 0 || n >= size())
+				throw std::out_of_range;
+			return (*(_start + n));
+		}
+
+    	reference front() {
+			return (*(_start));
+		}
+
+		const_reference front() const {
+			return (*(_start));
+		}
+
+    	reference back() {
+			return (*(_finish));
+		}
+		const_reference back() const {
+			return (*(_finish));
 		}
 };
 
