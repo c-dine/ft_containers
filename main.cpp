@@ -5,14 +5,15 @@
 #include <string>
 
 int	main() {
-	ft::vector<int>	tab(5,6);
+	ft::vector<int>	tab(2,6);
 	ft::vector<int>	tab2(tab);
 	ft::vector<int>	tab3;
 
-	std::cout << tab2.size() << " " << tab2[0] << std::endl;
-	tab2.resize(7, 3);
-	std::cout << tab2.size() << " " << tab2[6] << std::endl;
-	std::cout << tab3.max_size() << " " << tab3.empty() << std::endl;
+	// std::cout << tab.size() << " " << tab[0] << std::endl;
+	// std::cout << tab2.size() << " " << tab2[0] << std::endl;
+	tab2.resize(5, 3);
+	std::cout << tab2.size() << " " << tab2.capacity() << " " << tab2[4] << std::endl;
+	// std::cout << tab2.empty() << " " << tab3.empty() << std::endl;
 	return 0;
 }
 
