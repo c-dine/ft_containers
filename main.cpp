@@ -3,17 +3,30 @@
 #include "utils/enable_if.hpp"
 #include <iostream>
 #include <string>
+#include <vector>
+#include <iterator>
 
 int	main() {
-	ft::vector<int>	tab(2,6);
-	ft::vector<int>	tab2(tab);
-	ft::vector<int>	tab3;
+	{
+		// std::vector<int>		tab(1, 0);
 
-	// std::cout << tab.size() << " " << tab[0] << std::endl;
-	// std::cout << tab2.size() << " " << tab2[0] << std::endl;
-	tab2.resize(5, 3);
-	std::cout << tab2.size() << " " << tab2.capacity() << " " << tab2[4] << std::endl;
-	// std::cout << tab2.empty() << " " << tab3.empty() << std::endl;
+		// tab.push_back(1);
+		// tab.push_back(2);
+		// tab.push_back(3);
+		// tab.push_back(4);
+		// std::cout << "SIZE: " << tab.size() << " ; LAST ELEMENT: " << tab[3] << std::endl;
+		// tab.erase(tab.end() - 1);
+		// std::cout << "SIZE: " << tab.size() << " ; LAST ELEMENT: " << tab[2] << std::endl;
+	}
+	{
+		ft::vector<int>		tab;
+		
+		std::cout << tab.size() << std::endl;
+		tab.push_back(1);
+		tab.push_back(2);
+		std::cout << tab[0] << " " << tab[1] << std::endl;
+	}
+
 	return 0;
 }
 
