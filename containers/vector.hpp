@@ -196,7 +196,7 @@ template < class T, class Alloc = std::allocator<T> >
 			_alloc.deallocate(_start, capacity());
 			_alloc = new_alloc;
 			_start = new_start;
-			_end_of_storage = new_start + new_storage - 1;
+			_end_of_storage = _start + new_storage - 1;
 		}
 
 	public:
@@ -223,7 +223,7 @@ template < class T, class Alloc = std::allocator<T> >
 		}
 
 		size_type capacity() const {
-			if (!_finish)
+			if (!_start)
 				return (0);
 			return (_end_of_storage - _start + 1);
 		}
@@ -349,10 +349,12 @@ template < class T, class Alloc = std::allocator<T> >
 		}
 
 		void		insert (iterator position, size_type n, const value_type& val) {
-			size_type	position_iterator = static_cast<size_type>(position - begin());
-			if (size() + n >  capacity())
+			if (size() + n > capacity()) {
+				size_type	position_iterator = static_cast<size_type>(position - begin());
 				reallocate(size() + n);
-			position = begin() + position_iterator;
+				position = begin() + position_iterator;
+				std::cout << "SIZE: " << size() << " ; CAPACITY: " << capacity() << std::endl;
+			}
 			for (size_type i = 0; i < n; i++)
 				insert(position, val);
 		}
