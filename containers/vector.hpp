@@ -328,16 +328,17 @@ template < class T, class Alloc = std::allocator<T> >
 		}
 
 		iterator	insert (iterator position, const value_type& val) {
-			if (size() + 1 >  capacity())
+			if (size() + 1 >  capacity()) {
+				size_type	position_iterator = static_cast<size_type>(position - begin()); 
 				reallocate(size() + 1);
+				position = begin() + position_iterator;
+			}
 			if (size() == 0) {
 				_alloc.construct(_start, val);
 				_finish = _start;
 				return (position);
 			}
 			pointer	tmp = _finish + 1;
-			if (size() == 1 || size() == 2)
-				position = end();
 			for (iterator it = end(); it != position - 1; it--) {
 				_alloc.construct(tmp, *it);
 				tmp--;
@@ -347,9 +348,25 @@ template < class T, class Alloc = std::allocator<T> >
 			return (position);
 		}
 
-		// void		insert (iterator position, size_type n, const value_type& val);
-		// template <class InputIterator>
-    	// 	void	insert (iterator position, InputIterator first, InputIterator last);
+		void		insert (iterator position, size_type n, const value_type& val) {
+			size_type	position_iterator = static_cast<size_type>(position - begin());
+			if (size() + n >  capacity())
+				reallocate(size() + n);
+			position = begin() + position_iterator;
+			for (size_type i = 0; i < n; i++)
+				insert(position, val);
+		}
+
+		template <class InputIterator>
+    		void	insert (iterator position, InputIterator first, InputIterator last,
+						 typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
+				size_type	position_iterator = static_cast<size_type>(position - begin());
+				if (size() + (last - first + 1) >  capacity())
+					reallocate(size() + (last - first + 1));
+				position = begin() + position_iterator;
+				for (iterator it = last; it != first - 1; it--)
+					insert(position, *it);
+		}
 
 		iterator erase (iterator position) {
 			for (iterator it = position; it != end(); it++)

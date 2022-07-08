@@ -20,13 +20,18 @@ int	main() {
 	}
 	{
 		ft::vector<int>		tab;
+		ft::vector<int>		tab1(4, 9);
 		
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < 1; i++)
 			tab.push_back(i);
 		std::cout << "tab contains:";
-		for (unsigned i=0; i<tab.size(); ++i)
+		for (unsigned i=0; i< tab.size(); ++i)
 			std::cout << ' ' << tab[i];
-		tab.insert(tab.end(), 9);
+
+		// tab.insert(tab.begin(), 3);
+		tab.insert(tab.begin(), 4, 3);
+		// tab.insert(tab.begin(), tab1.begin(), tab1.end());
+
 		std::cout << "\ntab contains:";
 		for (unsigned i=0; i<tab.size(); ++i)
 			std::cout << ' ' << tab[i];
