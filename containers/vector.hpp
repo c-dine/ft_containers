@@ -133,12 +133,12 @@ template < class T, class Alloc = std::allocator<T> >
 		iterator end() {
 			if (size() == 0)
 				return (iterator(_start));
-			return (iterator(_finish));
+			return (iterator(_finish) + 1);
 		}
 		const_iterator end() const {
 			if (size() == 0)
 				return (const_iterator(_start));
-			return (const_iterator(_finish));
+			return (const_iterator(_finish) + 1);
 		}
 		reverse_iterator rbegin() {
 			return (reverse_iterator(end()));
@@ -339,7 +339,7 @@ template < class T, class Alloc = std::allocator<T> >
 				return (position);
 			}
 			pointer	tmp = _finish + 1;
-			for (iterator it = end(); it != position - 1; it--) {
+			for (iterator it = iterator(_finish); it != position - 1; it--) {
 				_alloc.construct(tmp, *it);
 				tmp--;
 			}
@@ -370,26 +370,26 @@ template < class T, class Alloc = std::allocator<T> >
 		}
 
 		iterator erase (iterator position) {
-			for (iterator it = position; it != end(); it++)
+			for (iterator it = position; it != iterator(_finish); it++)
 				*it = *(it + 1);
 			_alloc.destroy(_finish);
 			if (size() == 1)
 				_finish = 0;
 			else
 				_finish--;
-			if (position == end())
-				return (end());
+			if (position == iterator(_finish))
+				return (iterator(_finish));
 			return (position + 1);
 		}
 
 		iterator erase (iterator first, iterator last) {
 			iterator	tmp = first;
-			for (iterator it = last; it != end(); it++) {
+			for (iterator it = last; it != iterator(_finish); it++) {
 				tmp = it + 1;
 				tmp++;
 			}
 			size_type i = 0;
-			for (iterator it = tmp; it != end(); it++) {
+			for (iterator it = tmp; it != iterator(_finish); it++) {
 				_alloc.destroy(_finish - i);
 				i++;
 			}
@@ -397,8 +397,8 @@ template < class T, class Alloc = std::allocator<T> >
 				_finish = 0;
 			else
 				_finish -= (last - first + 1);
-			if (last == end())
-				return (end());
+			if (last == iterator(_finish))
+				return (iterator(_finish));
 			return (first);
 		}
 
