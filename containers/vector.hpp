@@ -336,6 +336,8 @@ template < class T, class Alloc = std::allocator<T> >
 				return (position);
 			}
 			pointer	tmp = _finish + 1;
+			if (size() == 1 || size() == 2)
+				position = end();
 			for (iterator it = end(); it != position - 1; it--) {
 				_alloc.construct(tmp, *it);
 				tmp--;

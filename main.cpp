@@ -21,12 +21,12 @@ int	main() {
 	{
 		ft::vector<int>		tab;
 		
-		for (int i = 0; i < 1; i++)
+		for (int i = 0; i < 2; i++)
 			tab.push_back(i);
 		std::cout << "tab contains:";
 		for (unsigned i=0; i<tab.size(); ++i)
 			std::cout << ' ' << tab[i];
-		tab.insert(tab.end(), 99);
+		tab.insert(tab.end(), 9);
 		std::cout << "\ntab contains:";
 		for (unsigned i=0; i<tab.size(); ++i)
 			std::cout << ' ' << tab[i];
