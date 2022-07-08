@@ -1,3 +1,2 @@
 - throw exception
-- quand tab vide, push back saute premier element
-	-> mauvaise size dans reallocate pour tableau vide quand push back
+- insert marche pas pour 1 element

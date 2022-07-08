@@ -21,10 +21,19 @@ int	main() {
 	{
 		ft::vector<int>		tab;
 		
-		std::cout << tab.size() << std::endl;
-		tab.push_back(1);
-		tab.push_back(2);
-		std::cout << tab[0] << " " << tab[1] << std::endl;
+		for (int i = 0; i < 1; i++)
+			tab.push_back(i);
+		std::cout << "tab contains:";
+		for (unsigned i=0; i<tab.size(); ++i)
+			std::cout << ' ' << tab[i];
+		tab.insert(tab.end(), 99);
+		std::cout << "\ntab contains:";
+		for (unsigned i=0; i<tab.size(); ++i)
+			std::cout << ' ' << tab[i];
+		std::cout << "\nSIZE: " << tab.size() << " ; CAPACITY: " << tab.capacity() << std::endl;
+	}
+	{
+
 	}
 
 	return 0;

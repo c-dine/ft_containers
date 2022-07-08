@@ -131,9 +131,13 @@ template < class T, class Alloc = std::allocator<T> >
 		}
 
 		iterator end() {
+			if (size() == 0)
+				return (iterator(_start));
 			return (iterator(_finish));
 		}
 		const_iterator end() const {
+			if (size() == 0)
+				return (const_iterator(_start));
 			return (const_iterator(_finish));
 		}
 		reverse_iterator rbegin() {
@@ -185,11 +189,13 @@ template < class T, class Alloc = std::allocator<T> >
 				if (i < size() - 1)
 					new_finish++;
 			}
+			if (size() == 0)
+				new_finish = 0;
 			clear();
+			_finish = new_finish;
 			_alloc.deallocate(_start, capacity());
 			_alloc = new_alloc;
 			_start = new_start;
-			_finish = new_finish;
 			_end_of_storage = new_start + new_storage - 1;
 		}
 
@@ -303,39 +309,78 @@ template < class T, class Alloc = std::allocator<T> >
 		void push_back (const value_type& val) {
 			if (size() + 1 > capacity())
 				reallocate(size() + 1);
-			_alloc.construct(_finish + 1, val);
-			_finish++;
+			if (_finish) {
+				_alloc.construct(_finish + 1, val);
+				_finish++;
+			}
+			else {
+				_alloc.construct(_start, val);
+				_finish = _start;
+			}
 		}
 
 		void pop_back() {
 			_alloc.destroy(_finish);
-			_finish--;
+			if (_finish)
+				_finish--;
+			if (size() == 1)
+				_finish = 0;
 		}
 
-		// iterator	insert (iterator position, const value_type& val) {
-		// 	if (size() + 1 >  capacity())
-		// 		reallocate(size() + 1);
-			
-		// }
+		iterator	insert (iterator position, const value_type& val) {
+			if (size() + 1 >  capacity())
+				reallocate(size() + 1);
+			if (size() == 0) {
+				_alloc.construct(_start, val);
+				_finish = _start;
+				return (position);
+			}
+			pointer	tmp = _finish + 1;
+			for (iterator it = end(); it != position - 1; it--) {
+				_alloc.construct(tmp, *it);
+				tmp--;
+			}
+			*position = val;
+			_finish++;
+			return (position);
+		}
+
 		// void		insert (iterator position, size_type n, const value_type& val);
 		// template <class InputIterator>
     	// 	void	insert (iterator position, InputIterator first, InputIterator last);
 
-		// iterator erase (iterator position) {
-		// 	size_type	i = 0;
-		// 	for (iterator it = begin(); it != position; it++)
-		// 		i++;
-		// 	for (iterator it = position; it != end(); it++) {
-		// 		at(i) = (*it + 1);
-		// 	}
-		// 	_alloc.destroy(_finish);
-		// 	_finish--;
-		// 	if (position == end())
-		// 		return (end());
-		// 	return (position + 1);
-		// }
+		iterator erase (iterator position) {
+			for (iterator it = position; it != end(); it++)
+				*it = (*it + 1);
+			_alloc.destroy(_finish);
+			if (size() == 1)
+				_finish = 0;
+			else
+				_finish--;
+			if (position == end())
+				return (end());
+			return (position + 1);
+		}
 
-		// iterator erase (iterator first, iterator last);
+		iterator erase (iterator first, iterator last) {
+			iterator	tmp = first;
+			for (iterator it = last; it != end(); it++) {
+				*tmp = *it + 1;
+				tmp++;
+			}
+			size_type i = 0;
+			for (iterator it = tmp; it != end(); it++) {
+				_alloc.destroy(_finish - i);
+				i++;
+			}
+			if (size() == static_cast<size_type>(last - first + 1))
+				_finish = 0;
+			else
+				_finish -= (last - first + 1);
+			if (last == end())
+				return (end());
+			return (first);
+		}
 
 		void swap (vector& x) {
 			pointer	tmp;
