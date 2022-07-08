@@ -353,7 +353,6 @@ template < class T, class Alloc = std::allocator<T> >
 				size_type	position_iterator = static_cast<size_type>(position - begin());
 				reallocate(size() + n);
 				position = begin() + position_iterator;
-				std::cout << "SIZE: " << size() << " ; CAPACITY: " << capacity() << std::endl;
 			}
 			for (size_type i = 0; i < n; i++)
 				insert(position, val);
@@ -372,7 +371,7 @@ template < class T, class Alloc = std::allocator<T> >
 
 		iterator erase (iterator position) {
 			for (iterator it = position; it != end(); it++)
-				*it = (*it + 1);
+				*it = *(it + 1);
 			_alloc.destroy(_finish);
 			if (size() == 1)
 				_finish = 0;
@@ -386,7 +385,7 @@ template < class T, class Alloc = std::allocator<T> >
 		iterator erase (iterator first, iterator last) {
 			iterator	tmp = first;
 			for (iterator it = last; it != end(); it++) {
-				*tmp = *it + 1;
+				tmp = it + 1;
 				tmp++;
 			}
 			size_type i = 0;

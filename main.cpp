@@ -8,39 +8,50 @@
 
 int	main() {
 	{
-		// std::vector<int>		tab(1, 0);
+		// ft::vector<int>		tab(1, 0);
 
-		// tab.push_back(1);
-		// tab.push_back(2);
-		// tab.push_back(3);
-		// tab.push_back(4);
-		// std::cout << "SIZE: " << tab.size() << " ; LAST ELEMENT: " << tab[3] << std::endl;
-		// tab.erase(tab.end() - 1);
-		// std::cout << "SIZE: " << tab.size() << " ; LAST ELEMENT: " << tab[2] << std::endl;
-	}
-	{
-		ft::vector<int>		tab;
-		ft::vector<int>		tab1(10, 9);
+		// for (int i = 0; i < 5; i++)
+		// 	tab.push_back(i);
+		// std::cout << "\ntab contains:";
+		// for (unsigned i=0; i<tab.size(); ++i)
+		// 	std::cout << ' ' << tab[i];
+
+		// tab.erase(tab.begin());
 		
-		for (int i = 0; i < 0; i++)
-			tab.push_back(i);
-		std::cout << "tab contains:";
-		for (unsigned i=0; i< tab.size(); ++i)
-			std::cout << ' ' << tab[i];
-
-		// tab.insert(tab.begin(), 3);
-		// tab.insert(tab.begin(), 4, 3);
-		tab.insert(tab.begin(), tab1.begin(), tab1.end());
-
-		std::cout << "\ntab contains:";
-		for (unsigned i=0; i<tab.size(); ++i)
-			std::cout << ' ' << tab[i];
-		std::cout << "\nSIZE: " << tab.size() << " ; CAPACITY: " << tab.capacity() << std::endl;
+		// std::cout << "\ntab contains:";
+		// for (unsigned i=0; i<tab.size(); ++i)
+		// 	std::cout << ' ' << tab[i];
 	}
 	{
+		// ft::vector<int>		tab;
+		// ft::vector<int>		tab1(10, 9);
+		
+		// for (int i = 0; i < 0; i++)
+		// 	tab.push_back(i);
+		// std::cout << "tab contains:";
+		// for (unsigned i=0; i< tab.size(); ++i)
+		// 	std::cout << ' ' << tab[i];
 
+		// // tab.insert(tab.begin(), 3);
+		// // tab.insert(tab.begin(), 4, 3);
+		// tab.insert(tab.begin(), tab1.begin(), tab1.end());
+
+		// std::cout << "\ntab contains:";
+		// for (unsigned i=0; i<tab.size(); ++i)
+		// 	std::cout << ' ' << tab[i];
+		// std::cout << "\nSIZE: " << tab.size() << " ; CAPACITY: " << tab.capacity() << std::endl;
 	}
+	{
+		ft::vector<int> foo(3, 15);
+		ft::vector<int> bar(5, 42);
+		
+		// ft::vector<int>::const_iterator it_foo = foo.begin();
+		// ft::vector<int>::const_iterator it_bar = bar.begin();
 
+		std::cout << "foo: " << foo.size() << "\tbar: " << bar.size() << "\n";
+		foo.swap(bar);
+		std::cout << "foo: " << foo.size() << "\tbar: " << bar.size() << "\n";
+	}
 	return 0;
 }
 
