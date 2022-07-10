@@ -37,7 +37,6 @@ template < class T, class Alloc = std::allocator<T> >
 		pointer 		_finish;
 		pointer 		_end_of_storage;
 
-
 	public:
 
 	/** CONSTRUCTOR**/
@@ -75,12 +74,12 @@ template < class T, class Alloc = std::allocator<T> >
 			_finish(0),
 			_end_of_storage(0)
 		{
-			_start = _alloc.allocate(last - first);
+			_start = _alloc.allocate(distance_it(first, last));
 			_finish = _start;
 			for (InputIterator it = first; it != last; it++)
 			{
 				_alloc.construct(_finish, *it);
-				if (it < last - 1)
+				if (1 < distance_it(it, last))
 					_finish++;
 			}
 			_end_of_storage = _finish;
@@ -166,6 +165,15 @@ template < class T, class Alloc = std::allocator<T> >
 		}
 
 	private:
+		template <class InputIterator>
+			size_type	distance_it(InputIterator first, InputIterator last)
+			{
+				size_type	distance = 0;
+
+				for (InputIterator it = first; it != last; it++)
+					distance++;
+				return (distance);
+			}
 		void	reallocate(size_type n)
 		{
 			allocator_type	new_alloc;
@@ -280,8 +288,8 @@ template < class T, class Alloc = std::allocator<T> >
 		template <class InputIterator>
 			void assign (InputIterator first, InputIterator last,
 						 typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
-				if (static_cast<size_type>(last - first) > capacity())
-					reallocate(last - first);
+				if (distance_it(first, last) > capacity())
+					reallocate(distance_it(first, last));
 				pointer	tmp = _start;
 				for (InputIterator it = first; it != last; it++)
 				{
@@ -362,11 +370,15 @@ template < class T, class Alloc = std::allocator<T> >
     		void	insert (iterator position, InputIterator first, InputIterator last,
 						 typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
 				size_type	position_iterator = static_cast<size_type>(position - begin());
-				if (size() + (last - first) > capacity())
-					reallocate(size() + (last - first));
+				if (size() + distance_it(first, last) > capacity())
+					reallocate(size() + distance_it(first, last));
 				position = begin() + position_iterator;
-				for (iterator it = last - 1; it != first - 1; it--)
-					insert(position, *it);
+				InputIterator	tmp = last;
+				tmp--;
+				for (size_type i = 0; i < distance_it(first, last); i++) {
+					insert(position, *tmp);
+					tmp--;
+				}
 		}
 
 		iterator erase (iterator position) {
