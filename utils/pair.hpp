@@ -1,6 +1,8 @@
 #ifndef PAIR_HPP
 # define PAIR_HPP
 
+namespace ft {
+
 template<class T1, class T2>
 struct pair
 {
@@ -12,6 +14,6 @@ struct pair
 	pair( const pair& p ) = default;
 		
 };
-
+}
 
 #endif
