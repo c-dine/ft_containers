@@ -6,6 +6,7 @@
 # include "../utils/lexicographical_compare.hpp"
 # include "../utils/enable_if.hpp"
 # include "../utils/is_integral.hpp"
+# include "../iterator/vector_iterator.hpp"
 # include <string>
 # include <iostream>
 # include <exception>
@@ -23,8 +24,10 @@ template < class T, class Alloc = std::allocator<T> >
 		typedef typename allocator_type::pointer					pointer;
 		typedef typename allocator_type::const_pointer				const_pointer;
 
-		typedef __gnu_cxx::__normal_iterator<pointer, vector>		iterator;
-		typedef __gnu_cxx::__normal_iterator<const_pointer, vector>	const_iterator;
+		// typedef __gnu_cxx::__normal_iterator<pointer, vector>		iterator;
+		// typedef __gnu_cxx::__normal_iterator<const_pointer, vector>	const_iterator;
+		typedef ft::normal_iterator<T>				iterator;
+		typedef ft::normal_iterator<const T>			const_iterator;
 		typedef std::reverse_iterator<iterator>						reverse_iterator;
 		typedef std::reverse_iterator<const_iterator>				const_reverse_iterator;
 		typedef std::ptrdiff_t										difference_type;
@@ -403,10 +406,10 @@ template < class T, class Alloc = std::allocator<T> >
 			for (iterator it = tmp; it != iterator(_finish); it++) {
 				_alloc.destroy(it.base());
 			}
-			if (size() == static_cast<size_type>(last - first))
+			if (size() == distance_it(first, last))
 				_finish = 0;
 			else
-				_finish -= (last - first);
+				_finish -= distance_it(first, last);
 			return (first);
 		}
 

@@ -6,77 +6,59 @@
 #include <vector>
 #include <iterator>
 
+int	main() {
+	{
+		// ft::vector<int>		tab(1, 0);
 
-#include <list>
+		// for (int i = 0; i < 5; i++)
+		// 	tab.push_back(i);
+		// std::cout << "\ntab contains:";
+		// for (unsigned i=0; i<tab.size(); ++i)
+		// 	std::cout << ' ' << tab[i];
 
-#define TESTED_TYPE int
+		// tab.erase(tab.begin());
+		
+		// std::cout << "\ntab contains:";
+		// for (unsigned i=0; i<tab.size(); ++i)
+		// 	std::cout << ' ' << tab[i];
+	}
+	{
+		// ft::vector<int>		tab;
+		// ft::vector<int>		tab1(10, 9);
+		
+		// for (int i = 0; i < 0; i++)
+		// 	tab.push_back(i);
+		// std::cout << "tab contains:";
+		// for (unsigned i=0; i< tab.size(); ++i)
+		// 	std::cout << ' ' << tab[i];
 
-int             main(void)
-{
-        std::list<TESTED_TYPE> lst;
-        std::list<TESTED_TYPE>::iterator lst_it;
-        for (int i = 1; i < 5; ++i)
-                lst.push_back(i * 3);
+		// // tab.insert(tab.begin(), 3);
+		// // tab.insert(tab.begin(), 4, 3);
+		// tab.insert(tab.begin(), tab1.begin(), tab1.end());
 
-        ft::vector<TESTED_TYPE> vct(lst.begin(), lst.end());
+		// std::cout << "\ntab contains:";
+		// for (unsigned i=0; i<tab.size(); ++i)
+		// 	std::cout << ' ' << tab[i];
+		// std::cout << "\nSIZE: " << tab.size() << " ; CAPACITY: " << tab.capacity() << std::endl;
+	}
+	{
+		// ft::vector<int> foo(3, 15);
+		// ft::vector<int> bar(5, 42);
+		
+		// // ft::vector<int>::const_iterator it_foo = foo.begin();
+		// // ft::vector<int>::const_iterator it_bar = bar.begin();
 
-        lst_it = lst.begin();
-        for (int i = 1; lst_it != lst.end(); ++i)
-                *lst_it++ = i * 5;
-        vct.assign(lst.begin(), lst.end());
+		// std::cout << "foo: " << foo.size() << "\tbar: " << bar.size() << "\n";
+		// foo.swap(bar);
+		// std::cout << "foo: " << foo.size() << "\tbar: " << bar.size() << "\n";
+	}
+	{
+		ft::vector<int> tab(3,5);
 
-        vct.insert(vct.end(), lst.rbegin(), lst.rend());
-        return (0);
+		std::cout << *(tab.begin()) << std::endl;
+	}
+	return 0;
 }
-
-// int	main() {
-// 	{
-// 		// ft::vector<int>		tab(1, 0);
-
-// 		// for (int i = 0; i < 5; i++)
-// 		// 	tab.push_back(i);
-// 		// std::cout << "\ntab contains:";
-// 		// for (unsigned i=0; i<tab.size(); ++i)
-// 		// 	std::cout << ' ' << tab[i];
-
-// 		// tab.erase(tab.begin());
-		
-// 		// std::cout << "\ntab contains:";
-// 		// for (unsigned i=0; i<tab.size(); ++i)
-// 		// 	std::cout << ' ' << tab[i];
-// 	}
-// 	{
-// 		// ft::vector<int>		tab;
-// 		// ft::vector<int>		tab1(10, 9);
-		
-// 		// for (int i = 0; i < 0; i++)
-// 		// 	tab.push_back(i);
-// 		// std::cout << "tab contains:";
-// 		// for (unsigned i=0; i< tab.size(); ++i)
-// 		// 	std::cout << ' ' << tab[i];
-
-// 		// // tab.insert(tab.begin(), 3);
-// 		// // tab.insert(tab.begin(), 4, 3);
-// 		// tab.insert(tab.begin(), tab1.begin(), tab1.end());
-
-// 		// std::cout << "\ntab contains:";
-// 		// for (unsigned i=0; i<tab.size(); ++i)
-// 		// 	std::cout << ' ' << tab[i];
-// 		// std::cout << "\nSIZE: " << tab.size() << " ; CAPACITY: " << tab.capacity() << std::endl;
-// 	}
-// 	{
-// 		ft::vector<int> foo(3, 15);
-// 		ft::vector<int> bar(5, 42);
-		
-// 		// ft::vector<int>::const_iterator it_foo = foo.begin();
-// 		// ft::vector<int>::const_iterator it_bar = bar.begin();
-
-// 		std::cout << "foo: " << foo.size() << "\tbar: " << bar.size() << "\n";
-// 		foo.swap(bar);
-// 		std::cout << "foo: " << foo.size() << "\tbar: " << bar.size() << "\n";
-// 	}
-// 	return 0;
-// }
 
 
 
