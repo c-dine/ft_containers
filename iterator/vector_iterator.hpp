@@ -28,7 +28,9 @@ template<typename T>
 			normal_iterator( void ) : _current(0) {}
 			normal_iterator(pointer	p) : _current(p) {}
 			normal_iterator(const normal_iterator &copy) : _current(copy._current) {}
-			~normal_iterator( void ) {}
+			template<typename _Iter>
+				normal_iterator(const normal_iterator<_Iter> &copy) : _current(copy.base()) {}
+			// ~normal_iterator( void ) {}
 		
 		/** OPERATORS **/
 			reference	operator*() const {
