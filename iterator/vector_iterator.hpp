@@ -7,10 +7,10 @@
 namespace ft {
 
 template<typename T>
-	class normal_iterator: protected ft::iterator<std::random_access_iterator_tag, T> {
+	class normal_iterator {
 		
 		protected:
-			typedef ft::iterator<std::random_access_iterator_tag, T>	traits_type;
+			typedef	ft::iterator_traits<T*>	traits_type;
 
 		public:
 			typedef T											iterator_type;
@@ -27,9 +27,8 @@ template<typename T>
 		/** CONSTRUTORS **/
 			normal_iterator( void ) : _current(0) {}
 			normal_iterator(pointer	p) : _current(p) {}
-			normal_iterator(const normal_iterator &copy)
-			: _current(copy._current)
-			{ }
+			normal_iterator(const normal_iterator &copy) : _current(copy._current) {}
+			~normal_iterator( void ) {}
 		
 		/** OPERATORS **/
 			reference	operator*() const {
