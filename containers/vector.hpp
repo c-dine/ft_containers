@@ -27,8 +27,6 @@ template < class T, class Alloc = std::allocator<T> >
 
 		typedef ft::normal_iterator<T>								iterator;
 		typedef ft::normal_iterator<const T>						const_iterator;
-		// typedef std::reverse_iterator<iterator>						reverse_iterator;
-		// typedef std::reverse_iterator<const_iterator>				const_reverse_iterator;
 		typedef ft::reverse_iterator<iterator>						reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>				const_reverse_iterator;
 		typedef std::ptrdiff_t										difference_type;
@@ -89,8 +87,12 @@ template < class T, class Alloc = std::allocator<T> >
 			_end_of_storage = _finish;
 		}
 
-		vector (const vector& x) {
-			if (this != &x)
+		vector (const vector& x)  :
+			_start(0),
+			_finish(0),
+			_end_of_storage(0)
+		{
+			if (this != &x && x.size())
 			{
 				_start = 0;
 				*this = x;
@@ -335,7 +337,7 @@ template < class T, class Alloc = std::allocator<T> >
 			_alloc.destroy(_finish);
 			if (_finish)
 				_finish--;
-			if (size() == 1)
+			else if (size() == 1)
 				_finish = 0;
 		}
 

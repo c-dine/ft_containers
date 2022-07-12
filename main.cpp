@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 #include <iterator>
+#include <containers/stack.hpp>
+
 
 int	main() {
 	{
@@ -53,9 +55,23 @@ int	main() {
 		// std::cout << "foo: " << foo.size() << "\tbar: " << bar.size() << "\n";
 	}
 	{
-		ft::vector<int> tab(3,5);
+		ft::vector<int>	tab;
+		ft::vector<int>	tab2(tab);
+		// ft::stack<int>	tab;
 
-		std::cout << *(tab.begin()) << std::endl;
+		std::cout << "END SIZE: " << tab2.size() << std::endl;
+
+		// for (size_t i = 0; i < 4; i++)
+		// 	tab2.push_back(i);
+		// std::cout << "SIZE: " << tab2.size() << " " << tab2.empty() << std::endl;
+		// for (size_t i = 0; i < tab2.size(); i++)
+		// 	std::cout << tab2[i] << " ";
+		// std::cout << "\n";
+		// for (size_t i = 0; i < 3; i++)
+		// 	tab2.pop_back();
+		// for (size_t i = 0; i < tab2.size(); i++)
+		// 	std::cout << tab2[i] << " ";
+		// std::cout << "\n";
 	}
 	return 0;
 }
