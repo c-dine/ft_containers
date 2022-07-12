@@ -122,6 +122,8 @@ template < class T, class Alloc = std::allocator<T> >
 					if (i < x.size() - 1)
 						_finish++;
 				}
+				if (!x.size())
+					_finish = 0;
 				_end_of_storage = _finish;
 			}
 			return (*this);
@@ -248,7 +250,7 @@ template < class T, class Alloc = std::allocator<T> >
 
 		void reserve (size_type n) {
 			if (n > max_size())
-				throw std::length_error("Length error.");
+				throw std::length_error("vector::reserve");
 			if (n > capacity())
 				reallocate(n);
 		}
@@ -265,13 +267,13 @@ template < class T, class Alloc = std::allocator<T> >
 
 		reference at (size_type n) {
 			if (n < 0 || n >= size())
-				throw std::out_of_range("Out of range");
+				throw std::out_of_range("vector::at");
 			return (*(_start + n));
 		}
 
 		const_reference at (size_type n) const {
 			if (n < 0 || n >= size())
-				throw std::out_of_range("Out of range");
+				throw std::out_of_range("vector::at");
 			return (*(_start + n));
 		}
 
@@ -294,30 +296,30 @@ template < class T, class Alloc = std::allocator<T> >
 		template <class InputIterator>
 			void assign (InputIterator first, InputIterator last,
 						 typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
-				if (distance_it(first, last) > capacity())
-					reallocate(distance_it(first, last));
+				size_type	distance_it_ = distance_it(first, last);
+				size_type	tmp_size = size();
+
+				if (distance_it_ > capacity())
+					reallocate(distance_it_);
+				
 				pointer	tmp = _start;
-				for (InputIterator it = first; it != last; it++)
-				{
-					if (tmp)
-						_alloc.destroy(tmp);
-					_alloc.construct(tmp, *it);
-					tmp++;
-				}
-				_finish = tmp - 1;
+				for (size_type i = 0; i < distance_it_; i++)
+					_alloc.construct(tmp++, *(first++));
+				for (size_type i = distance_it_; i < tmp_size; i++)
+					_alloc.destroy(tmp++);
+				_finish = _start + distance_it_ - 1;
 			}
+
 		void assign (size_type n, const value_type& val) {
+			size_type	tmp_size = size();
 			if (n > capacity())
 				reallocate(n);
 			pointer	tmp = _start;
 			for (size_type i = 0; i < n; i++)
-			{
-				if (tmp)
-					_alloc.destroy(tmp);
-				_alloc.construct(tmp, val);
-				tmp++;
-			}
-			_finish = tmp - 1;
+				_alloc.construct(tmp++, val);
+			for (size_type i = n; i < tmp_size; i++) 
+				_alloc.destroy(tmp++);
+			_finish = _start + n - 1;
 		}
 
 		void push_back (const value_type& val) {
