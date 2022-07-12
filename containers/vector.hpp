@@ -7,6 +7,7 @@
 # include "../utils/enable_if.hpp"
 # include "../utils/is_integral.hpp"
 # include "../iterator/vector_iterator.hpp"
+# include "../iterator/reverse_iterator.hpp"
 # include <string>
 # include <iostream>
 # include <exception>
@@ -26,8 +27,10 @@ template < class T, class Alloc = std::allocator<T> >
 
 		typedef ft::normal_iterator<T>								iterator;
 		typedef ft::normal_iterator<const T>						const_iterator;
-		typedef std::reverse_iterator<iterator>						reverse_iterator;
-		typedef std::reverse_iterator<const_iterator>				const_reverse_iterator;
+		// typedef std::reverse_iterator<iterator>						reverse_iterator;
+		// typedef std::reverse_iterator<const_iterator>				const_reverse_iterator;
+		typedef ft::reverse_iterator<iterator>						reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>				const_reverse_iterator;
 		typedef std::ptrdiff_t										difference_type;
 		typedef std::size_t											size_type;
 

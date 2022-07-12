@@ -3,6 +3,8 @@
 
 # include "iterator_traits.hpp"
 # include "iterator_base.hpp"
+# include "reverse_iterator.hpp"
+
 
 namespace ft {
 
