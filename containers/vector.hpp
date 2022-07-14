@@ -405,10 +405,9 @@ template < class T, class Alloc = std::allocator<T> >
 			iterator	tmp = first;
 			for (iterator it = last; it != iterator(_finish + 1); it++) {
 				*tmp = *it;
-				// _alloc.construct(tmp.base(), *it);
 				tmp++;
 			}
-			for (iterator it = tmp; it != iterator(_finish); it++) {
+			for (iterator it = tmp; it != iterator(_finish + 1); it++) {
 				_alloc.destroy(it.base());
 			}
 			if (size() == distance_it(first, last))
