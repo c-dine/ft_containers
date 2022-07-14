@@ -297,28 +297,24 @@ template < class T, class Alloc = std::allocator<T> >
 			void assign (InputIterator first, InputIterator last,
 						 typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
 				size_type	distance_it_ = distance_it(first, last);
-				size_type	tmp_size = size();
 
 				if (distance_it_ > capacity())
 					reallocate(distance_it_);
 				
+				clear();
 				pointer	tmp = _start;
 				for (size_type i = 0; i < distance_it_; i++)
 					_alloc.construct(tmp++, *(first++));
-				for (size_type i = distance_it_; i < tmp_size; i++)
-					_alloc.destroy(tmp++);
 				_finish = _start + distance_it_ - 1;
 			}
 
 		void assign (size_type n, const value_type& val) {
-			size_type	tmp_size = size();
 			if (n > capacity())
 				reallocate(n);
+			clear();
 			pointer	tmp = _start;
 			for (size_type i = 0; i < n; i++)
 				_alloc.construct(tmp++, val);
-			for (size_type i = n; i < tmp_size; i++) 
-				_alloc.destroy(tmp++);
 			_finish = _start + n - 1;
 		}
 
@@ -356,7 +352,10 @@ template < class T, class Alloc = std::allocator<T> >
 			}
 			pointer	tmp = _finish + 1;
 			for (iterator it = iterator(_finish); it != position - 1; it--) {
-				_alloc.construct(tmp, *it);
+				if (tmp == _finish + 1)
+					_alloc.construct(tmp, *it);
+				else
+					*tmp = *it;
 				tmp--;
 			}
 			*position = val;
@@ -405,7 +404,8 @@ template < class T, class Alloc = std::allocator<T> >
 		iterator erase (iterator first, iterator last) {
 			iterator	tmp = first;
 			for (iterator it = last; it != iterator(_finish + 1); it++) {
-				_alloc.construct(tmp.base(), *it);
+				*tmp = *it;
+				// _alloc.construct(tmp.base(), *it);
 				tmp++;
 			}
 			for (iterator it = tmp; it != iterator(_finish); it++) {
