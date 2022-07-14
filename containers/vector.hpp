@@ -358,6 +358,8 @@ template < class T, class Alloc = std::allocator<T> >
 					*tmp = *it;
 				tmp--;
 			}
+			if (position == end())
+				_alloc.construct(tmp, *_finish);
 			*position = val;
 			_finish++;
 			return (position);
