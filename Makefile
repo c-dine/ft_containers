@@ -1,6 +1,5 @@
 CC = c++
-FLAGS = -g
-#-Wall -Wextra -Werror -std=c++98 -g
+FLAGS = -g -Wall -Wextra -Werror -std=c++98
 SRC = main.cpp
 OBJ = ${SRC:.cpp=.o}
 NAME = ft_containers

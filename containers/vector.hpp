@@ -182,7 +182,7 @@ template < class T, class Alloc = std::allocator<T> >
 					distance++;
 				return (distance);
 			}
-		void	reallocate(size_type n)
+		void	reallocate(size_type n, bool exact_size)
 		{
 			allocator_type	new_alloc;
 			size_type		coeff_alloc;
@@ -198,6 +198,8 @@ template < class T, class Alloc = std::allocator<T> >
 					coeff_alloc++;
 				new_storage = coeff_alloc * capacity();
 			}
+			if (exact_size)
+				new_storage = n;
 			new_start = new_alloc.allocate(new_storage);
 			new_finish = new_start;
 			for (size_type i = 0; i < size(); i++){
@@ -213,6 +215,36 @@ template < class T, class Alloc = std::allocator<T> >
 			_alloc = new_alloc;
 			_start = new_start;
 			_end_of_storage = _start + new_storage - 1;
+
+			// allocator_type	new_alloc;
+			// size_type		coeff_alloc;
+			// size_type		new_storage;
+			// pointer			new_start;
+			// pointer			new_finish;
+
+			// if (capacity() == 0)
+			// 	new_storage = n;
+			// else {
+			// 	coeff_alloc = 2;
+			// 	while (n > coeff_alloc * capacity()) 
+			// 		coeff_alloc++;
+			// 	new_storage = coeff_alloc * capacity();
+			// }
+			// new_start = new_alloc.allocate(new_storage);
+			// new_finish = new_start;
+			// for (size_type i = 0; i < size(); i++){
+			// 	new_alloc.construct(new_finish, _start[i]);
+			// 	if (i < size() - 1)
+			// 		new_finish++;
+			// }
+			// if (size() == 0)
+			// 	new_finish = 0;
+			// clear();
+			// _finish = new_finish;
+			// _alloc.deallocate(_start, capacity());
+			// _alloc = new_alloc;
+			// _start = new_start;
+			// _end_of_storage = _start + new_storage - 1;
 		}
 
 	public:
@@ -228,7 +260,7 @@ template < class T, class Alloc = std::allocator<T> >
 				_finish = _start + n - 1;
 			}
 			if (n > capacity())
-				reallocate(n);
+				reallocate(n, 1);
 			if (n > size())
 			{
 				for (size_type i = 0; i < n - size(); i++) {
@@ -252,7 +284,7 @@ template < class T, class Alloc = std::allocator<T> >
 			if (n > max_size())
 				throw std::length_error("vector::reserve");
 			if (n > capacity())
-				reallocate(n);
+				reallocate(n, 1);
 		}
 
 	/** ELEMENT ACCESS **/
@@ -299,7 +331,7 @@ template < class T, class Alloc = std::allocator<T> >
 				size_type	distance_it_ = distance_it(first, last);
 
 				if (distance_it_ > capacity())
-					reallocate(distance_it_);
+					reallocate(distance_it_, 1);
 				
 				clear();
 				pointer	tmp = _start;
@@ -310,7 +342,7 @@ template < class T, class Alloc = std::allocator<T> >
 
 		void assign (size_type n, const value_type& val) {
 			if (n > capacity())
-				reallocate(n);
+				reallocate(n, 1);
 			clear();
 			pointer	tmp = _start;
 			for (size_type i = 0; i < n; i++)
@@ -320,7 +352,7 @@ template < class T, class Alloc = std::allocator<T> >
 
 		void push_back (const value_type& val) {
 			if (size() + 1 > capacity())
-				reallocate(size() + 1);
+				reallocate(size() + 1, 0);
 			if (_finish) {
 				_alloc.construct(_finish + 1, val);
 				_finish++;
@@ -342,7 +374,7 @@ template < class T, class Alloc = std::allocator<T> >
 		iterator	insert (iterator position, const value_type& val) {
 			if (size() + 1 >  capacity()) {
 				size_type	position_iterator = static_cast<size_type>(position - begin()); 
-				reallocate(size() + 1);
+				reallocate(size() + 1, 1);
 				position = begin() + position_iterator;
 			}
 			if (size() == 0) {
@@ -368,7 +400,7 @@ template < class T, class Alloc = std::allocator<T> >
 		void		insert (iterator position, size_type n, const value_type& val) {
 			if (size() + n > capacity()) {
 				size_type	position_iterator = static_cast<size_type>(position - begin());
-				reallocate(size() + n);
+				reallocate(size() + n, 1);
 				position = begin() + position_iterator;
 			}
 			for (size_type i = 0; i < n; i++)
@@ -380,7 +412,7 @@ template < class T, class Alloc = std::allocator<T> >
 						 typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
 				size_type	position_iterator = static_cast<size_type>(position - begin());
 				if (size() + distance_it(first, last) > capacity())
-					reallocate(size() + distance_it(first, last));
+					reallocate(size() + distance_it(first, last), 1);
 				position = begin() + position_iterator;
 				InputIterator	tmp = last;
 				tmp--;
