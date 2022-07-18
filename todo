@@ -9,3 +9,5 @@ rb tree: https://www.programiz.com/dsa/red-black-tree
 	reserve -> n
 	asign -> n
 -	rb tree -> comp pas pris en compte, checker operator comparaison dans pair
+-	destructor rb tree
+-	fix left et right rotate

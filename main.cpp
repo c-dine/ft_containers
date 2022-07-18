@@ -111,14 +111,14 @@ int	main() {
 	}
 	{
 		// RB TREE TESTS
-		ft::pair<int, int>	el(2, 30);
+		ft::pair<int, int>	el(30, 45);
 		ft::rb_tree<int, int, int>	tree(el);
 
-		tree.insert_node(ft::pair<int, int>(1,35));
-		tree.insert_node(ft::pair<int, int>(1,44));
-		tree.insert_node(ft::pair<int, int>(1,24));
-		tree.insert_node(ft::pair<int, int>(1,14));
-		tree.insert_node(ft::pair<int, int>(1,34));
+		tree.insert_node(ft::pair<int, int>(35, 34));
+		tree.insert_node(ft::pair<int, int>(44, 23));
+		// tree.insert_node(ft::pair<int, int>(1,24));
+		// tree.insert_node(ft::pair<int, int>(1,14));
+		// tree.insert_node(ft::pair<int, int>(1,34));
 		tree.printTree();
 	}
 	return 0;

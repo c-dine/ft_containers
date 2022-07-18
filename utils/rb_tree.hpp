@@ -26,13 +26,14 @@ template<class key_type, class value_type, class Compare>
 
 		/** FIX OPERATIONS **/
 
-			// membre du haut
 			void	left_rotate(t_node *x_node) {
 				if (x_node->right) {
 					t_node	*y_node = x_node->right;
-					if (y_node->left)
+					if (y_node->left) {
 						y_node->left->parent = x_node;
-					
+						x_node->right = y_node->left;
+					}
+
 					if (x_node->parent == NULL)
 						_root = y_node;
 					else if (x_node == x_node->parent->left)
@@ -40,24 +41,12 @@ template<class key_type, class value_type, class Compare>
 					else
 						x_node->parent->right = y_node;
 					x_node->parent = y_node;
+					y_node->left = x_node;
 				}
 			}
 
 			// A CORRIGER ?
-			void	right_rotate(t_node */* x_node */y_node) {
-				// // if (x_node == x_node->parent->left) {
-				// 	t_node	*y_node = x_node->parent;
-				// 	if (x_node->right)
-				// 		x_node->right->parent = y_node;
-					
-				// 	if (y_node->parent == NULL)
-				// 		_root = x_node;
-				// 	else if (y_node == y_node->parent->right)
-				// 		y_node->parent->right = x_node;
-				// 	else
-				// 		y_node->parent->left = x_node;
-				// 	y_node->parent = x_node;
-				// // }
+			void	right_rotate(t_node *y_node) {
 				if (y_node->left) {
 					t_node	*x_node = y_node->left;
 					if (x_node->right)
@@ -98,7 +87,7 @@ template<class key_type, class value_type, class Compare>
 					t_node	*p = new_node->parent;
 					t_node	*gp = p->parent;
 
-					if (p == gp->left) {
+					if (p == gp->left && gp->right) {
 						if (gp->right->color == RED) {
 							gp->left->color = BLACK;
 							gp->right->color = BLACK;
@@ -115,7 +104,7 @@ template<class key_type, class value_type, class Compare>
 							right_rotate(gp);
 						}
 					}
-					else {
+					else if (gp->left){
 						if (gp->left->color == RED) {
 							gp->left->color = BLACK;
 							gp->right->color = BLACK;
@@ -132,6 +121,10 @@ template<class key_type, class value_type, class Compare>
 							left_rotate(gp);
 						}
 					}
+					// else if (gp->right)
+					// 	left_rotate(new_node->parent);
+					// else
+					// 	right_rotate(new_node->parent);
 					if (new_node == _root)
 						break ;
 				}
@@ -250,6 +243,7 @@ template<class key_type, class value_type, class Compare>
 					else
 						tmp_parent->left = new_node;
 
+					left_rotate(new_node->parent);
 					insert_fix(new_node);
 				}
 				// std::cout << "New element (" << new_node->data << "): parent-> " << new_node->parent->data;
