@@ -20,12 +20,10 @@ template<
 		typedef	Alloc						allocator_type;
 	
 	private:
-		typedef typename _Alloc::value_type								Alloc_value_type;
+		typedef typename Alloc::value_type								Alloc_value_type;
 		typedef typename Alloc::template rebind<value_type>::other		Pair_alloc_type;
 		typedef _Rb_tree<key_type, value_type, _Select1st<value_type>,
-				key_compare, _Pair_alloc_type> 							Rep_type;
-
-		Rep_type	_tree;
+				key_compare, Pair_alloc_type> 							Rep_type;
 
 	public:
 		typedef typename Pair_alloc_type::pointer         pointer;
@@ -40,8 +38,42 @@ template<
 		typedef typename Rep_type::const_reverse_iterator const_reverse_iterator;
 
 		class value_compare : public std::binary_function<value_type, value_type, bool> {
-			
+			friend class map<Key, T, Compare, Alloc>;
+			protected:
+				Compare	_comp;
+				value_compare(Compare c) : _comp(c) {}
+			public:
+				bool operator()(const value_type& x, const value_type& y) const { return (_comp(x._first, y._first)); }
+		};
+
+		private:
+			Rep_type	_tree;
+
+
+	/** CONSTRUCTORS **/
+		explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : 
+			_tree(comp, alloc) {}
+		
+		template <class InputIterator>
+			map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
+			const allocator_type& alloc = allocator_type());
+			// A FAIRE PLUS TARD
+		
+		map (const map& x) : _tree(x._tree) {}
+		~map() {}
+
+	/** OPERATOR **/
+		map& operator= (const map& x) {
+			_tree = x._tree;
+			return (*this);
 		}
+	
+	/** ITERATORS **/
+
+
+
+
+		
 };
 
 #endif
