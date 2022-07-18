@@ -1,6 +1,8 @@
 #include "containers/vector.hpp"
 #include "utils/is_integral.hpp"
 #include "utils/enable_if.hpp"
+#include "utils/pair.hpp"
+#include "utils/rb_tree.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -63,49 +65,61 @@ int	main() {
 		// std::cout << "foo: " << foo.size() << "\tbar: " << bar.size() << "\n";
 	}
 	{
-		ft::vector<int>		tab(2,2);
-		std::vector<int>	tab2(2,2);
+		// ft::vector<int>		tab(2,2);
+		// std::vector<int>	tab2(2,2);
 
-		std::cout << tab.capacity() << std::endl;
-		std::cout << tab2.capacity() << std::endl << std::endl;
+		// std::cout << tab.capacity() << std::endl;
+		// std::cout << tab2.capacity() << std::endl << std::endl;
 
-		tab.push_back(3);
-		tab2.push_back(3);
+		// tab.push_back(3);
+		// tab2.push_back(3);
 
-		std::cout << "FT PUSH_BACK:\t\t" << tab.capacity() << std::endl;
-		std::cout << "STD PUSH_BACK:\t\t" << tab2.capacity() << std::endl << std::endl;
+		// std::cout << "FT PUSH_BACK:\t\t" << tab.capacity() << std::endl;
+		// std::cout << "STD PUSH_BACK:\t\t" << tab2.capacity() << std::endl << std::endl;
 
-		tab.insert(tab.begin(), 15, 3);
-		tab2.insert(tab2.begin(), 15, 3);
+		// tab.insert(tab.begin(), 15, 3);
+		// tab2.insert(tab2.begin(), 15, 3);
 
-		std::cout << "FT INSERT:\t\t" << tab.capacity() << std::endl;
-		std::cout << "STD INSERT:\t\t" << tab2.capacity() << std::endl << std::endl;
+		// std::cout << "FT INSERT:\t\t" << tab.capacity() << std::endl;
+		// std::cout << "STD INSERT:\t\t" << tab2.capacity() << std::endl << std::endl;
 
-		tab.resize(547);
-		tab2.resize(547);
-		std::cout << "FT INSERT:\t\t" << tab.capacity() << std::endl;
-		std::cout << "STD INSERT:\t\t" << tab2.capacity() << std::endl << std::endl;
-		tab.resize(900);
-		tab2.resize(900);
-		std::cout << "FT INSERT:\t\t" << tab.capacity() << std::endl;
-		std::cout << "STD INSERT:\t\t" << tab2.capacity() << std::endl << std::endl;
-		tab.resize(1200);
-		tab2.resize(1200);
+		// tab.resize(547);
+		// tab2.resize(547);
+		// std::cout << "FT INSERT:\t\t" << tab.capacity() << std::endl;
+		// std::cout << "STD INSERT:\t\t" << tab2.capacity() << std::endl << std::endl;
+		// tab.resize(900);
+		// tab2.resize(900);
+		// std::cout << "FT INSERT:\t\t" << tab.capacity() << std::endl;
+		// std::cout << "STD INSERT:\t\t" << tab2.capacity() << std::endl << std::endl;
+		// tab.resize(1200);
+		// tab2.resize(1200);
 
-		std::cout << "FT RESIZE:\t\t" << tab.capacity() << std::endl;
-		std::cout << "STD RESIZE:\t\t" << tab2.capacity() << std::endl << std::endl;
+		// std::cout << "FT RESIZE:\t\t" << tab.capacity() << std::endl;
+		// std::cout << "STD RESIZE:\t\t" << tab2.capacity() << std::endl << std::endl;
 
-		tab.reserve(650);
-		tab2.reserve(650);
+		// tab.reserve(650);
+		// tab2.reserve(650);
 
-		std::cout << "FT RESERVE:\t\t" << tab.capacity() << std::endl;
-		std::cout << "STD RESERVE:\t\t" << tab2.capacity() << std::endl << std::endl;
+		// std::cout << "FT RESERVE:\t\t" << tab.capacity() << std::endl;
+		// std::cout << "STD RESERVE:\t\t" << tab2.capacity() << std::endl << std::endl;
 
-		tab.assign(2000, 5);
-		tab2.assign(2000, 5);
+		// tab.assign(2000, 5);
+		// tab2.assign(2000, 5);
 
-		std::cout << "FT ASSIGN:\t\t" << tab.capacity() << std::endl;
-		std::cout << "STD ASSIGN:\t\t" << tab2.capacity() << std::endl << std::endl;
+		// std::cout << "FT ASSIGN:\t\t" << tab.capacity() << std::endl;
+		// std::cout << "STD ASSIGN:\t\t" << tab2.capacity() << std::endl << std::endl;
+	}
+	{
+		// RB TREE TESTS
+		ft::pair<int, int>	el(2, 30);
+		ft::rb_tree<int, int, int>	tree(el);
+
+		tree.insert_node(ft::pair<int, int>(1,35));
+		tree.insert_node(ft::pair<int, int>(1,44));
+		tree.insert_node(ft::pair<int, int>(1,24));
+		tree.insert_node(ft::pair<int, int>(1,14));
+		tree.insert_node(ft::pair<int, int>(1,34));
+		tree.printTree();
 	}
 	return 0;
 }

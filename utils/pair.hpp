@@ -13,11 +13,10 @@ struct pair
 	T2	_second;
 
 	/** CONSTRUCTORS **/
-		pair() : first_type(), second_type() {}
+		pair() : _first(0), _second(0) {}
 		pair( const T1& x, const T2& y ) : _first(x), _second(y) {}
 		template< class U1, class U2 >
 			pair( const pair<U1, U2>& p ) : _first(p._first), _second(p._second) {}
-		pair( const pair& p ) = default;
 
 	/** OPERATOR **/
 		pair& operator=( const pair& other ) {
@@ -45,8 +44,7 @@ template< class T1, class T2 >
 
 template< class T1, class T2 >
 	bool operator<( const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs ) {
-		return (lhs._first < rhs._first 
-			|| (!(rhs._first < lhs._first)) && lhs._second < rhs._second);
+		return (lhs._second < rhs._second);
 	}
 
 template< class T1, class T2 >
@@ -65,5 +63,12 @@ template< class T1, class T2 >
 	}
 
 }
+
+template< class T1, class T2 >
+	std::ostream& operator<<(std::ostream& out, const ft::pair<T1, T2>& tmp)
+	{
+		out << tmp._second;
+		return (out);
+	}
 
 #endif
