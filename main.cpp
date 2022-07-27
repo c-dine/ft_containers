@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 #include <iterator>
 #include <containers/stack.hpp>
 
@@ -112,14 +113,25 @@ int	main() {
 	{
 		// RB TREE TESTS
 		ft::pair<int, int>	el(30, 45);
-		ft::rb_tree<int, int, int>	tree(el);
+		ft::rb_tree<int, int, int>	tree;
 
-		tree.insert_node(ft::pair<int, int>(35, 34));
-		tree.insert_node(ft::pair<int, int>(44, 23));
-		// tree.insert_node(ft::pair<int, int>(1,24));
-		// tree.insert_node(ft::pair<int, int>(1,14));
-		// tree.insert_node(ft::pair<int, int>(1,34));
+		tree.insert(ft::pair<int, int>(35, 34));
+		tree.insert(ft::pair<int, int>(44, 23));
+		tree.insert(ft::pair<int, int>(10,24));
+		tree.insert(ft::pair<int, int>(13,14));
+		tree.insert(ft::pair<int, int>(61,34));
 		tree.printTree();
+		tree.deleteNode(10);
+		tree.deleteNode(44);
+		tree.deleteNode(13);
+		std::cout << "\n___________________________________________\n\n";
+		tree.printTree();
+	}
+	{
+		// std::map<int, int>	tab;
+		// tab.insert(std::pair<int,int>(10,35));
+		// tab.insert(std::pair<int,int>(10,4));
+		// std::cout << tab[10] << std::endl;
 	}
 	return 0;
 }

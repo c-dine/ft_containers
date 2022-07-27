@@ -4,12 +4,13 @@
 # include <functional>
 # include <memory>
 # include "../utils/pair.hpp"
+# include "../utils/rb_tree.hpp"
 
 template<
     class Key,
     class T,
     class Compare = std::less<Key>,
-    class Allocator = std::allocator<std::pair<const Key, T> >
+    class Alloc = std::allocator<std::pair<const Key, T> >
 > class map {
 
 	public:
@@ -22,8 +23,8 @@ template<
 	private:
 		typedef typename Alloc::value_type								Alloc_value_type;
 		typedef typename Alloc::template rebind<value_type>::other		Pair_alloc_type;
-		typedef _Rb_tree<key_type, value_type, _Select1st<value_type>,
-				key_compare, Pair_alloc_type> 							Rep_type;
+		typedef /* _Rb_tree<key_type, value_type, _Select1st<value_type>,
+				key_compare, Pair_alloc_type>  */	ft::rb_tree<key_type, value_type, key_compare>		Rep_type;
 
 	public:
 		typedef typename Pair_alloc_type::pointer         pointer;
@@ -47,12 +48,12 @@ template<
 		};
 
 		private:
-			Rep_type	_tree;
+			Rep_type			*_tree;
+			allocator_type		_alloc;
 
 
 	/** CONSTRUCTORS **/
-		explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : 
-			_tree(comp, alloc) {}
+		explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _alloc(alloc) {}
 		
 		template <class InputIterator>
 			map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
@@ -70,9 +71,20 @@ template<
 	
 	/** ITERATORS **/
 
+	/** CAPACITY **/
+	bool empty() const {
+		if (!size())
+			return (true);
+		return (false);
+	}
 
+	size_type size() const {
+		return (_tree.size_tree());
+	}
 
-
+	size_type max_size() const {
+		return (_alloc.max_size());
+	}
 		
 };
 

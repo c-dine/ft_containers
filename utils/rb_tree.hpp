@@ -9,7 +9,7 @@
 
 namespace ft {
 
-template<class key_type, class value_type, class Compare>
+template<class key_type, class value_type, class key_compare >
     class rb_tree {
         private:
 			typedef struct s_node 
@@ -21,267 +21,303 @@ template<class key_type, class value_type, class Compare>
 					bool								color; 
 			}               t_node;
 			
-            t_node  *_root;
-			Compare	_comp;
-
-		/** FIX OPERATIONS **/
-
-			void	left_rotate(t_node *x_node) {
-				if (x_node->right) {
-					t_node	*y_node = x_node->right;
-					if (y_node->left) {
-						y_node->left->parent = x_node;
-						x_node->right = y_node->left;
-					}
-
-					if (x_node->parent == NULL)
-						_root = y_node;
-					else if (x_node == x_node->parent->left)
-						x_node->parent->left = y_node;
-					else
-						x_node->parent->right = y_node;
-					x_node->parent = y_node;
-					y_node->left = x_node;
-				}
-			}
-
-			// A CORRIGER ?
-			void	right_rotate(t_node *y_node) {
-				if (y_node->left) {
-					t_node	*x_node = y_node->left;
-					if (x_node->right)
-						x_node->right->parent = y_node;
-					
-					if (y_node->parent == NULL)
-						_root = x_node;
-					else if (y_node == y_node->parent->right)
-						y_node->parent->right = x_node;
-					else
-						y_node->parent->left = x_node;
-					y_node->parent = x_node;
-				}
-			}
-
-			void	left_right_rotate(t_node *x_node) {
-				left_rotate(x_node);
-				right_rotate(x_node->parent->parent);
-			}
-
-			void	right_left_rotate(t_node *x_node) {
-				right_rotate(x_node);
-				left_rotate(x_node->parent->parent);
-			}
-
-			// transplant x with y
-			void	transplant(t_node *x, t_node *y) {
-				y->parent = x->parent;
-				if (x == x->parent->left)
-					x->parent->left = y;
-				else
-					x->parent->right = y;
-				x->parent = NULL;
-			}
-
-			void	insert_fix(t_node *new_node) {
-				while (new_node->parent->color == RED) {
-					t_node	*p = new_node->parent;
-					t_node	*gp = p->parent;
-
-					if (p == gp->left && gp->right) {
-						if (gp->right->color == RED) {
-							gp->left->color = BLACK;
-							gp->right->color = BLACK;
-							gp->color = RED;
-							new_node = gp;
-						}
-						else if (new_node == p->right) {
-							new_node = p;
-							left_rotate(new_node);
-						}
-						else {
-							p->color = BLACK;
-							gp->color = RED;
-							right_rotate(gp);
-						}
-					}
-					else if (gp->left){
-						if (gp->left->color == RED) {
-							gp->left->color = BLACK;
-							gp->right->color = BLACK;
-							gp->color = RED;
-							new_node = gp;
-						}
-						else if (new_node == p->left) {
-							new_node = p;
-							right_rotate(new_node);
-						}
-						else {
-							p->color = BLACK;
-							gp->color = RED;
-							left_rotate(gp);
-						}
-					}
-					// else if (gp->right)
-					// 	left_rotate(new_node->parent);
-					// else
-					// 	right_rotate(new_node->parent);
-					if (new_node == _root)
-						break ;
-				}
-				_root->color = BLACK;
-			}
-
-			void	delete_fix(t_node *x) {
-				t_node	*w;
-
-				while (x != _root && x->color == BLACK) {
-					if (x == x->parent->left) {
-						w = x->parent->right;
-
-						if (w->color == RED) {
-							x->parent->right->color = BLACK;
-							x->parent->color = RED;
-							left_rotate(x->parent);
-							w = x->parent->right;	
-						}
-						else if (w->left->color == BLACK && w->right->color == BLACK) {
-							w->color = RED;
-							x = x->parent;
-						}
-						else if (w->right == BLACK) {
-							w->left = BLACK;
-							x->color = RED;
-							right_rotate(w);
-							w = x->parent->right;
-						}
-						else {
-							w->color = x->parent->color;
-							x->parent->parent->color = BLACK;
-							w->right = BLACK;
-							left_rotate(x->parent);
-							_root = x;
-						}
-					}
-					else {
-						w = x->parent->left;
-
-						if (w->color == RED) {
-							x->parent->left->color = BLACK;
-							x->parent->color = RED;
-							right_rotate(x->parent);
-							w = x->parent->left;	
-						}
-						else if (w->right->color == BLACK && w->left->color == BLACK) {
-							w->color = RED;
-							x = x->parent;
-						}
-						else if (w->left == BLACK) {
-							w->right = BLACK;
-							x->color = RED;
-							left_rotate(w);
-							w = x->parent->left;
-						}
-						else {
-							w->color = x->parent->color;
-							x->parent->parent->color = BLACK;
-							w->left = BLACK;
-							right_rotate(x->parent);
-							_root = x;
-						}
-					}
-					x->color = BLACK;
-				}
-			}
+            t_node  		*_root;
+			key_compare		_comp;
+			// allocator_type	_alloc;
 
         public:
 
 		/** CONSTRUCTORS **/
-			rb_tree(/*  Compare comp  */) {
+			rb_tree() {
+				std::cout << "ok\n";
 				_root = NULL;
-				// _comp = comp;
 			}
 
-            rb_tree(ft::pair<key_type, value_type> element/* , Compare comp */) {
+            rb_tree(ft::pair<key_type, value_type> element) {
                 _root = new t_node;
                 _root->data = element;
 				_root->parent = NULL;
 				_root->left = NULL;
 				_root->right = NULL;
 				_root->color = BLACK;
-				// _comp = comp;
             }
 
-		/** OPERATION ALGORITHMS **/
+		/** TOOLS **/
 
-			void	insert_node(ft::pair<key_type, value_type> element) {
-				t_node	*new_node = new t_node;
-	
-				if (_root == NULL) {
-					new_node->color = BLACK;
-					new_node->data = element;
-					new_node->parent = NULL;
-					new_node->left = NULL;
-					new_node->right = NULL;
-				}
-				else {
-					t_node	*tmp = _root;
-					t_node	*tmp_parent;
-					while (tmp) {
-						tmp_parent = tmp;
-						if (element > tmp->data)
-							tmp = tmp->right;
-						else
-							tmp = tmp->left;
-					}
-					new_node->data = element;
-					new_node->parent = tmp_parent;
-					new_node->left = NULL;
-					new_node->right = NULL;
-					new_node->color = RED;
-					if (element > tmp_parent->data)
-						tmp_parent->right = new_node;
-					else
-						tmp_parent->left = new_node;
+		t_node *minimum(t_node *node) {
+			while (node->left != NULL) {
+				node = node->left;
+			}
+			return (node);
+		}
 
-					left_rotate(new_node->parent);
-					insert_fix(new_node);
-				}
-				// std::cout << "New element (" << new_node->data << "): parent-> " << new_node->parent->data;
-				// if (!new_node->parent)
-				// 	std::cout << std::endl;
-				// else if (new_node->parent->left == new_node)
-				// 	std::cout << " LEFT\n";
-				// else
-				// 	std::cout << " RIGHT\n";
+		void rbTransplant(t_node *u, t_node *v) {
+			if (u->parent == NULL)
+				_root = v;
+			else if (u == u->parent->left)
+				u->parent->left = v;
+			else
+				u->parent->right = v;
+			if (v)
+				v->parent = u->parent;
+		}
+
+		void leftRotate(t_node *x) {
+			t_node *y = x->right;
+			
+			x->right = y->left;
+			if (y->left != NULL)
+				y->left->parent = x;
+			y->parent = x->parent;
+			if (x->parent == NULL)
+				this->_root = y;
+			else if (x == x->parent->left)
+				x->parent->left = y;
+			else
+				x->parent->right = y;
+			y->left = x;
+			x->parent = y;
+		}
+
+		void rightRotate(t_node *x) {
+			t_node *y = x->left;
+		
+			x->left = y->right;
+			if (y->right != NULL)
+				y->right->parent = x;
+			y->parent = x->parent;
+			if (x->parent == NULL)
+				this->_root = y;
+			else if (x == x->parent->right)
+				x->parent->right = y;
+			else
+				x->parent->left = y;
+			y->right = x;
+			x->parent = y;
+		}
+
+		/** INSERT **/
+
+		void insert(ft::pair<key_type, value_type> key) {
+			t_node *node = new t_node;
+		
+			node->parent = NULL;
+			node->data = key;
+			node->left = NULL;
+			node->right = NULL;
+			node->color = 1;
+
+			if (!_root) {
+				_root = node;
+				return;
 			}
 
-			void	delete_node(t_node node) {
-				bool	originalColor = node->color;
-				t_node	*x;
-				t_node	*y;
+			t_node *y = NULL;
+			t_node *x = this->_root;
 
-				if (!node->left) {
-					x = node->right;
-					transplant(node, x);
-				}
-				else if (!node->right) {
-					x = node->left;
-					transplant(node, x);
+			while (x != NULL) {
+				y = x;
+				if (node->data < x->data)
+					x = x->left;
+				else
+					x = x->right;
+			}
+
+			node->parent = y;
+			if (y == NULL)
+				_root = node;
+			else if (node->data < y->data)
+				y->left = node;
+			else
+				y->right = node;
+
+			if (node->parent == NULL) {
+				node->color = 0;
+				return;
+			}
+
+			if (node->parent->parent == NULL)
+				return;
+
+			insertFix(node);
+		}
+
+		void insertFix(t_node *k) {
+			t_node *u;
+			
+			while (k->parent->color == 1) {
+				if (k->parent == k->parent->parent->right) {
+					u = k->parent->parent->left;
+					if (u && u->color == 1) {
+						u->color = 0;
+						k->parent->color = 0;
+						k->parent->parent->color = 1;
+						k = k->parent->parent;
+					} 
+					else {
+						if (k == k->parent->left) {
+							k = k->parent;
+							rightRotate(k);
+						}
+						k->parent->color = 0;
+						k->parent->parent->color = 1;
+						leftRotate(k->parent->parent);
+					}
 				}
 				else {
-					y = node->right;
-					while (y->left)
-						y = y->left;
-					originalColor = y->color;
-					x = y->right;
-					if (y == node->left || y == node->right)
-						x->parent = y;
-					else
-						transplant(y, y->right);
-					y->color = originalColor;
+					u = k->parent->parent->right;
+
+					if (u && u->color == 1) {
+						u->color = 0;
+						k->parent->color = 0;
+						k->parent->parent->color = 1;
+						k = k->parent->parent;
+					} 
+					else {
+						if (k == k->parent->right) {
+							k = k->parent;
+							leftRotate(k);
+						}
+						k->parent->color = 0;
+						k->parent->parent->color = 1;
+						rightRotate(k->parent->parent);
+					}
 				}
-				if (originalColor == BLACK)
-					delete_fix(x);
+				if (k == _root) {
+					break;
+				}
+			}
+			_root->color = 0;
+		}
+
+		/** DELETE **/
+  
+  		void deleteNode(key_type data) {
+    		deleteNodeHelper(_root, ft::pair<key_type, value_type>(data, 0));
+  		}
+
+		void deleteNodeHelper(t_node *node, ft::pair<key_type, value_type> key) {
+			t_node *z = NULL;
+			t_node *x, *y;
+			while (node != NULL) {
+				if (node->data == key)
+					z = node;
+				if (node->data <= key)
+					node = node->right;
+				else
+					node = node->left;
+			}
+
+			if (z == NULL) {
+				std::cout << "Key not found in the tree." << std::endl;
+				return;
+			}
+
+			y = z;
+			int y_original_color = y->color;
+			if (z->left == NULL) {
+				x = z->right;
+				rbTransplant(z, z->right);
+			} 
+			else if (z->right == NULL) {
+				x = z->left;
+				rbTransplant(z, z->left);
+			}
+			else {
+				y = minimum(z->right);
+				y_original_color = y->color;
+				x = y->right;
+				if (y->parent == z) {
+					x->parent = y;
+				}
+				else {
+					rbTransplant(y, y->right);
+					y->right = z->right;
+					y->right->parent = y;
+				}
+
+				rbTransplant(z, y);
+				y->left = z->left;
+				y->left->parent = y;
+				y->color = z->color;
+			}
+			delete z;
+			if (y_original_color == 0)
+				deleteFix(x);
+		}
+
+		void deleteFix(t_node *x) {
+			t_node *s;
+			
+			while (x && x != _root && x->color == 0) {
+				if (x == x->parent->left) {
+					s = x->parent->right;
+					if (s->color == 1) {
+					s->color = 0;
+					x->parent->color = 1;
+					leftRotate(x->parent);
+					s = x->parent->right;
+					}
+
+					if (s->left->color == 0 && s->right->color == 0) {
+					s->color = 1;
+					x = x->parent;
+					} else {
+					if (s->right->color == 0) {
+						s->left->color = 0;
+						s->color = 1;
+						rightRotate(s);
+						s = x->parent->right;
+					}
+
+					s->color = x->parent->color;
+					x->parent->color = 0;
+					s->right->color = 0;
+					leftRotate(x->parent);
+					x = _root;
+					}
+				} else {
+					s = x->parent->left;
+					if (s->color == 1) {
+					s->color = 0;
+					x->parent->color = 1;
+					rightRotate(x->parent);
+					s = x->parent->left;
+					}
+
+					if (s->right->color == 0 && s->right->color == 0) {
+					s->color = 1;
+					x = x->parent;
+					} else {
+					if (s->left->color == 0) {
+						s->right->color = 0;
+						s->color = 1;
+						leftRotate(s);
+						s = x->parent->left;
+					}
+
+					s->color = x->parent->color;
+					x->parent->color = 0;
+					s->left->color = 0;
+					rightRotate(x->parent);
+					x = _root;
+					}
+				}
+			}
+			if (x)
+				x->color = 0;
+		}
+
+		/** MEMBER FUNCTIONS **/
+			size_t	size(t_node *node) {
+				if (!node)
+					return (0);
+				else
+					return (size(node->left) + 1 + size(node->right));
+			}
+
+			size_t size_tree() {
+				return (size(_root));
 			}
 
 			void print_tree_helper(t_node *n, int indent)
