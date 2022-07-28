@@ -3,17 +3,19 @@
 
 # include "pair.hpp"
 # include "stdlib.h"
+# include <memory>
 # include <stdio.h>
 # define RED 1
 # define BLACK 0
 
 namespace ft {
 
-template<class key_type, class value_type, class key_compare >
+template<class key_type, class value_type, class key_compare>
     class rb_tree {
         private:
 			typedef struct s_node 
 			{
+					s_node								*address;
 					ft::pair<key_type, value_type>		data;
 					struct s_node						*parent;
 					struct s_node						*left;
@@ -21,26 +23,40 @@ template<class key_type, class value_type, class key_compare >
 					bool								color; 
 			}               t_node;
 			
-            t_node  		*_root;
-			key_compare		_comp;
-			// allocator_type	_alloc;
+            t_node  				*_root;
+			key_compare				_comp;
+			std::allocator<t_node>	_alloc;
 
         public:
 
 		/** CONSTRUCTORS **/
-			rb_tree() {
-				std::cout << "ok\n";
+			rb_tree(const std::allocator<t_node>& alloc = std::allocator<t_node>()) : _alloc(alloc) {
 				_root = NULL;
 			}
 
-            rb_tree(ft::pair<key_type, value_type> element) {
-                _root = new t_node;
+            rb_tree(ft::pair<key_type, value_type> *element, const std::allocator<t_node>& alloc = std::allocator<t_node>()) : _alloc(alloc) {
+                _root = _alloc.allocate(1);
+				_root->address = _root;
                 _root->data = element;
 				_root->parent = NULL;
 				_root->left = NULL;
 				_root->right = NULL;
 				_root->color = BLACK;
             }
+
+			~rb_tree() {
+				free_nodes(_root);
+			}
+
+			void	free_nodes(t_node *node) {
+				if (node && node->left)
+					free_nodes(node->left);
+				if (node && node->right)
+					free_nodes(node->right);
+				if (node)
+					_alloc.deallocate(node->address, 1);
+
+			}
 
 		/** TOOLS **/
 
@@ -99,8 +115,9 @@ template<class key_type, class value_type, class key_compare >
 		/** INSERT **/
 
 		void insert(ft::pair<key_type, value_type> key) {
-			t_node *node = new t_node;
+			t_node *node = _alloc.allocate(1);
 		
+			node->address = node;
 			node->parent = NULL;
 			node->data = key;
 			node->left = NULL;
@@ -241,7 +258,7 @@ template<class key_type, class value_type, class key_compare >
 				y->left->parent = y;
 				y->color = z->color;
 			}
-			delete z;
+			_alloc.deallocate(z->address, 1);
 			if (y_original_color == 0)
 				deleteFix(x);
 		}
