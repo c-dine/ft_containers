@@ -9,6 +9,7 @@
 #include <map>
 #include <iterator>
 #include <containers/stack.hpp>
+// #include <containers/map.hpp>
 
 
 #ifndef STD
@@ -113,7 +114,7 @@ int	main() {
 	{
 		// RB TREE TESTS
 		ft::pair<int, int>	el(30, 45);
-		ft::rb_tree<int, int, int>	tree;
+		ft::rb_tree<int, int>	tree;
 
 		tree.insert(ft::pair<int, int>(35, 34));
 		tree.insert(ft::pair<int, int>(44, 23));
@@ -128,10 +129,7 @@ int	main() {
 		tree.printTree();
 	}
 	{
-		// std::map<int, int>	tab;
-		// tab.insert(std::pair<int,int>(10,35));
-		// tab.insert(std::pair<int,int>(10,4));
-		// std::cout << tab[10] << std::endl;
+		// ft::map<int, int>	tab;
 	}
 	return 0;
 }

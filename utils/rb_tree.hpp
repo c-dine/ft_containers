@@ -3,6 +3,7 @@
 
 # include "pair.hpp"
 # include "stdlib.h"
+// # include "../iterator/map_iterator.hpp"
 # include <memory>
 # include <stdio.h>
 # define RED 1
@@ -10,31 +11,51 @@
 
 namespace ft {
 
-template<class key_type, class value_type, class key_compare>
-    class rb_tree {
-        private:
-			typedef struct s_node 
-			{
-					s_node								*address;
-					ft::pair<key_type, value_type>		data;
-					struct s_node						*parent;
-					struct s_node						*left;
-					struct s_node						*right;
-					bool								color; 
-			}               t_node;
-			
-            t_node  				*_root;
-			key_compare				_comp;
-			std::allocator<t_node>	_alloc;
+template <typename key_type, typename value_type>
+	struct s_node 
+	{
+			s_node								*address;
+			ft::pair<key_type, value_type>		*data;
+			struct s_node						*parent;
+			struct s_node						*left;
+			struct s_node						*right;
+			bool								color; 
+	};
 
-        public:
+
+template<
+	class key_type,
+	class value_type, 
+	class key_compare = std::less<key_type>,
+	class allocator_type = std::allocator<ft::pair<key_type, value_type> >
+>	class rb_tree {
+
+		public:
+			class value_compare : public std::binary_function<value_type, value_type, bool> {
+				protected:
+					key_compare	_comp;
+				public:
+					value_compare(key_compare c) : _comp(c) {}
+					bool operator()(const value_type& x, const value_type& y) const { return (_comp(x, y)); }
+			};
+			
+		// typedef typename s_node<key_type, value_type>	s_node<key_type, value_type>;
+        private:
+
+            s_node<key_type, value_type>  											*_root;
+			value_compare										_comp;
+			std::allocator<s_node<key_type, value_type> >								_alloc;
+			allocator_type										_alloc_pair;
+
+		public:
+
 
 		/** CONSTRUCTORS **/
-			rb_tree(const std::allocator<t_node>& alloc = std::allocator<t_node>()) : _alloc(alloc) {
+			rb_tree(const allocator_type& alloc = allocator_type(), const key_compare& comp = key_compare()) : _comp(value_compare(comp)), _alloc_pair(alloc) {
 				_root = NULL;
 			}
 
-            rb_tree(ft::pair<key_type, value_type> *element, const std::allocator<t_node>& alloc = std::allocator<t_node>()) : _alloc(alloc) {
+            rb_tree(ft::pair<key_type, value_type> *element, const allocator_type& alloc = allocator_type(), const key_compare& comp = key_compare()) : _comp(comp), _alloc_pair(alloc) {
                 _root = _alloc.allocate(1);
 				_root->address = _root;
                 _root->data = element;
@@ -48,26 +69,29 @@ template<class key_type, class value_type, class key_compare>
 				free_nodes(_root);
 			}
 
-			void	free_nodes(t_node *node) {
+			void	free_nodes(s_node<key_type, value_type> *node) {
 				if (node && node->left)
 					free_nodes(node->left);
 				if (node && node->right)
 					free_nodes(node->right);
-				if (node)
+				if (node && node->data) {
+					_alloc_pair.destroy(node->data);
+					_alloc_pair.deallocate(node->data, 1);
+				}
+				if (node) 
 					_alloc.deallocate(node->address, 1);
-
 			}
 
 		/** TOOLS **/
 
-		t_node *minimum(t_node *node) {
+		s_node<key_type, value_type> *minimum(s_node<key_type, value_type> *node) {
 			while (node->left != NULL) {
 				node = node->left;
 			}
 			return (node);
 		}
 
-		void rbTransplant(t_node *u, t_node *v) {
+		void rbTransplant(s_node<key_type, value_type> *u, s_node<key_type, value_type> *v) {
 			if (u->parent == NULL)
 				_root = v;
 			else if (u == u->parent->left)
@@ -78,8 +102,8 @@ template<class key_type, class value_type, class key_compare>
 				v->parent = u->parent;
 		}
 
-		void leftRotate(t_node *x) {
-			t_node *y = x->right;
+		void leftRotate(s_node<key_type, value_type> *x) {
+			s_node<key_type, value_type> *y = x->right;
 			
 			x->right = y->left;
 			if (y->left != NULL)
@@ -95,8 +119,8 @@ template<class key_type, class value_type, class key_compare>
 			x->parent = y;
 		}
 
-		void rightRotate(t_node *x) {
-			t_node *y = x->left;
+		void rightRotate(s_node<key_type, value_type> *x) {
+			s_node<key_type, value_type> *y = x->left;
 		
 			x->left = y->right;
 			if (y->right != NULL)
@@ -115,11 +139,12 @@ template<class key_type, class value_type, class key_compare>
 		/** INSERT **/
 
 		void insert(ft::pair<key_type, value_type> key) {
-			t_node *node = _alloc.allocate(1);
+			s_node<key_type, value_type> *node = _alloc.allocate(1);
 		
+			node->data = _alloc_pair.allocate(1);
+			_alloc_pair.construct(node->data, key);
 			node->address = node;
 			node->parent = NULL;
-			node->data = key;
 			node->left = NULL;
 			node->right = NULL;
 			node->color = 1;
@@ -129,12 +154,12 @@ template<class key_type, class value_type, class key_compare>
 				return;
 			}
 
-			t_node *y = NULL;
-			t_node *x = this->_root;
+			s_node<key_type, value_type> *y = NULL;
+			s_node<key_type, value_type> *x = this->_root;
 
 			while (x != NULL) {
 				y = x;
-				if (node->data < x->data)
+				if (_comp(node->data->_first, x->data->_first))
 					x = x->left;
 				else
 					x = x->right;
@@ -143,7 +168,7 @@ template<class key_type, class value_type, class key_compare>
 			node->parent = y;
 			if (y == NULL)
 				_root = node;
-			else if (node->data < y->data)
+			else if (_comp(node->data->_first, y->data->_first))
 				y->left = node;
 			else
 				y->right = node;
@@ -159,8 +184,8 @@ template<class key_type, class value_type, class key_compare>
 			insertFix(node);
 		}
 
-		void insertFix(t_node *k) {
-			t_node *u;
+		void insertFix(s_node<key_type, value_type> *k) {
+			s_node<key_type, value_type> *u;
 			
 			while (k->parent->color == 1) {
 				if (k->parent == k->parent->parent->right) {
@@ -213,13 +238,13 @@ template<class key_type, class value_type, class key_compare>
     		deleteNodeHelper(_root, ft::pair<key_type, value_type>(data, 0));
   		}
 
-		void deleteNodeHelper(t_node *node, ft::pair<key_type, value_type> key) {
-			t_node *z = NULL;
-			t_node *x, *y;
+		void deleteNodeHelper(s_node<key_type, value_type> *node, ft::pair<key_type, value_type> key) {
+			s_node<key_type, value_type> *z = NULL;
+			s_node<key_type, value_type> *x, *y;
 			while (node != NULL) {
-				if (node->data == key)
+				if (*(node->data) == key)
 					z = node;
-				if (node->data <= key)
+				if (_comp(node->data->_first, key._first) || node->data->_first == key._first)
 					node = node->right;
 				else
 					node = node->left;
@@ -258,13 +283,15 @@ template<class key_type, class value_type, class key_compare>
 				y->left->parent = y;
 				y->color = z->color;
 			}
+			_alloc_pair.destroy(z->data);
+			_alloc_pair.deallocate(z->data, 1);
 			_alloc.deallocate(z->address, 1);
 			if (y_original_color == 0)
 				deleteFix(x);
 		}
 
-		void deleteFix(t_node *x) {
-			t_node *s;
+		void deleteFix(s_node<key_type, value_type> *x) {
+			s_node<key_type, value_type> *s;
 			
 			while (x && x != _root && x->color == 0) {
 				if (x == x->parent->left) {
@@ -325,8 +352,29 @@ template<class key_type, class value_type, class key_compare>
 				x->color = 0;
 		}
 
+		/** FIND **/
+		s_node<key_type, value_type>	*search(s_node<key_type, value_type> *node, const key_type &k) {
+			if (!node)
+				return (NULL);
+			if (node->data->_first == k)
+				return (node);
+			if (node && node->right)
+				search(node->right, k);
+			if (node && node->left)
+				search(node->left, k);
+		}
+
+		ft::pair<key_type, value_type>	&find_key(const key_type& k) {
+			s_node<key_type, value_type>	*tmp;
+
+			tmp = search(_root, k);
+			if (tmp)
+				return (tmp->data);
+			return (NULL);
+		}
+
 		/** MEMBER FUNCTIONS **/
-			size_t	size(t_node *node) {
+			size_t	size(s_node<key_type, value_type> *node) {
 				if (!node)
 					return (0);
 				else
@@ -337,7 +385,7 @@ template<class key_type, class value_type, class key_compare>
 				return (size(_root));
 			}
 
-			void print_tree_helper(t_node *n, int indent)
+			void print_tree_helper(s_node<key_type, value_type> *n, int indent)
 			{
 				int i;
 				if (n == NULL)
@@ -352,9 +400,9 @@ template<class key_type, class value_type, class key_compare>
 					fputs(" ", stdout);
 				
 				if (n->color == BLACK)
-					std::cout << "\033[1;30m(" << n->data << ")\033[0m\n";
+					std::cout << "\033[1;30m(" << *n->data << ")\033[0m\n";
 				else
-					std::cout << "\033[1;31m(" << n->data << ")\033[0m\n";
+					std::cout << "\033[1;31m(" << *n->data << ")\033[0m\n";
 
 				if (n->left != NULL)
 					print_tree_helper(n->left, indent + 4);

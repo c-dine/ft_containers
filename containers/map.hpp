@@ -10,7 +10,7 @@ template<
     class Key,
     class T,
     class Compare = std::less<Key>,
-    class Alloc = std::allocator<std::pair<const Key, T> >
+    class Alloc = std::allocator<ft::pair<const Key, T> >
 > class map {
 
 	public:
@@ -23,8 +23,7 @@ template<
 	private:
 		typedef typename Alloc::value_type								Alloc_value_type;
 		typedef typename Alloc::template rebind<value_type>::other		Pair_alloc_type;
-		typedef /* _Rb_tree<key_type, value_type, _Select1st<value_type>,
-				key_compare, Pair_alloc_type>  */	ft::rb_tree<key_type, value_type, key_compare>		Rep_type;
+		typedef	ft::rb_tree<key_type, value_type, key_compare, allocator_type>		Rep_type;
 
 	public:
 		typedef typename Pair_alloc_type::pointer         pointer;
@@ -38,26 +37,16 @@ template<
 		typedef typename Rep_type::reverse_iterator       reverse_iterator;
 		typedef typename Rep_type::const_reverse_iterator const_reverse_iterator;
 
-		class value_compare : public std::binary_function<value_type, value_type, bool> {
-			friend class map<Key, T, Compare, Alloc>;
-			protected:
-				Compare	_comp;
-				value_compare(Compare c) : _comp(c) {}
-			public:
-				bool operator()(const value_type& x, const value_type& y) const { return (_comp(x._first, y._first)); }
-		};
-
 		private:
 			Rep_type			*_tree;
-			allocator_type		_alloc;
 
 
 	/** CONSTRUCTORS **/
-		explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _alloc(alloc) {}
+		explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _comp(comp) {}
 		
 		template <class InputIterator>
 			map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
-			const allocator_type& alloc = allocator_type());
+			const allocator_type& alloc = allocator_type()) : _comp(comp);
 			// A FAIRE PLUS TARD
 		
 		map (const map& x) : _tree(x._tree) {}
@@ -82,9 +71,24 @@ template<
 		return (_tree.size_tree());
 	}
 
+	// ou alloc du tree ?
 	size_type max_size() const {
 		return (_alloc.max_size());
 	}
+
+	/** ELEMENT ACCESS **/
+	reference operator[] (const key_type& k) {
+		return (*(_start + n));
+	}
+
+	/** MODIFIERS **/
+	pair<iterator,bool> insert (const value_type& val);
+
+	iterator insert (iterator position, const value_type& val);
+
+	template <class InputIterator>
+		void insert (InputIterator first, InputIterator last);
+
 		
 };
 
