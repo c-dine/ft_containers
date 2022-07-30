@@ -9,7 +9,7 @@
 #include <map>
 #include <iterator>
 #include <containers/stack.hpp>
-// #include <containers/map.hpp>
+#include <containers/map.hpp>
 
 
 #ifndef STD
@@ -113,23 +113,35 @@ int	main() {
 	}
 	{
 		// RB TREE TESTS
-		ft::pair<int, int>	el(30, 45);
-		ft::rb_tree<int, int>	tree;
+		// ft::pair<int, int>	el(30, 45);
+		// ft::rb_tree<int, int>	tree;
 
-		tree.insert(ft::pair<int, int>(35, 34));
-		tree.insert(ft::pair<int, int>(44, 23));
-		tree.insert(ft::pair<int, int>(10,24));
-		tree.insert(ft::pair<int, int>(13,14));
-		tree.insert(ft::pair<int, int>(61,34));
-		tree.printTree();
-		tree.deleteNode(10);
-		tree.deleteNode(44);
-		tree.deleteNode(13);
-		std::cout << "\n___________________________________________\n\n";
-		tree.printTree();
+		// tree.insert(ft::pair<int, int>(35, 34));
+		// tree.insert(ft::pair<int, int>(44, 23));
+		// tree.insert(ft::pair<int, int>(10,24));
+		// tree.insert(ft::pair<int, int>(13,14));
+		// tree.insert(ft::pair<int, int>(61,34));
+		// tree.printTree();
+		// tree.deleteNode(10);
+		// tree.deleteNode(44);
+		// tree.deleteNode(13);
+		// std::cout << "\n___________________________________________\n\n";
+		// tree.printTree();
 	}
 	{
-		// ft::map<int, int>	tab;
+		ft::map<int, int>	tab;
+		std::map<int, int>	tab1;
+
+		tab.insert(ft::make_pair(50,3));
+		tab.insert(ft::make_pair(100,3));
+		tab.insert(ft::make_pair(0,3));
+		tab.insert(ft::make_pair(20,3));
+		tab.insert(ft::make_pair(70,3));
+		tab.insert(ft::make_pair(2,3));
+		tab.insert(ft::make_pair(3,3));
+		tab.insert(ft::make_pair(4,3));
+		tab.insert(ft::make_pair(5,3));
+		std::cout << *tab.begin() << std::endl;
 	}
 	return 0;
 }
