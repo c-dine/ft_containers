@@ -135,10 +135,18 @@ template<
 	template <class InputIterator>
 		void insert (InputIterator first, InputIterator last);
 
+	void	clear() {
+		_tree.clear();
+	}
+
 	size_t erase (const key_type& k) {
 		_tree.deleteNode(k);
 		return (1);
 	}
+
+	void erase (iterator position);
+
+	void erase (iterator first, iterator last);
 };
 
 }

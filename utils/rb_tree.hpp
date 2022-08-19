@@ -79,6 +79,20 @@ template<
 				free_nodes(_root);
 			}
 
+			void	clear() {
+				delete_floating();
+
+				free_nodes(_root);
+				_root = _alloc.allocate(1);
+				_root->data = _alloc_pair.allocate(1);
+				_alloc_pair.construct(_root->data, ft::make_pair(0,0));
+				_root->address = _root;
+				_root->parent = NULL;
+				_root->color = EMPTY;
+				
+				insert_floating();
+			}
+
 			void	free_nodes(node_type *node) {
 				if (node && node->left)
 					free_nodes(node->left);

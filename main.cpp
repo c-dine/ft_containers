@@ -137,8 +137,10 @@ int	main() {
 		// tab.insert(std::make_pair(21,4));
 		// tab1.insert(ft::make_pair(21,4));
 		// tab1.print_tree();
-		std::cout <<  tab.rbegin()->first << " " << tab.size() << std::endl;
-		std::cout << tab1.rbegin()->first << " " << tab1.size() << std::endl;
+		tab1.clear();
+		std::cout <<  tab.rbegin()->second << " " << tab.size() << std::endl;
+		std::cout << tab1.rbegin()->second << " " << tab1.size() << std::endl;
+
 		// tab.insert(ft::make_pair(0,3));
 		// tab.insert(ft::make_pair(2,3));
 		// tab.insert(ft::make_pair(3,3));
