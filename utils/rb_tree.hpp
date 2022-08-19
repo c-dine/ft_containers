@@ -7,9 +7,11 @@
 # include "../iterator/map_iterator.hpp"
 # include <memory>
 # include <stdio.h>
-# define RED 1
 # define BLACK 0
+# define RED 1
 # define FLOATING_END 2
+# define FLOATING_BEG 3
+# define EMPTY 4
 
 namespace ft {
 
@@ -36,13 +38,28 @@ template<
 			value_compare										_comp;
 			std::allocator<node_type>							_alloc;
 			allocator_type										_alloc_pair;
+			node_type											*_floating_beg;
+			node_type											*_floating_end;
 
 		public:
 
 
 		/** CONSTRUCTORS **/
 			rb_tree(const allocator_type& alloc = allocator_type(), const key_compare& comp = key_compare()) : _comp(value_compare(comp)), _alloc_pair(alloc) {
-                _root = NULL;
+                // _root = NULL;
+				// _floating_end = NULL;
+				// _floating_beg = NULL;
+				_root = _alloc.allocate(1);
+				_root->data = _alloc_pair.allocate(1);
+				_alloc_pair.construct(_root->data, ft::make_pair(0,0));
+				_root->address = _root;
+				_root->parent = NULL;
+				_floating_beg = add_floating_end(FLOATING_BEG);
+				_floating_end = add_floating_end(FLOATING_END);
+				_root->left = _floating_beg;
+				_root->right = _floating_end;
+				_root->color = EMPTY;
+
 			}
 
             rb_tree(ft::pair<key_type, mapped_type> element, const allocator_type& alloc = allocator_type(), const key_compare& comp = key_compare()) : _comp(comp), _alloc_pair(alloc) {
@@ -51,8 +68,10 @@ template<
 				_alloc_pair.construct(_root->data, element);
 				_root->address = _root;
 				_root->parent = NULL;
-				_root->left = NULL;
-				_root->right = NULL;
+				_floating_beg = add_floating_end(FLOATING_BEG);
+				_floating_end = add_floating_end(FLOATING_END);
+				_root->left = _floating_beg;
+				_root->right = _floating_end;
 				_root->color = BLACK;
             }
 
@@ -69,9 +88,49 @@ template<
 					_alloc_pair.destroy(node->data);
 					_alloc_pair.deallocate(node->data, 1);
 				}
-				if (node) 
+				if (node)
 					_alloc.deallocate(node->address, 1);
 			}
+
+		node_type	*add_floating_end(int which) {
+			node_type	*tmp;
+
+			tmp = _alloc.allocate(1);
+			tmp->data = _alloc_pair.allocate(1);
+			_alloc_pair.construct(tmp->data, ft::make_pair(0,0));
+			if (which == FLOATING_BEG)
+				tmp->color = FLOATING_BEG;
+			else if (which == FLOATING_END)
+				tmp->color = FLOATING_END;
+			tmp->address = tmp;
+			tmp->parent = _root;
+			tmp->left = NULL;
+			tmp->right = NULL;
+			return (tmp);
+		}
+
+		void	delete_floating() {
+			if (_floating_beg && _floating_end) {
+				if (_floating_beg->parent)
+					_floating_beg->parent->left = NULL;
+				_floating_beg->parent = NULL;
+				if (_floating_end->parent)
+					_floating_end->parent->right = NULL;
+				_floating_end->parent = NULL;
+			}
+		}
+
+		void	insert_floating() {
+			node_type	*tmp_beg = getFirst();
+			node_type	*tmp_end = getLast();
+
+			tmp_beg->left = _floating_beg;
+			if (_floating_beg)
+				_floating_beg->parent = tmp_beg;
+			tmp_end->right = _floating_end;
+			if (_floating_end)
+				_floating_end->parent = tmp_end;
+		}
 
 		/** TOOLS **/
 
@@ -138,11 +197,16 @@ template<
 			node->parent = NULL;
 			node->left = NULL;
 			node->right = NULL;
-			node->color = 1;
+			node->color = RED;
 
-			if (!_root) {
+			delete_floating();
+			if (_root->color == EMPTY) {
+				_alloc_pair.destroy(_root->data);
+				_alloc_pair.deallocate(_root->data, 1);
+				_alloc.deallocate(_root->address, 1);
 				_root = node;
-				return (_root);
+				node->color = BLACK;
+				return (insert_floating(), _root);
 			}
 
 			node_type *y = NULL;
@@ -166,14 +230,14 @@ template<
 
 			if (node->parent == NULL) {
 				node->color = 0;
-				return (node);
+				return (insert_floating(), node);
 			}
 
 			if (node->parent->parent == NULL)
-				return (node);
+				return (insert_floating(), node);
 
 			insertFix(node);
-			return (node);
+			return (insert_floating(), node);
 		}
 
 		void insertFix(node_type *k) {
@@ -233,6 +297,9 @@ template<
 		void deleteNodeHelper(node_type *node, ft::pair<key_type, mapped_type> key) {
 			node_type *z = NULL;
 			node_type *x, *y;
+
+			delete_floating();
+			
 			while (node != NULL) {
 				if (*(node->data) == key)
 					z = node;
@@ -275,11 +342,23 @@ template<
 				y->left->parent = y;
 				y->color = z->color;
 			}
+			if (z->parent == NULL) {
+				_root = _alloc.allocate(1);
+				_root->data = _alloc_pair.allocate(1);
+				_alloc_pair.construct(_root->data, ft::make_pair(0,0));
+				_root->address = _root;
+				_root->parent = NULL;
+				_root->left = _floating_beg;
+				_root->right = _floating_end;
+				_root->color = EMPTY;
+			}
 			_alloc_pair.destroy(z->data);
 			_alloc_pair.deallocate(z->data, 1);
 			_alloc.deallocate(z->address, 1);
 			if (y_original_color == 0)
 				deleteFix(x);
+			
+			insert_floating();
 		}
 
 		void deleteFix(node_type *x) {
@@ -360,7 +439,9 @@ template<
 		node_type	*find_key(const key_type& k) {
 			node_type	*tmp;
 
+			delete_floating();
 			tmp = search(_root, k);
+			insert_floating();
 			if (tmp)
 				return (tmp);
 			return (NULL);
@@ -368,7 +449,7 @@ template<
 
 		/** MEMBER FUNCTIONS **/
 			size_t	size(node_type *node) const {
-				if (!node)
+				if (_root && _root->color == EMPTY)
 					return (0);
 				else
 					return (size(node->left) + 1 + size(node->right));
@@ -428,7 +509,9 @@ template<
 			
 			void printTree()
 			{
+				delete_floating();
 				print_tree_helper(_root, 4);
+				insert_floating();
 			}
 
     };

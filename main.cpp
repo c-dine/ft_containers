@@ -133,15 +133,15 @@ int	main() {
 		std::map<int, int>	tab1;
 
 		tab.insert(ft::make_pair(50,3));
-		tab.insert(ft::make_pair(100,3));
-		tab.insert(ft::make_pair(0,3));
-		tab.insert(ft::make_pair(20,3));
-		tab.insert(ft::make_pair(70,3));
-		tab.insert(ft::make_pair(2,3));
-		tab.insert(ft::make_pair(3,3));
-		tab.insert(ft::make_pair(4,3));
-		tab.insert(ft::make_pair(5,3));
-		std::cout << *tab.begin() << std::endl;
+		// tab.insert(ft::make_pair(20,3));
+		// tab.insert(ft::make_pair(70,3));
+		std::cout << *tab.begin() << " " << tab.size() << std::endl;
+		tab.print_tree();
+		// tab.insert(ft::make_pair(0,3));
+		// tab.insert(ft::make_pair(2,3));
+		// tab.insert(ft::make_pair(3,3));
+		// tab.insert(ft::make_pair(4,3));
+		// tab.insert(ft::make_pair(5,3));
 	}
 	return 0;
 }

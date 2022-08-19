@@ -46,9 +46,13 @@ template<
 		Rep_type			_tree;
 
 	public:
+		void	print_tree() {
+			_tree.printTree();
+			std::cout << "__________________\n";
+		}
 	/** CONSTRUCTORS **/
-		explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) {
-			_tree = ft::rb_tree<key_type, mapped_type>(alloc, comp);
+		explicit map (/* const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type() */) {
+			// _tree = ft::rb_tree<key_type, mapped_type>(alloc, comp);
 		}
 		
 		template <class InputIterator>
@@ -111,7 +115,10 @@ template<
 	template <class InputIterator>
 		void insert (InputIterator first, InputIterator last);
 
-		
+	size_t erase (const key_type& k) {
+		_tree.deleteNode(k);
+		return (1);
+	}
 };
 
 }
