@@ -97,7 +97,7 @@ template<
 
 			tmp = _alloc.allocate(1);
 			tmp->data = _alloc_pair.allocate(1);
-			_alloc_pair.construct(tmp->data, ft::make_pair(0,0));
+			_alloc_pair.construct(tmp->data, ft::make_pair(1,0));
 			if (which == FLOATING_BEG)
 				tmp->color = FLOATING_BEG;
 			else if (which == FLOATING_END)
@@ -121,8 +121,8 @@ template<
 		}
 
 		void	insert_floating() {
-			node_type	*tmp_beg = getFirst();
-			node_type	*tmp_end = getLast();
+			node_type	*tmp_beg = getFirst(false);
+			node_type	*tmp_end = getLast(false);
 
 			tmp_beg->left = _floating_beg;
 			if (_floating_beg)
@@ -130,6 +130,10 @@ template<
 			tmp_end->right = _floating_end;
 			if (_floating_end)
 				_floating_end->parent = tmp_end;
+			_alloc_pair.destroy(_floating_beg->data);
+			_alloc_pair.destroy(_floating_end->data);
+			_alloc_pair.construct(_floating_beg->data, ft::make_pair(size_tree(),0));
+			_alloc_pair.construct(_floating_end->data, ft::make_pair(size_tree(),0));
 		}
 
 		/** TOOLS **/
@@ -214,7 +218,7 @@ template<
 
 			while (x != NULL) {
 				y = x;
-				if (_comp(node->data->_first, x->data->_first))
+				if (_comp(node->data->first, x->data->first))
 					x = x->left;
 				else
 					x = x->right;
@@ -223,7 +227,7 @@ template<
 			node->parent = y;
 			if (y == NULL)
 				_root = node;
-			else if (_comp(node->data->_first, y->data->_first))
+			else if (_comp(node->data->first, y->data->first))
 				y->left = node;
 			else
 				y->right = node;
@@ -303,7 +307,7 @@ template<
 			while (node != NULL) {
 				if (*(node->data) == key)
 					z = node;
-				if (_comp(node->data->_first, key._first) || node->data->_first == key._first)
+				if (_comp(node->data->first, key.first) || node->data->first == key.first)
 					node = node->right;
 				else
 					node = node->left;
@@ -427,7 +431,7 @@ template<
 		node_type	*search(node_type *node, const key_type &k) {
 			if (!node)
 				return (NULL);
-			if (node->data->_first == k)
+			if (node->data->first == k)
 				return (node);
 			if (node && node->right)
 				search(node->right, k);
@@ -449,7 +453,9 @@ template<
 
 		/** MEMBER FUNCTIONS **/
 			size_t	size(node_type *node) const {
-				if (_root && _root->color == EMPTY)
+				if ((_root && _root->color == EMPTY) || 
+						(node && (node->color == FLOATING_BEG || node->color == FLOATING_END)) || 
+						!node)
 					return (0);
 				else
 					return (size(node->left) + 1 + size(node->right));
@@ -468,19 +474,23 @@ template<
 				return (_root);
 			}
 
-			node_type	*getLast() const {
+			node_type	*getLast(bool reversed) const {
 				node_type	*tmp = _root;
 
 				while (tmp->right)
 					tmp = tmp->right;
+				if (reversed && tmp->color == FLOATING_END)
+					tmp = tmp->parent;
 				return (tmp);
 			}
 
-			node_type	*getFirst() const {
+			node_type	*getFirst(bool reversed) const {
 				node_type	*tmp = _root;
 
 				while (tmp->left)
 					tmp = tmp->left;
+				if (reversed && tmp->color == FLOATING_BEG)
+					tmp = tmp->parent;
 				return (tmp);
 			}
 

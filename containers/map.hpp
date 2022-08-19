@@ -36,11 +36,11 @@ template<
 		typedef typename Pair_alloc_type::reference       						reference;
 		typedef typename Pair_alloc_type::const_reference 						const_reference;
 		typedef typename ft::map_iterator<key_type, mapped_type>				iterator;
-		typedef typename ft::map_const_iterator<key_type, mapped_type>				const_iterator;
+		typedef typename ft::map_const_iterator<key_type, mapped_type>			const_iterator;
+		typedef typename ft::map_reverse_iterator<key_type, mapped_type>		reverse_iterator;
+		typedef typename ft::map_const_reverse_iterator<key_type, mapped_type>	const_reverse_iterator;
 		// typedef typename Rep_type::size_type              						size_type;
 		// typedef typename Rep_type::difference_type        						difference_type;
-		// typedef typename Rep_type::reverse_iterator       						reverse_iterator;
-		// typedef typename Rep_type::const_reverse_iterator 						const_reverse_iterator;
 
 	private:
 		Rep_type			_tree;
@@ -71,20 +71,40 @@ template<
 	
 	/** ITERATORS **/
 		iterator begin() {
-			return (iterator(_tree.getFirst()));
+			return (iterator(_tree.getFirst(true)));
 		}
 		const_iterator begin() const {
-			return (const_iterator(_tree.getFirst()));
+			return (const_iterator(_tree.getFirst(true)));
 		}
 		iterator end() {
 			if (empty())
 				return (begin());
-			return (iterator(_tree.getLast()));
+			return (iterator(_tree.getLast(false)));
 		}
 		const_iterator end() const {
 			if (empty())
 				return (begin());
-			return (const_iterator(_tree.getLast()));
+			return (const_iterator(_tree.getLast(false)));
+		}
+
+		reverse_iterator rbegin(){
+			return (reverse_iterator(_tree.getLast(true)));
+		}
+
+		const_reverse_iterator rbegin() const {
+			return (const_reverse_iterator(_tree.getLast(true)));
+		}
+
+    	reverse_iterator rend() {
+			if (size() == 1)
+				return (reverse_iterator(_tree.getFirst(true)));
+			return (reverse_iterator(_tree.getFirst(false)));
+		}
+
+		const_reverse_iterator rend() const {
+			if (size() == 1)
+				return (const_reverse_iterator(_tree.getFirst(true)));
+			return (const_reverse_iterator(_tree.getFirst(false)));
 		}
 
 	/** CAPACITY **/
@@ -104,7 +124,7 @@ template<
 
 	/** MODIFIERS **/
 	ft::pair<iterator,bool> insert (const value_type& val) {
-		node_type	*tmp = _tree.find_key(val._first);
+		node_type	*tmp = _tree.find_key(val.first);
 		if (tmp)
 			return (ft::make_pair(iterator(tmp), false));
 		return (ft::make_pair(_tree.insert(val), true));

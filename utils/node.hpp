@@ -20,7 +20,6 @@ template <typename key_type, typename value_type>
                     address = address->parent->parent;
                 if (address->parent && address->parent->right == address)
                     address = address->parent;
-                address = address; 
             }
 
             void    increment() {
@@ -30,7 +29,6 @@ template <typename key_type, typename value_type>
                     address = address->parent->parent;
                 if (address->parent && address->parent->left == address)
                     address = address->parent;
-                address = address; 
             }
 	};
 
