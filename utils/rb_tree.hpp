@@ -465,6 +465,16 @@ template<
 			return (NULL);
 		}
 
+		node_type	*findNextKey(const key_type& k) const {
+			node_type	*tmp = getFirst(true);
+
+			while (tmp && _comp(tmp->data->first, k))
+				tmp = tmp->increment();
+			if (!tmp)
+				return (_floating_end);
+			return (tmp);
+		}
+
 		/** MEMBER FUNCTIONS **/
 			size_t	size(node_type *node) const {
 				if ((_root && _root->color == EMPTY) || 

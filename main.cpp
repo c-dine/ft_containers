@@ -144,8 +144,9 @@ int	main() {
 		// }
 
 		tab1.print_tree();
-		std::cout << tab1.find(21)->first << std::endl;
-
+		// std::cout << tab1.equal_range(32).first->first << std::endl;
+		// std::cout << tab1.equal_range(32).second->first << std::endl;
+		std::cout << tab1.upper_bound(32)->first << std::endl;
 		// // std::cout <<  tab.begin()->first << " " << tab.size() << std::endl;
 		// std::cout << tab1.begin()->first << " " << tab1.size() << std::endl;
 

@@ -214,15 +214,55 @@ template<
 		node_type	*lower = _tree.find_key(k);
 
 		if (lower) {
-			node_type	*upper = lower + 1;
+			node_type	*upper = lower->increment();
 			return (ft::make_pair<const_iterator, const_iterator>(const_iterator(lower), const_iterator(upper)));
 		}
+
 		lower = _tree.findNextKey(k);
 		return (ft::make_pair<const_iterator, const_iterator>(const_iterator(lower), const_iterator(lower)));
 	}
 
 	pair<iterator,iterator>             equal_range (const key_type& k) {
+		node_type	*lower = _tree.find_key(k);
 
+		if (lower) {
+			node_type	*upper = lower->increment();
+			return (ft::make_pair<iterator, iterator>(iterator(lower), iterator(upper)));
+		}
+
+		lower = _tree.findNextKey(k);
+		return (ft::make_pair<iterator, iterator>(iterator(lower), iterator(lower)));
+	}
+
+    iterator lower_bound (const key_type& k) {
+		node_type	*tmp = _tree.find_key(k);
+		if (tmp)
+			return (iterator(tmp));
+		
+		tmp = _tree.findNextKey(k);
+		return (iterator(tmp));
+	}
+
+	const_iterator lower_bound (const key_type& k) const {
+		node_type	*tmp = _tree.find_key(k);
+		if (tmp)
+			return (const_iterator(tmp));
+		
+		tmp = _tree.findNextKey(k);
+		return (const_iterator(tmp));
+	}
+
+	iterator upper_bound (const key_type& k) {
+		node_type	*tmp = _tree.findNextKey(k);
+		if (tmp->data->first == k)
+			return (iterator(tmp->increment()));
+		return (iterator(tmp));
+	}
+	const_iterator upper_bound (const key_type& k) const {
+		node_type	*tmp = _tree.findNextKey(k);
+		if (tmp->data->first == k)
+			return (const_iterator(tmp->increment()));
+		return (const_iterator(tmp));
 	}
 
 	/** ACCESS **/
@@ -230,8 +270,6 @@ template<
 	mapped_type& operator[] (const key_type& k) {
 		return (_tree.find_key(k)->data->second);
 	}
-
-
 };
 
 }
