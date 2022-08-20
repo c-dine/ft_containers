@@ -149,10 +149,15 @@ template<
 	}
 
 	void erase (iterator first, iterator last) {
-		// size_t	size_it = last - first;
-		for (iterator it = first; it != last; it++) {
-			std::cout << "ok\n";
-			// _tree.deleteNode(it->first);
+		size_t	size_it = 0;
+		for (iterator it = first; it != last; it++)
+			size_it++;
+		
+		iterator	tmp;
+		for (size_t i = 0; i < size_it; i++) {
+			tmp = first;
+			first++;
+			_tree.deleteNode(tmp->first);
 		}
 	}
 };

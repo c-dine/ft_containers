@@ -13,22 +13,24 @@ template <typename key_type, typename value_type>
 			struct s_node						*right;
 			int 								color;
 
-            void    decrement() {
+            s_node    *decrement() {
                 if (address && address->left)
-                    address = address->left;
+                    return (address->left);
                 else if (address->parent && address->parent->left == address && address->parent->parent && address->parent == address->parent->parent->right)
-                    address = address->parent->parent;
+                    return (address->parent->parent);
                 else if (address->parent && address->parent->right == address)
-                    address = address->parent;
+                    return (address->parent);
+				return (NULL);
             }
 
-            void    increment() {
+            s_node    *increment() {
                 if (address && address->right)
-                    address = address->right;
+                    return (address->right);
                 else if (address->parent && address->parent->right == address && address->parent->parent && address->parent == address->parent->parent->left)
-                    address = address->parent->parent;
+                    return (address->parent->parent);
                 else if (address->parent && address->parent->left == address)
-                    address = address->parent;
+                    return (address->parent);
+				return (NULL);
             }
 	};
 

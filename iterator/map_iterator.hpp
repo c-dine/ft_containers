@@ -35,24 +35,24 @@ namespace ft {
 				}
 
 				Self	&operator++() {
-					_current->increment();
+					_current = _current = _current->increment();
 					return (*this);
 				}
 
 				Self	operator++(int) {
 					Self tmp = *this;
-					_current->increment();
+					_current = _current = _current->increment();
 					return (tmp);
 				}
 
 				Self	&operator--() {
-					_current->decrement();
+					_current = _current = _current->decrement();
 					return (*this);
 				}
 
 				Self	operator--(int) {
 					Self tmp = *this;
-					_current->decrement();
+					_current = _current = _current->decrement();
 					return (tmp);
 				}
 
@@ -95,24 +95,24 @@ namespace ft {
 				}
 
 				Self	&operator++() {
-					_current->increment();
+					_current = _current->increment();
 					return (*this);
 				}
 
 				Self	operator++(int) {
 					Self tmp = *this;
-					_current->increment();
+					_current = _current->increment();
 					return (tmp);
 				}
 
 				Self	&operator--() {
-					_current->decrement();
+					_current = _current->decrement();
 					return (*this);
 				}
 
 				Self	operator--(int) {
 					Self tmp = *this;
-					_current->decrement();
+					_current = _current->decrement();
 					return (tmp);
 				}
 
@@ -169,24 +169,24 @@ namespace ft {
 				}
 
 				Self	&operator++() {
-					_current->decrement();
+					_current = _current->decrement();
 					return (*this);
 				}
 
 				Self	operator++(int) {
 					Self tmp = *this;
-					_current->decrement();
+					_current = _current->decrement();
 					return (tmp);
 				}
 
 				Self	&operator--() {
-					_current->increment();
+					_current = _current->increment();
 					return (*this);
 				}
 
 				Self	operator--(int) {
 					Self tmp = *this;
-					_current->increment();
+					_current = _current->increment();
 					return (tmp);
 				}
 
@@ -229,24 +229,24 @@ namespace ft {
 				}
 
 				Self	&operator++() {
-					_current->decrement();
+					_current = _current->decrement();
 					return (*this);
 				}
 
 				Self	operator++(int) {
 					Self tmp = *this;
-					_current->decrement();
+					_current = _current->decrement();
 					return (tmp);
 				}
 
 				Self	&operator--() {
-					_current->increment();
+					_current = _current->increment();
 					return (*this);
 				}
 
 				Self	operator--(int) {
 					Self tmp = *this;
-					_current->increment();
+					_current = _current->increment();
 					return (tmp);
 				}
 

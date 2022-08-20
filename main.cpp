@@ -137,14 +137,14 @@ int	main() {
 		tab.insert(std::make_pair(21,4));
 		tab1.insert(ft::make_pair(21,4));
 		tab1.insert(ft::make_pair(32,4));
-		ft::map<int, int>::iterator it_beg = tab1.begin();
 		
-		for (ft::map<int, int>::iterator it = it_beg; it != tab1.end(); it++) {
-			std::cout << it->first << std::endl;
-		}
-		// tab1.print_tree();
-		// tab1.erase(tab1.begin(), tab1.end());
-		// tab1.print_tree();
+		// for (ft::map<int, int>::iterator it = tab1.begin(); it != tab1.end(); it++) {
+		// 	std::cout << it->first << std::endl;
+		// }
+
+		tab1.print_tree();
+		tab1.erase(tab1.begin(), tab1.end());
+		tab1.print_tree();
 
 		// // std::cout <<  tab.begin()->first << " " << tab.size() << std::endl;
 		// std::cout << tab1.begin()->first << " " << tab1.size() << std::endl;
