@@ -313,8 +313,9 @@ template<
   		}
 
 		void deleteNodeHelper(node_type *node, ft::pair<key_type, mapped_type> key) {
-			node_type *z = NULL;
-			node_type *x, *y;
+			node_type	*z = NULL;
+			node_type	*x, *y;
+			bool		empty = false;
 
 			delete_floating();
 			
@@ -331,6 +332,8 @@ template<
 				std::cout << "Key not found in the tree." << std::endl;
 				return;
 			}
+			else if (!z->parent && !z->left && !z->right)
+				empty = true;
 
 			y = z;
 			int y_original_color = y->color;
@@ -360,19 +363,17 @@ template<
 				y->left->parent = y;
 				y->color = z->color;
 			}
-			if (z->parent == NULL) {
+			_alloc_pair.destroy(z->data);
+			_alloc_pair.deallocate(z->data, 1);
+			_alloc.deallocate(z->address, 1);
+			if (empty) {
 				_root = _alloc.allocate(1);
 				_root->data = _alloc_pair.allocate(1);
 				_alloc_pair.construct(_root->data, ft::make_pair(0,0));
 				_root->address = _root;
 				_root->parent = NULL;
-				_root->left = _floating_beg;
-				_root->right = _floating_end;
 				_root->color = EMPTY;
 			}
-			_alloc_pair.destroy(z->data);
-			_alloc_pair.deallocate(z->data, 1);
-			_alloc.deallocate(z->address, 1);
 			if (y_original_color == 0)
 				deleteFix(x);
 			
@@ -501,9 +502,9 @@ template<
 			node_type	*getFirst(bool reversed) const {
 				node_type	*tmp = _root;
 
-				while (tmp->left)
+				while (tmp && tmp->left)
 					tmp = tmp->left;
-				if (reversed && tmp->color == FLOATING_BEG)
+				if (tmp && reversed && tmp->color == FLOATING_BEG)
 					tmp = tmp->parent;
 				return (tmp);
 			}

@@ -144,7 +144,9 @@ template<
 		return (1);
 	}
 
-	void erase (iterator position);
+	void erase (iterator position) {
+		_tree.deleteNode(position->first);
+	}
 
 	void erase (iterator first, iterator last);
 };

@@ -64,11 +64,11 @@ template< class T1, class T2 >
 
 }
 
-// template< class T1, class T2 >
-// 	std::ostream& operator<<(std::ostream& out, const ft::pair<T1, T2>& tmp)
-// 	{
-// 		out << tmp.first;
-// 		return (out);
-// 	}
+template< class T1, class T2 >
+	std::ostream& operator<<(std::ostream& out, const ft::pair<T1, T2>& tmp)
+	{
+		out << tmp.first;
+		return (out);
+	}
 
 #endif
