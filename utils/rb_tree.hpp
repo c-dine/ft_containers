@@ -206,7 +206,7 @@ template<
 
 		/** INSERT **/
 
-		node_type *insert(ft::pair<key_type, mapped_type> key) {
+		node_type *insert(ft::pair<key_type, mapped_type> key, ft::pair<key_type, mapped_type> *hint) {
 			node_type *node = _alloc.allocate(1);
 		
 			node->data = _alloc_pair.allocate(1);
@@ -229,6 +229,9 @@ template<
 
 			node_type *y = NULL;
 			node_type *x = this->_root;
+
+			if (hint)
+				x = findNextKey(hint->first);
 
 			while (x != NULL) {
 				y = x;
@@ -465,6 +468,7 @@ template<
 			return (NULL);
 		}
 
+		// finds key or the one after
 		node_type	*findNextKey(const key_type& k) const {
 			node_type	*tmp = getFirst(true);
 

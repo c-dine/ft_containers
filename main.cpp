@@ -138,15 +138,17 @@ int	main() {
 		tab1.insert(ft::make_pair(50,3));
 		tab1.insert(ft::make_pair(21,4));
 		tab1.insert(ft::make_pair(32,4));
+		tab1.print_tree();
+		tab1.insert(tab.begin(), tab.end());
+		tab1.print_tree();
 		
 		// for (ft::map<int, int>::iterator it = tab1.begin(); it != tab1.end(); it++) {
 		// 	std::cout << it->first << std::endl;
 		// }
 
-		tab1.print_tree();
 		// std::cout << tab1.equal_range(32).first->first << std::endl;
 		// std::cout << tab1.equal_range(32).second->first << std::endl;
-		std::cout << tab1.upper_bound(32)->first << std::endl;
+		// std::cout << tab1.lower_bound(32)->first << std::endl;
 		// // std::cout <<  tab.begin()->first << " " << tab.size() << std::endl;
 		// std::cout << tab1.begin()->first << " " << tab1.size() << std::endl;
 

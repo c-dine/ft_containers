@@ -127,13 +127,25 @@ template<
 		node_type	*tmp = _tree.find_key(val.first);
 		if (tmp)
 			return (ft::make_pair(iterator(tmp), false));
-		return (ft::make_pair(_tree.insert(val), true));
+		return (ft::make_pair(iterator(_tree.insert(val, NULL)), true));
 	}
 
-	iterator insert (iterator position, const value_type& val);
+	iterator insert (iterator position, const value_type& val) {
+		node_type	*tmp = _tree.find_key(val.first);
+		if (tmp)
+			return (iterator(tmp));
+		return (iterator(_tree.insert(val, &(*position))));
+	}
 
 	template <class InputIterator>
-		void insert (InputIterator first, InputIterator last);
+		void insert (InputIterator first, InputIterator last) {
+			node_type	*tmp;
+			for (InputIterator it = first; it != last; it++) {
+				tmp = _tree.find_key(it->first);
+				if (!tmp)
+					_tree.insert(*it, NULL);
+			}
+		}
 
 
 	void	clear() {
@@ -168,21 +180,21 @@ template<
 
 		tmp_it = x.begin();
 		for (size_t i = 0; i < x.size(); i++) {
-			tmp_map.insert(*tmp_it);
+			tmp_map.insert(*tmp_it, NULL);
 			tmp_it++;
 		}
 
 		x.clear();
 		tmp_it = begin();
 		for (size_t i = 0; i < size(); i++) {
-			x.insert(*tmp_it);
+			x.insert(*tmp_it, NULL);
 			tmp_it++;
 		}
 
 		clear();
 		tmp_it = tmp_map.begin();
 		for (size_t i = 0; i < tmp_map.size(); i++) {
-			insert(*tmp_it);
+			insert(*tmp_it, NULL);
 			tmp_it++;
 		}
 	}
@@ -235,20 +247,12 @@ template<
 	}
 
     iterator lower_bound (const key_type& k) {
-		node_type	*tmp = _tree.find_key(k);
-		if (tmp)
-			return (iterator(tmp));
-		
-		tmp = _tree.findNextKey(k);
+		node_type	*tmp = _tree.findNextKey(k);
 		return (iterator(tmp));
 	}
 
 	const_iterator lower_bound (const key_type& k) const {
-		node_type	*tmp = _tree.find_key(k);
-		if (tmp)
-			return (const_iterator(tmp));
-		
-		tmp = _tree.findNextKey(k);
+		node_type	*tmp = _tree.findNextKey(k);
 		return (const_iterator(tmp));
 	}
 
@@ -271,6 +275,41 @@ template<
 		return (_tree.find_key(k)->data->second);
 	}
 };
+
+template<typename Key, typename Tp, typename Compare, typename Alloc>
+	inline bool operator==(const map<Key, Tp, Compare, Alloc>& x,
+		const map<Key, Tp, Compare, Alloc>& y)
+		{ return x._tree == y._tree; }
+
+template<typename Key, typename Tp, typename Compare, typename Alloc>
+	inline bool operator<(const map<Key, Tp, Compare, Alloc>& x,
+		const map<Key, Tp, Compare, Alloc>& y)
+		{ return x._tree < y._tree; }
+
+template<typename Key, typename Tp, typename Compare, typename Alloc>
+	inline bool operator!=(const map<Key, Tp, Compare, Alloc>& x,
+		const map<Key, Tp, Compare, Alloc>& y)
+		{ return !(x == y); }
+
+template<typename Key, typename Tp, typename Compare, typename Alloc>
+	inline bool operator>(const map<Key, Tp, Compare, Alloc>& x,
+		const map<Key, Tp, Compare, Alloc>& y)
+		{ return y < x; }
+
+template<typename Key, typename Tp, typename Compare, typename Alloc>
+	inline bool operator<=(const map<Key, Tp, Compare, Alloc>& x,
+		const map<Key, Tp, Compare, Alloc>& y)
+		{ return !(y < x); }
+
+template<typename Key, typename Tp, typename Compare, typename Alloc>
+	inline bool operator>=(const map<Key, Tp, Compare, Alloc>& x,
+		const map<Key, Tp, Compare, Alloc>& y)
+		{ return !(x < y); }
+
+template<typename Key, typename Tp, typename Compare, typename Alloc>
+	inline void swap(map<Key, Tp, Compare, Alloc>& x,
+		map<Key, Tp, Compare, Alloc>& y)
+		{ x.swap(y); }
 
 }
 #endif
