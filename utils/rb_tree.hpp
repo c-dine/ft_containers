@@ -443,24 +443,23 @@ template<
 		}
 
 		/** FIND **/
-		node_type	*search(node_type *node, const key_type &k) {
-			if (!node)
+		node_type	*search(node_type *node, const key_type &k) const {
+			node_type	*tmp;
+
+			if (!node || node->color == FLOATING_BEG || node->color == FLOATING_END)
 				return (NULL);
 			if (node->data->first == k)
 				return (node);
-			if (node && node->right)
-				search(node->right, k);
-			if (node && node->left)
-				search(node->left, k);
-			return (NULL);
+			tmp = search(node->right, k);
+			if (tmp)
+				return (tmp);
+			return (search(node->left, k));
 		}
 
-		node_type	*find_key(const key_type& k) {
+		node_type	*find_key(const key_type& k) const {
 			node_type	*tmp;
 
-			delete_floating();
 			tmp = search(_root, k);
-			insert_floating();
 			if (tmp)
 				return (tmp);
 			return (NULL);

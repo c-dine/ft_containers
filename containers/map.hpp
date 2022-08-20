@@ -135,6 +135,7 @@ template<
 	template <class InputIterator>
 		void insert (InputIterator first, InputIterator last);
 
+
 	void	clear() {
 		_tree.clear();
 	}
@@ -185,6 +186,51 @@ template<
 			tmp_it++;
 		}
 	}
+
+	/** OPERATIONS **/
+	size_t count (const key_type& k) const {
+		if (_tree.find_key(k))
+			return (1);
+		return (0);
+	}
+
+    iterator find (const key_type& k) {
+		node_type	*tmp = _tree.find_key(k);
+
+		if (tmp)
+			return (iterator(tmp));
+		return (end());
+	}
+
+	const_iterator find (const key_type& k) const {
+		node_type	*tmp = _tree.find_key(k);
+
+		if (tmp)
+			return (const_iterator(tmp));
+		return (end());
+	}
+
+	pair<const_iterator,const_iterator> equal_range (const key_type& k) const {
+		node_type	*lower = _tree.find_key(k);
+
+		if (lower) {
+			node_type	*upper = lower + 1;
+			return (ft::make_pair<const_iterator, const_iterator>(const_iterator(lower), const_iterator(upper)));
+		}
+		lower = _tree.findNextKey(k);
+		return (ft::make_pair<const_iterator, const_iterator>(const_iterator(lower), const_iterator(lower)));
+	}
+
+	pair<iterator,iterator>             equal_range (const key_type& k) {
+
+	}
+
+	/** ACCESS **/
+
+	mapped_type& operator[] (const key_type& k) {
+		return (_tree.find_key(k)->data->second);
+	}
+
 
 };
 

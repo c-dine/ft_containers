@@ -144,8 +144,7 @@ int	main() {
 		// }
 
 		tab1.print_tree();
-		tab1.swap(tab);
-		tab1.print_tree();
+		std::cout << tab1.find(21)->first << std::endl;
 
 		// // std::cout <<  tab.begin()->first << " " << tab.size() << std::endl;
 		// std::cout << tab1.begin()->first << " " << tab1.size() << std::endl;
