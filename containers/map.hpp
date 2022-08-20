@@ -38,7 +38,7 @@ template<
 		typedef typename Pair_alloc_type::reference       						reference;
 		typedef typename Pair_alloc_type::const_reference 						const_reference;
 		typedef typename ft::map_iterator<key_type, mapped_type>				iterator;
-		typedef typename ft::map_iterator<key_type, mapped_type>			const_iterator;
+		typedef typename ft::map_iterator<key_type, mapped_type>				const_iterator;
 		typedef typename ft::map_reverse_iterator<key_type, mapped_type>		reverse_iterator;
 		typedef typename ft::map_const_reverse_iterator<key_type, mapped_type>	const_reverse_iterator;
 		// typedef typename Rep_type::size_type              						size_type;
@@ -57,8 +57,9 @@ template<
 		
 		template <class InputIterator>
 			map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
-			const allocator_type& alloc = allocator_type()) : _tree(ft::rb_tree<key_type, mapped_type>(alloc, comp)) {
-				_tree.insert(first, last);
+				const allocator_type& alloc = allocator_type(),
+				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) : _tree(ft::rb_tree<key_type, mapped_type>(alloc, comp)) {
+				insert(first, last);
 			}
 		
 		map (const map& x) : _tree(x._tree) {}
@@ -140,7 +141,7 @@ template<
 
 	template <class InputIterator>
 		void insert (InputIterator first, InputIterator last,
-			 typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
+			typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
 			node_type	*tmp;
 			for (InputIterator it = first; it != last; it++) {
 				tmp = _tree.find_key(it->first);
@@ -163,7 +164,8 @@ template<
 		_tree.deleteNode(position->first);
 	}
 
-	void erase (iterator first, iterator last) {
+	void erase (iterator first, iterator last,
+				typename ft::enable_if<!ft::is_integral<iterator>::value, iterator>::type* = 0) {
 		size_t	size_it = 0;
 		for (iterator it = first; it != last; it++)
 			size_it++;
@@ -182,21 +184,21 @@ template<
 
 		tmp_it = x.begin();
 		for (size_t i = 0; i < x.size(); i++) {
-			tmp_map.insert(*tmp_it, NULL);
+			tmp_map.insert(*tmp_it);
 			tmp_it++;
 		}
 
 		x.clear();
 		tmp_it = begin();
 		for (size_t i = 0; i < size(); i++) {
-			x.insert(*tmp_it, NULL);
+			x.insert(*tmp_it);
 			tmp_it++;
 		}
 
 		clear();
 		tmp_it = tmp_map.begin();
 		for (size_t i = 0; i < tmp_map.size(); i++) {
-			insert(*tmp_it, NULL);
+			insert(*tmp_it);
 			tmp_it++;
 		}
 	}
