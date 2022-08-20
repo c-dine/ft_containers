@@ -46,9 +46,6 @@ template<
 
 		/** CONSTRUCTORS **/
 			rb_tree(const allocator_type& alloc = allocator_type(), const key_compare& comp = key_compare()) : _comp(value_compare(comp)), _alloc_pair(alloc) {
-                // _root = NULL;
-				// _floating_end = NULL;
-				// _floating_beg = NULL;
 				_root = _alloc.allocate(1);
 				_root->data = _alloc_pair.allocate(1);
 				_alloc_pair.construct(_root->data, ft::pair<key_type, mapped_type>(0,0));
