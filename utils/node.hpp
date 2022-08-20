@@ -13,7 +13,7 @@ template <typename key_type, typename value_type>
 			struct s_node						*right;
 			int 								color;
 
-            s_node    *decrement() {
+            s_node    *decrement() const {
                 if (address && address->left)
                     return (address->left);
                 else if (address->parent && address->parent->left == address && address->parent->parent && address->parent == address->parent->parent->right)
@@ -23,7 +23,7 @@ template <typename key_type, typename value_type>
 				return (NULL);
             }
 
-            s_node    *increment() {
+            s_node    *increment() const {
                 if (address && address->right)
                     return (address->right);
                 else if (address->parent && address->parent->right == address && address->parent->parent && address->parent == address->parent->parent->left)

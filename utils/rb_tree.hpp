@@ -51,7 +51,7 @@ template<
 				// _floating_beg = NULL;
 				_root = _alloc.allocate(1);
 				_root->data = _alloc_pair.allocate(1);
-				_alloc_pair.construct(_root->data, ft::make_pair(0,0));
+				_alloc_pair.construct(_root->data, ft::pair<key_type, mapped_type>(0,0));
 				_root->address = _root;
 				_root->parent = NULL;
 				_floating_beg = add_floating_end(FLOATING_BEG);
@@ -111,7 +111,7 @@ template<
 
 			tmp = _alloc.allocate(1);
 			tmp->data = _alloc_pair.allocate(1);
-			_alloc_pair.construct(tmp->data, ft::make_pair(1,0));
+			_alloc_pair.construct(tmp->data, ft::pair<key_type, mapped_type>(1,0));
 			if (which == FLOATING_BEG)
 				tmp->color = FLOATING_BEG;
 			else if (which == FLOATING_END)
@@ -146,8 +146,8 @@ template<
 				_floating_end->parent = tmp_end;
 			_alloc_pair.destroy(_floating_beg->data);
 			_alloc_pair.destroy(_floating_end->data);
-			_alloc_pair.construct(_floating_beg->data, ft::make_pair(size_tree(),0));
-			_alloc_pair.construct(_floating_end->data, ft::make_pair(size_tree(),0));
+			_alloc_pair.construct(_floating_beg->data, ft::pair<key_type, mapped_type>(size_tree(),0));
+			_alloc_pair.construct(_floating_end->data, ft::pair<key_type, mapped_type>(size_tree(),0));
 		}
 
 		/** TOOLS **/
@@ -372,7 +372,7 @@ template<
 			if (empty) {
 				_root = _alloc.allocate(1);
 				_root->data = _alloc_pair.allocate(1);
-				_alloc_pair.construct(_root->data, ft::make_pair(0,0));
+				_alloc_pair.construct(_root->data, ft::pair<key_type, mapped_type>(0,0));
 				_root->address = _root;
 				_root->parent = NULL;
 				_root->color = EMPTY;
