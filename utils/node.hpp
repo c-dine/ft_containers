@@ -16,18 +16,18 @@ template <typename key_type, typename value_type>
             void    decrement() {
                 if (address && address->left)
                     address = address->left;
-                if (address->parent && address->parent->left == address && address->parent->parent && address->parent == address->parent->parent->right)
+                else if (address->parent && address->parent->left == address && address->parent->parent && address->parent == address->parent->parent->right)
                     address = address->parent->parent;
-                if (address->parent && address->parent->right == address)
+                else if (address->parent && address->parent->right == address)
                     address = address->parent;
             }
 
             void    increment() {
                 if (address && address->right)
                     address = address->right;
-                if (address->parent && address->parent->right == address && address->parent->parent && address->parent == address->parent->parent->left)
+                else if (address->parent && address->parent->right == address && address->parent->parent && address->parent == address->parent->parent->left)
                     address = address->parent->parent;
-                if (address->parent && address->parent->left == address)
+                else if (address->parent && address->parent->left == address)
                     address = address->parent;
             }
 	};
