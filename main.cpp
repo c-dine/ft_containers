@@ -129,12 +129,13 @@ int	main() {
 		// tree.printTree();
 	}
 	{
-		std::map<int, int>	tab;
+		ft::map<int, int>	tab;
 		ft::map<int, int>	tab1;
 
-		// tab.insert(std::make_pair(50,3));
+		tab.insert(ft::make_pair(-1,3));
+		tab.insert(ft::make_pair(-2,4));
+
 		tab1.insert(ft::make_pair(50,3));
-		tab.insert(std::make_pair(21,4));
 		tab1.insert(ft::make_pair(21,4));
 		tab1.insert(ft::make_pair(32,4));
 		
@@ -143,7 +144,7 @@ int	main() {
 		// }
 
 		tab1.print_tree();
-		tab1.erase(tab1.begin(), tab1.end());
+		tab1.swap(tab);
 		tab1.print_tree();
 
 		// // std::cout <<  tab.begin()->first << " " << tab.size() << std::endl;
