@@ -141,6 +141,9 @@ int	main() {
 		tab1.print_tree();
 		tab1.insert(tab.begin(), tab.end());
 		tab1.print_tree();
+		tab1.erase(-1);
+		tab1.erase(50);
+		tab1.print_tree();
 		
 		// for (ft::map<int, int>::iterator it = tab1.begin(); it != tab1.end(); it++) {
 		// 	std::cout << it->first << std::endl;

@@ -315,7 +315,7 @@ template<
 		/** DELETE **/
   
   		void deleteNode(key_type data) {
-    		deleteNodeHelper(_root, ft::pair<key_type, mapped_type>(data, 0));
+    		deleteNodeHelper(_root, ft::pair<key_type, mapped_type>(data, mapped_type()));
   		}
 
 		void deleteNodeHelper(node_type *node, ft::pair<key_type, mapped_type> key) {
@@ -326,7 +326,7 @@ template<
 			delete_floating();
 			
 			while (node != NULL) {
-				if (*(node->data) == key)
+				if (*(node->data) == key) 
 					z = node;
 				if (_comp(node->data->first, key) || node->data->first == key.first)
 					node = node->right;
@@ -355,10 +355,11 @@ template<
 				y = minimum(z->right);
 				y_original_color = y->color;
 				x = y->right;
-				if (y->parent == z) {
+
+				if (x && y->parent == z) {
 					x->parent = y;
 				}
-				else {
+				else if (x) {
 					rbTransplant(y, y->right);
 					y->right = z->right;
 					y->right->parent = y;
@@ -375,7 +376,7 @@ template<
 			if (empty) {
 				_root = _alloc.allocate(1);
 				_root->data = _alloc_pair.allocate(1);
-				_alloc_pair.construct(_root->data, ft::pair<key_type, mapped_type>(0,0));
+				_alloc_pair.construct(_root->data, ft::pair<key_type, mapped_type>(key_type(),mapped_type()));
 				_root->address = _root;
 				_root->parent = NULL;
 				_root->color = EMPTY;
