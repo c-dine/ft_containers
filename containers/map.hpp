@@ -56,12 +56,14 @@ template<
 			std::cout << "__________________\n";
 		}
 	/** CONSTRUCTORS **/
-		explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(ft::rb_tree<key_type, mapped_type>(alloc, comp)) {}
+		explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : 
+			_tree(ft::rb_tree<key_type, mapped_type>(alloc, comp)) {}
 		
 		template <class InputIterator>
 			map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
 				const allocator_type& alloc = allocator_type(),
-				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) : _tree(ft::rb_tree<key_type, mapped_type>(alloc, comp)) {
+				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) : 
+					_tree(ft::rb_tree<key_type, mapped_type>(alloc, comp)) {
 				insert(first, last);
 			}
 		

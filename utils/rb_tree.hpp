@@ -34,7 +34,8 @@ template<
 					value_compare(key_compare c) : _comp(c) {}
 					bool operator()(const value_type& x, const value_type& y) const { return (_comp(x.first, y.first)); }
 					bool operator()(const key_type& x, const key_type& y) const { return (_comp(x, y)); }
-					// bool operator()(const mapped_type& x, const mapped_type& y) const { return (_comp(x, y)); }
+					bool operator()(const value_type& x, const key_type& y) const { return (_comp(x.first, y)); }
+					bool operator()(const key_type& x, const value_type& y) const { return (_comp(x, y.first)); }
 					key_compare	getKey() const { return (_comp); }
 			};
 			

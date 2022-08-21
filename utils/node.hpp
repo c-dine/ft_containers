@@ -33,7 +33,6 @@ template <typename key_type, typename value_type>
 				return (NULL);
             }
 	};
-
 }
 
 #endif
