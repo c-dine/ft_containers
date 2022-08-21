@@ -16,4 +16,4 @@ rb iterator: https://gcc.gnu.org/onlinedocs/gcc-4.6.2/libstdc++/api/a01067_sourc
 -	insert
 -	keycomp value comp dans map
 
-what i was doing: base(), value comp
+what i was doing: base(), == map

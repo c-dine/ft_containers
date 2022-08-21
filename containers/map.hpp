@@ -9,6 +9,7 @@
 # include "../utils/node.hpp"
 # include "../utils/enable_if.hpp"
 # include "../utils/is_integral.hpp"
+# include "../utils/lexicographical_compare.hpp"
 
 namespace ft {
 
@@ -20,21 +21,12 @@ template<
 > class map {
 
 	public:
-		typedef	Key							key_type;
-		typedef	T							mapped_type;
-		typedef	ft::pair<const Key, T>		value_type;
-		typedef	Compare						key_compare;
-		typedef	Alloc						allocator_type;
-		typedef ft::s_node<key_type, mapped_type>		node_type;
-
-
-		// class value_compare : public std::binary_function<mapped_type, mapped_type, bool> {
-		// 	protected:
-		// 		key_compare	_comp;
-		// 	public:
-		// 		value_compare(key_compare c) : _comp(c) {}
-		// 		bool operator()(const value_type& x, const value_type& y) const { return (_comp(x.first, y.first)); }
-		// };
+		typedef	Key													key_type;
+		typedef	T													mapped_type;
+		typedef	ft::pair<const Key, T>								value_type;
+		typedef	Compare												key_compare;
+		typedef	Alloc												allocator_type;
+		typedef ft::s_node<key_type, mapped_type>					node_type;
 	
 	private:
 		typedef typename Alloc::value_type								Alloc_value_type;
@@ -50,8 +42,10 @@ template<
 		typedef typename ft::map_iterator<key_type, mapped_type>				const_iterator;
 		typedef typename ft::map_reverse_iterator<key_type, mapped_type>		reverse_iterator;
 		typedef typename ft::map_const_reverse_iterator<key_type, mapped_type>	const_reverse_iterator;
+		typedef	typename ft::rb_tree<key_type, mapped_type>::value_compare		value_compare;
 		// typedef typename Rep_type::size_type              						size_type;
 		// typedef typename Rep_type::difference_type        						difference_type;
+
 
 	private:
 		Rep_type			_tree;
@@ -282,22 +276,47 @@ template<
 		return (const_iterator(tmp));
 	}
 
+	/** OBSERVERS **/
+
+	key_compare key_comp() const {
+		return (_tree.getKeyComp());
+	}
+
+	value_compare value_comp() const {
+		return (_tree.getValueComp());
+	}
+
 	/** ACCESS **/
 
 	mapped_type& operator[] (const key_type& k) {
 		return (_tree.find_key(k)->data->second);
+	}
+
+	Rep_type	getTree() const {
+		return (_tree);
 	}
 };
 
 template<typename Key, typename Tp, typename Compare, typename Alloc>
 	inline bool operator==(const map<Key, Tp, Compare, Alloc>& x,
 		const map<Key, Tp, Compare, Alloc>& y)
-		{ return x._tree == y._tree; }
+		{ 
+			if (x.size() != y.size())
+				return (false);
+
+			ft::map_iterator<Key, Tp>	x_it = x.begin();
+			for (ft::map_iterator<Key, Tp> y_it = y.begin(); y_it != y.end(); y_it++) {
+				if (*x_it != *y_it || x_it == x.end())
+					return (false);
+				x_it++;
+			}
+			return (true);
+		}
 
 template<typename Key, typename Tp, typename Compare, typename Alloc>
 	inline bool operator<(const map<Key, Tp, Compare, Alloc>& x,
 		const map<Key, Tp, Compare, Alloc>& y)
-		{ return x._tree < y._tree; }
+		{ return ft::lexicographical_compare(x.begin(), x.end(), y.begin(), x.end()); }
 
 template<typename Key, typename Tp, typename Compare, typename Alloc>
 	inline bool operator!=(const map<Key, Tp, Compare, Alloc>& x,

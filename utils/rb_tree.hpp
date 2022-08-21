@@ -27,13 +27,16 @@ template<
 			typedef s_node<key_type, mapped_type>				node_type;
 			typedef	ft::pair<const key_type, mapped_type>		value_type;
 
-			// class value_compare : public std::binary_function<mapped_type, mapped_type, bool> {
-			// 	protected:
-			// 		key_compare	_comp;
-			// 	public:
-			// 		value_compare(key_compare c) : _comp(c) {}
-			// 		bool operator()(const value_type& x, const value_type& y) const { return (_comp(x.first, y.first)); }
-			// };
+			class value_compare : public std::binary_function<mapped_type, mapped_type, bool> {
+				protected:
+					key_compare	_comp;
+				public:
+					value_compare(key_compare c) : _comp(c) {}
+					bool operator()(const value_type& x, const value_type& y) const { return (_comp(x.first, y.first)); }
+					bool operator()(const key_type& x, const key_type& y) const { return (_comp(x, y)); }
+					// bool operator()(const mapped_type& x, const mapped_type& y) const { return (_comp(x, y)); }
+					key_compare	getKey() const { return (_comp); }
+			};
 			
         private:
 
@@ -325,7 +328,7 @@ template<
 			while (node != NULL) {
 				if (*(node->data) == key)
 					z = node;
-				if (_comp(*node->data, ft::pair<key_type, mapped_type>(key, 0)) || node->data->first == key.first)
+				if (_comp(node->data->first, key) || node->data->first == key.first)
 					node = node->right;
 				else
 					node = node->left;
@@ -472,7 +475,7 @@ template<
 		node_type	*findNextKey(const key_type& k) const {
 			node_type	*tmp = getFirst(true);
 
-			while (tmp && _comp(*tmp->data, ft::pair<key_type, mapped_type>(k, 0)))
+			while (tmp && _comp(tmp->data->first, k))
 				tmp = tmp->increment();
 			if (!tmp)
 				return (_floating_end);
@@ -521,6 +524,15 @@ template<
 					tmp = tmp->parent;
 				return (tmp);
 			}
+
+			value_compare	getValueComp() const {
+				return (_comp);
+			}
+
+			key_compare	getKeyComp() const {
+				return (_comp.getKey());
+			}
+		
 
 			void print_tree_helper(node_type *n, int indent)
 			{
