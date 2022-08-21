@@ -26,6 +26,15 @@ template<
 		typedef	Compare						key_compare;
 		typedef	Alloc						allocator_type;
 		typedef ft::s_node<key_type, mapped_type>		node_type;
+
+
+		// class value_compare : public std::binary_function<mapped_type, mapped_type, bool> {
+		// 	protected:
+		// 		key_compare	_comp;
+		// 	public:
+		// 		value_compare(key_compare c) : _comp(c) {}
+		// 		bool operator()(const value_type& x, const value_type& y) const { return (_comp(x.first, y.first)); }
+		// };
 	
 	private:
 		typedef typename Alloc::value_type								Alloc_value_type;
@@ -43,22 +52,6 @@ template<
 		typedef typename ft::map_const_reverse_iterator<key_type, mapped_type>	const_reverse_iterator;
 		// typedef typename Rep_type::size_type              						size_type;
 		// typedef typename Rep_type::difference_type        						difference_type;
-
-		class value_compare
-		{   // in C++98, it is required to inherit binary_function<value_type,value_type,bool>
-		friend class map;
-		protected:
-		Compare comp;
-		value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
-		public:
-		typedef bool result_type;
-		typedef value_type first_argument_type;
-		typedef value_type second_argument_type;
-		bool operator() (const value_type& x, const value_type& y) const
-		{
-			return comp(x.first, y.first);
-		}
-		}
 
 	private:
 		Rep_type			_tree;
