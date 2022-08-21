@@ -193,21 +193,21 @@ template<
 		iterator	tmp_it;
 
 		tmp_it = x.begin();
-		for (size_t i = 0; i < x.size(); i++) {
+		for (size_t i = 0; i < x.size() && tmp_it.getNode(); i++) {
 			tmp_map.insert(*tmp_it);
 			tmp_it++;
 		}
 
 		x.clear();
 		tmp_it = begin();
-		for (size_t i = 0; i < size(); i++) {
+		for (size_t i = 0; i < size() && tmp_it.getNode(); i++) {
 			x.insert(*tmp_it);
 			tmp_it++;
 		}
 
 		clear();
 		tmp_it = tmp_map.begin();
-		for (size_t i = 0; i < tmp_map.size(); i++) {
+		for (size_t i = 0; i < tmp_map.size() && tmp_it.getNode(); i++) {
 			insert(*tmp_it);
 			tmp_it++;
 		}
