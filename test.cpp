@@ -3,20 +3,73 @@
 #include <map>
 #include <iostream>
 #include "containers/vector.hpp"
+#include "utils/pair.hpp"
+#include "containers/map.hpp"
+#include "containers_test/srcs/base.hpp"
 
-int	main() {
-	std::map<int, int, std::greater<int>>	tab;
+template <typename T>
+std::string     printPair(const T &iterator, bool nl = true, std::ostream &o = std::cout)
+{
+        o << "key: " << iterator->first << " | value: " << iterator->second;
+        if (nl)
+                o << std::endl;
+        return ("");
+}
 
-	tab.insert(std::pair<int,int>(0,0));
-	tab.insert(std::pair<int,int>(1,1));
-	tab.insert(std::pair<int,int>(2,2));
-	tab.insert(std::pair<int,int>(3,3));
-	tab.insert(std::pair<int,int>(4,4));
-	tab.insert(std::pair<int,int>(5,5));
-	tab.insert(std::pair<int,int>(6,6));
+template <typename T_MAP>
+void    printSize(T_MAP const &mp, bool print_content = 1)
+{
+        std::cout << "size: " << mp.size() << std::endl;
+        std::cout << "max_size: " << mp.max_size() << std::endl;
+        if (print_content)
+        {
+                typename T_MAP::const_iterator it = mp.begin(), ite = mp.end();
+                std::cout << std::endl << "Content is:" << std::endl;
+                for (; it != ite; ++it)
+                        std::cout << "- " << printPair(it, false) << std::endl;
+        }
+        std::cout << "###############################################" << std::endl;
+}
 
-	for (std::map<int, int>::iterator it = tab.begin(); it != tab.end(); it++)
-		std::cout << it->first << std::endl;
 
-	return (0);
+#include <list>
+
+#define T1 int
+#define T2 std::string
+typedef ft::pair<const T1, T2> T3;
+
+static int iter = 0;
+
+template <typename MAP, typename U>
+void    ft_erase(MAP &mp, U param)
+{
+        std::cout << "\t-- [" << iter++ << "] --" << std::endl;
+        std::cout << "ret: " << mp.erase(param) << std::endl;
+        printSize(mp);
+}
+
+int             main(void)
+{
+        std::list<T3> lst;
+        unsigned int lst_size = 6;
+        for (unsigned int i = 0; i < lst_size; ++i)
+                lst.push_back(T3(i, std::string((lst_size - i), i + 65)));
+        ft::map<T1, T2> mp(lst.begin(), lst.end());
+        // printSize(mp);
+
+        // for (int i = 2; i < 4; ++i)
+        //         ft_erase(mp, i);
+
+        // ft_erase(mp, mp.begin()->first);
+        // ft_erase(mp, (--mp.end())->first);
+
+        // mp[-1] = "Hello";
+        // mp[10] = "Hi there";
+        // mp[10] = "Hi there";
+        // printSize(mp);
+
+        // ft_erase(mp, 0);
+        // ft_erase(mp, 1);
+
+        return (0);
 }

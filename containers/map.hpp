@@ -67,12 +67,17 @@ template<
 				insert(first, last);
 			}
 		
-		map (const map& x) : _tree(x._tree) {}
+		map (const map& x) {
+			*this = x;
+		}
+
 		~map() {}
 
 	/** OPERATOR **/
 		map& operator= (const map& x) {
-			_tree = x._tree;
+			if (size())
+				clear();
+			insert(x.begin(), x.end());
 			return (*this);
 		}
 	
@@ -291,7 +296,11 @@ template<
 	/** ACCESS **/
 
 	mapped_type& operator[] (const key_type& k) {
-		return (_tree.find_key(k)->data->second);
+		node_type	*tmp = _tree.find_key(k);
+
+		if (tmp)
+			return (tmp->data->second);
+		return (insert(ft::make_pair(k, mapped_type())).first->second);
 	}
 
 	Rep_type	getTree() const {
