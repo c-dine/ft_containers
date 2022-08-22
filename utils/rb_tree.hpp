@@ -332,7 +332,6 @@ template<
 		void deleteNodeHelper(node_type *node, ft::pair<key_type, mapped_type> key) {
 			node_type	*z = NULL;
 			node_type	*x, *y;
-			bool		empty = false;
 
 			delete_floating();
 
@@ -350,8 +349,6 @@ template<
 				std::cout << "Key not found in the tree." << std::endl;
 				return;
 			}
-			else if (!z->parent && !z->left && !z->right)
-				empty = true;
 
 			y = z;
 			int y_original_color = y->color;
@@ -385,15 +382,6 @@ template<
 			_alloc_pair.destroy(z->data);
 			_alloc_pair.deallocate(z->data, 1);
 			_alloc.deallocate(z->address, 1);
-			if (empty) {
-				_root = _alloc.allocate(1);
-				_root->data = _alloc_pair.allocate(1);
-				_alloc_pair.construct(_root->data, ft::pair<key_type, mapped_type>(key_type(),mapped_type()));
-				_root->address = _root;
-				_root->parent = NULL;
-				_root->color = EMPTY;
-				_root->comp = _comp.getKey();
-			}
 			if (y_original_color == 0)
 				deleteFix(x);
 			
