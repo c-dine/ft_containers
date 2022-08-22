@@ -130,7 +130,7 @@ int	main() {
 	}
 	{
 		ft::map<int, int>	tab;
-		ft::map<int, int>	tab1;
+		ft::map<int, int, std::greater<int> >	tab1;
 
 		tab.insert(ft::make_pair(-1,3));
 		tab.insert(ft::make_pair(-2,4));
