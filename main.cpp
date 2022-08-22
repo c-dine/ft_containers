@@ -129,21 +129,25 @@ int	main() {
 		// tree.printTree();
 	}
 	{
-		ft::map<int, int>	tab;
+		ft::map<int, int, std::greater<int> >	tab;
 		ft::map<int, int, std::greater<int> >	tab1;
 
 		tab.insert(ft::make_pair(-1,3));
 		tab.insert(ft::make_pair(-2,4));
+		tab.insert(ft::make_pair(-3,4));
+		tab.insert(ft::make_pair(-4,4));
+		ft::map<int, int, std::greater<int> >::iterator	it = tab.begin();
 
-		tab1.insert(ft::make_pair(50,3));
-		tab1.insert(ft::make_pair(21,4));
-		tab1.insert(ft::make_pair(32,4));
-		tab1.print_tree();
-		tab1.insert(tab.begin(), tab.end());
-		tab1.print_tree();
-		tab1.erase(-1);
-		tab1.erase(50);
-		tab1.print_tree();
+		it++;
+		// tab1.insert(ft::make_pair(50,3));
+		// tab1.insert(ft::make_pair(21,4));
+		// tab1.insert(ft::make_pair(32,4));
+		// tab1.print_tree();
+		// tab1.insert(tab.begin(), tab.end());
+		// tab1.print_tree();
+		// tab1.erase(-1);
+		// tab1.erase(50);
+		// tab1.print_tree();
 		
 		// for (ft::map<int, int>::iterator it = tab1.begin(); it != tab1.end(); it++) {
 		// 	std::cout << it->first << std::endl;

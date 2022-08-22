@@ -8,7 +8,7 @@
 
 namespace ft {
 
-template <typename key_type, typename value_type>
+template <typename key_type, typename value_type, typename key_compare>
 	struct s_node 
 	{
 			s_node								*address;
@@ -17,6 +17,7 @@ template <typename key_type, typename value_type>
 			struct s_node						*left;
 			struct s_node						*right;
 			int 								color;
+			key_compare						comp;
 
 			s_node	*getRoot() const {
 				s_node	*tmp = address;

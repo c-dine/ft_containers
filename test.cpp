@@ -10,7 +10,6 @@
 template <typename T>
 std::string     printPair(const T &iterator, bool nl = true, std::ostream &o = std::cout)
 {
-		std::cout << "TEST : " << *iterator << std::endl;
         o << "key: " << iterator->first << " | value: " << iterator->second;
         if (nl)
                 o << std::endl;
@@ -26,9 +25,11 @@ void    printSize(T_MAP const &mp, bool print_content = 1)
         {
                 typename T_MAP::const_iterator it = mp.begin(), ite = mp.end();
                 std::cout << std::endl << "Content is:" << std::endl;
-                for (; it != ite; ++it)
+                for (; it != ite; ++it) {
+						std::cout << "TEST : " << *it << std::endl;
                         std::cout << "- " << printPair(it, false) << std::endl;
-        }
+        		}
+		}
         std::cout << "###############################################" << std::endl;
 }
 template <typename T1, typename T2>
@@ -46,13 +47,28 @@ void    printReverse(ft::map<T1, T2> &mp)
 }
 
 #define T1 int
-#define T2 int
+#define T2 std::string
+
+struct ft_more {
+        bool    operator()(const T1 &first, const T1 &second) const {
+                return (first > second);
+        }
+};
+
+typedef ft::map<T1, T2, ft_more> ft_mp;
+typedef ft::map<T1, T2, ft_more>::iterator ft_mp_it;
 
 int             main(void)
 {
-        ft::map<T1, T2> const mp;
-        ft::map<T1, T2>::iterator it = mp.begin(); // <-- error expected
+        ft_mp mp;
 
-        std::cout << it->second << std::endl;
+        mp[42] = "fgzgxfn";
+        mp[25] = "funny";
+        mp[80] = "hey";
+        mp[12] = "no";
+        mp[27] = "bee";
+        mp[90] = "8";
+        printSize(mp);
+
         return (0);
 }

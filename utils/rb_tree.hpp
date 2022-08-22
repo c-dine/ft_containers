@@ -24,7 +24,7 @@ template<
 
 		public:
 
-			typedef s_node<key_type, mapped_type>				node_type;
+			typedef s_node<key_type, mapped_type, key_compare>							node_type;
 			typedef	ft::pair<const key_type, mapped_type>		value_type;
 
 			class value_compare : public std::binary_function<mapped_type, mapped_type, bool> {
@@ -63,6 +63,7 @@ template<
 				_root->left = _floating_beg;
 				_root->right = _floating_end;
 				_root->color = EMPTY;
+				_root->comp = _comp.getKey();
 			}
 
             rb_tree(ft::pair<key_type, mapped_type> element, const allocator_type& alloc = allocator_type(), const key_compare& comp = key_compare()) : _comp(value_compare(comp)), _alloc_pair(alloc) {
@@ -76,6 +77,7 @@ template<
 				_root->left = _floating_beg;
 				_root->right = _floating_end;
 				_root->color = BLACK;
+				_root->comp = _comp.getKey();
             }
 
 			~rb_tree() {
@@ -94,6 +96,7 @@ template<
 				_root->color = EMPTY;
 				_root->left = _floating_beg;
 				_root->right = _floating_end;
+				_root->comp = _comp.getKey();
 			}
 
 			void	free_nodes(node_type *node) {
@@ -123,6 +126,7 @@ template<
 			tmp->parent = _root;
 			tmp->left = NULL;
 			tmp->right = NULL;
+			tmp->comp = _comp.getKey();
 			return (tmp);
 		}
 
@@ -219,6 +223,7 @@ template<
 			node->left = NULL;
 			node->right = NULL;
 			node->color = RED;
+			node->comp = _comp.getKey();
 
 			delete_floating();
 			if (_root->color == EMPTY) {
@@ -380,6 +385,7 @@ template<
 				_root->address = _root;
 				_root->parent = NULL;
 				_root->color = EMPTY;
+				_root->comp = _comp.getKey();
 			}
 			if (y_original_color == 0)
 				deleteFix(x);
