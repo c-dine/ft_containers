@@ -336,7 +336,7 @@ template<
 			delete_floating();
 
 			while (node != NULL) {
-				if (*(node->data) == key) 
+				if (node->data->first == key.first) 
 					z = node;
 				if (_comp(node->data->first, key) || node->data->first == key.first)
 					node = node->right;
