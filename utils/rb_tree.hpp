@@ -233,8 +233,6 @@ template<
 			node_type *y = NULL;
 			node_type *x = this->_root;
 
-			if (hint)
-				x = findNextKey(hint->first);
 
 			while (x != NULL) {
 				y = x;
@@ -243,6 +241,8 @@ template<
 				else
 					x = x->right;
 			}
+			if (hint)
+				x = findNextKey(hint->first);
 
 			node->parent = y;
 			if (y == NULL)

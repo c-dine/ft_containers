@@ -146,7 +146,11 @@ template<
 		node_type	*tmp = _tree.find_key(val.first);
 		if (tmp)
 			return (iterator(tmp));
-		return (iterator(_tree.insert(val, &(*position))));
+
+		if (position->first < val.first)
+			return (iterator(_tree.insert(val, &(*position))));
+
+		return (iterator(_tree.insert(val, NULL)));
 	}
 
 	template <class InputIterator>
