@@ -320,7 +320,13 @@ template<
 		/** DELETE **/
   
   		void deleteNode(key_type data) {
-    		deleteNodeHelper(_root, ft::pair<key_type, mapped_type>(data, mapped_type()));
+			if (size_tree() == 1 && _root->data->first == data) {
+				_root->color = EMPTY;
+				_alloc_pair.destroy(_root->data);
+				_alloc_pair.construct(_root->data, ft::pair<key_type, mapped_type>(key_type(),mapped_type()));
+			}
+			else
+	    		deleteNodeHelper(_root, ft::pair<key_type, mapped_type>(data, mapped_type()));
   		}
 
 		void deleteNodeHelper(node_type *node, ft::pair<key_type, mapped_type> key) {
@@ -329,7 +335,7 @@ template<
 			bool		empty = false;
 
 			delete_floating();
-			
+
 			while (node != NULL) {
 				if (*(node->data) == key) 
 					z = node;
@@ -338,6 +344,7 @@ template<
 				else
 					node = node->left;
 			}
+
 
 			if (z == NULL) {
 				std::cout << "Key not found in the tree." << std::endl;
@@ -399,6 +406,7 @@ template<
 			while (x && x != _root && x->color == 0) {
 				if (x == x->parent->left) {
 					s = x->parent->right;
+
 					if (s->color == 1) {
 					s->color = 0;
 					x->parent->color = 1;
@@ -410,7 +418,7 @@ template<
 					s->color = 1;
 					x = x->parent;
 					} else {
-					if (s->right->color == 0) {
+					if (s->right && s->right->color == 0) {
 						s->left->color = 0;
 						s->color = 1;
 						rightRotate(s);
@@ -569,6 +577,7 @@ template<
 				delete_floating();
 				print_tree_helper(_root, 4);
 				insert_floating();
+				std::cout << std::endl << "-----------------------"<< std::endl;
 			}
 
     };

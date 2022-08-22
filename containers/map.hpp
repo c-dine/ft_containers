@@ -157,9 +157,10 @@ template<
 		void insert (InputIterator first, InputIterator last,
 			typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
 			node_type	*tmp;
+
 			for (InputIterator it = first; it != last; it++) {
 				tmp = _tree.find_key(it->first);
-				if (!tmp)
+				if (!tmp || tmp->color == EMPTY)
 					_tree.insert(*it, NULL);
 			}
 		}
@@ -188,6 +189,7 @@ template<
 		for (size_t i = 0; i < size_it; i++) {
 			tmp = first;
 			first++;
+			std::cout << tmp->first << " OK\n";
 			_tree.deleteNode(tmp->first);
 		}
 	}
