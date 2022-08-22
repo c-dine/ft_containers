@@ -69,6 +69,7 @@ template<
 			}
 		
 		map (const map& x) {
+			_tree = new Rep_type;
 			*this = x;
 		}
 
