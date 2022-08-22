@@ -17,7 +17,7 @@ template<
     class Key,
     class T,
     class Compare = std::less<Key>,
-    class Alloc = std::allocator<ft::pair<const Key, T> >
+    class Alloc = std::allocator<ft::pair<Key, T> >
 > class map {
 
 	public:
@@ -29,9 +29,9 @@ template<
 		typedef ft::s_node<key_type, mapped_type>					node_type;
 	
 	private:
-		typedef typename Alloc::value_type								Alloc_value_type;
-		typedef typename Alloc::template rebind<value_type>::other		Pair_alloc_type;
-		typedef	ft::rb_tree<key_type, mapped_type>						Rep_type;
+		typedef typename Alloc::value_type												Alloc_value_type;
+		typedef typename Alloc::template rebind<value_type>::other						Pair_alloc_type;
+		typedef	ft::rb_tree<key_type, mapped_type, key_compare, allocator_type>			Rep_type;
 
 	public:
 		typedef typename Pair_alloc_type::pointer         						pointer;
@@ -42,7 +42,7 @@ template<
 		typedef typename ft::map_iterator<key_type, mapped_type>				const_iterator;
 		typedef typename ft::map_reverse_iterator<key_type, mapped_type>		reverse_iterator;
 		typedef typename ft::map_const_reverse_iterator<key_type, mapped_type>	const_reverse_iterator;
-		typedef	typename ft::rb_tree<key_type, mapped_type>::value_compare		value_compare;
+		typedef	typename Rep_type::value_compare		value_compare;
 		// typedef typename Rep_type::size_type              						size_type;
 		// typedef typename Rep_type::difference_type        						difference_type;
 
@@ -57,13 +57,13 @@ template<
 		}
 	/** CONSTRUCTORS **/
 		explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : 
-			_tree(ft::rb_tree<key_type, mapped_type>(alloc, comp)) {}
+			_tree(ft::rb_tree<key_type, mapped_type, key_compare, allocator_type>(alloc, comp)) {}
 		
 		template <class InputIterator>
 			map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
 				const allocator_type& alloc = allocator_type(),
 				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) : 
-					_tree(ft::rb_tree<key_type, mapped_type>(alloc, comp)) {
+					_tree(ft::rb_tree<key_type, mapped_type, key_compare, allocator_type>(alloc, comp)) {
 				insert(first, last);
 			}
 		

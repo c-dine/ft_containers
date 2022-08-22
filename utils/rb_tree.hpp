@@ -18,8 +18,8 @@ namespace ft {
 template<
 	class key_type,
 	class mapped_type, 
-	class key_compare = std::less<key_type>,
-	class allocator_type = std::allocator<ft::pair<key_type, mapped_type> >
+	class key_compare,
+	class allocator_type
 >	class rb_tree {
 
 		public:
@@ -65,7 +65,7 @@ template<
 				_root->color = EMPTY;
 			}
 
-            rb_tree(ft::pair<key_type, mapped_type> element, const allocator_type& alloc = allocator_type(), const key_compare& comp = key_compare()) : _comp(comp), _alloc_pair(alloc) {
+            rb_tree(ft::pair<key_type, mapped_type> element, const allocator_type& alloc = allocator_type(), const key_compare& comp = key_compare()) : _comp(value_compare(comp)), _alloc_pair(alloc) {
                 _root = _alloc.allocate(1);
 				_root->data = _alloc_pair.allocate(1);
 				_alloc_pair.construct(_root->data, element);

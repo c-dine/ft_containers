@@ -45,30 +45,14 @@ void    printReverse(ft::map<T1, T2> &mp)
         std::cout << "_______________________________________________" << std::endl;
 }
 
-
 #define T1 int
-#define T2 std::string
-
-struct ft_more {
-        bool    operator()(const T1 &first, const T1 &second) const {
-                return (first > second);
-        }
-};
-
-typedef ft::map<T1, T2, ft_more> ft_mp;
-typedef ft::map<T1, T2, ft_more>::iterator ft_mp_it;
+#define T2 int
 
 int             main(void)
 {
-        ft_mp mp;
+        ft::map<T1, T2> const mp;
+        ft::map<T1, T2>::iterator it = mp.begin(); // <-- error expected
 
-        mp[42] = "fgzgxfn";
-        mp[25] = "funny";
-        mp[80] = "hey";
-        mp[12] = "no";
-        mp[27] = "bee";
-        mp[90] = "8";
-        printSize(mp);
-
+        std::cout << it->second << std::endl;
         return (0);
 }
