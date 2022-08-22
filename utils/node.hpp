@@ -47,20 +47,20 @@ template <typename key_type, typename value_type, typename key_compare>
 					return (tmp->left);
 				if (tmp->color == FLOATING_END)
 					return (tmp->parent);
-				while (tmp && tmp->data->first >= data->first) {	
+				while (tmp && (!comp(tmp->data->first, data->first) || tmp->data->first == data->first)) {	
 					if (tmp == getFirst())
-						break ;				
-					if (tmp->left && tmp->left->right && tmp->left->right->data->first < data->first) {
+						break ;
+					if (tmp->left && tmp->left->right && comp(tmp->left->right->data->first, data->first)) {
 						tmp = tmp->left->right;
-						while (tmp->right && tmp->right->data->first < data->first)
+						while (tmp->right && comp(tmp->right->data->first, data->first))
 							tmp = tmp->right; 
 						return (tmp);
 					}
-					if (tmp->left && tmp->left != address && tmp->left->data->first < data->first)
+					if (tmp->left && tmp->left != address && comp(tmp->left->data->first, data->first))
 						return (tmp->left);
 					tmp = tmp->parent;
 				}
-				if (tmp && (tmp->data->first < data->first))
+				if (tmp && (comp(tmp->data->first, data->first)))
 					return (tmp);
 				return (NULL);
             }
@@ -72,20 +72,20 @@ template <typename key_type, typename value_type, typename key_compare>
 					return (tmp->right);
 				if (tmp->color == FLOATING_BEG)
 					return (tmp->parent);
-				while (tmp && tmp->data->first <= data->first) {	
+				while (tmp && (comp(tmp->data->first, data->first) || tmp->data->first == data->first)) {	
 					if (tmp == getLast())
-						break ;				
-					if (tmp->right && tmp->right->left && tmp->right->left->data->first > data->first) {
+						break ;		
+					if (tmp->right && tmp->right->left && !comp(tmp->right->left->data->first, data->first)) {
 						tmp = tmp->right->left;
-						while (tmp->left && tmp->left->data->first > data->first)
+						while (tmp->left && !comp(tmp->left->data->first, data->first))
 							tmp = tmp->left; 
 						return (tmp);
 					}
-					if (tmp->right && tmp->right != address && tmp->right->data->first > data->first)
+					if (tmp->right && tmp->right != address && !comp(tmp->right->data->first, data->first))
 						return (tmp->right);
 					tmp = tmp->parent;
 				}
-				if (tmp && (tmp->data->first > data->first))
+				if (tmp && (!comp(tmp->data->first, data->first)))
 					return (tmp);
 				return (NULL);
             }

@@ -482,7 +482,7 @@ template<
 		node_type	*findNextKey(const key_type& k) const {
 			node_type	*tmp = getFirst(true);
 
-			while (tmp && _comp(tmp->data->first, k))
+			while (tmp && _comp(tmp->data->first, k) && tmp->color != FLOATING_END)
 				tmp = tmp->increment();
 			if (!tmp)
 				return (_floating_end);
