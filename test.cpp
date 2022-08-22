@@ -44,61 +44,49 @@ void    printReverse(ft::map<T1, T2> &mp)
         }
         std::cout << "_______________________________________________" << std::endl;
 }
-#include <list>
 
-#include <list>
 
-#define T1 int
-#define T2 std::string
+#define T1 char
+#define T2 int
 typedef ft::pair<const T1, T2> T3;
 
-static int iter = 0;
-
-template <typename MAP, typename U>
-void    ft_erase(MAP &mp, U param)
+template <class MAP>
+void	cmp(const MAP &lhs, const MAP &rhs)
 {
-        std::cout << "\t-- [" << iter++ << "] --" << std::endl;
-        mp.erase(param);
-        printSize(mp);
+	static int i = 0;
+
+	std::cout << "############### [" << i++ << "] ###############"  << std::endl;
+	std::cout << "eq: " << (lhs == rhs) << " | ne: " << (lhs != rhs) << std::endl;
+	std::cout << "lt: " << (lhs <  rhs) << " | le: " << (lhs <= rhs) << std::endl;
+	std::cout << "gt: " << (lhs >  rhs) << " | ge: " << (lhs >= rhs) << std::endl;
 }
 
-template <typename MAP, typename U, typename V>
-void    ft_erase(MAP &mp, U param, V param2)
+int		main(void)
 {
-        std::cout << "\t-- [" << iter++ << "] --" << std::endl;
-        mp.erase(param, param2);
-        printSize(mp);
-}
+	ft::map<T1, T2> mp1;
+	ft::map<T1, T2> mp2;
 
-int             main(void)
-{
-        std::list<T3> lst;
-        unsigned int lst_size = 10;
-        for (unsigned int i = 0; i < lst_size; ++i)
-                lst.push_back(T3(i, std::string((lst_size - i), i + 65)));
-        ft::map<T1, T2> mp(lst.begin(), lst.end());
-        printSize(mp);
+	mp1['a'] = 2; mp1['b'] = 3; mp1['c'] = 4; mp1['d'] = 5;
+	mp2['a'] = 2; mp2['b'] = 3; mp2['c'] = 4; mp2['d'] = 5;
 
-        ft_erase(mp, ++mp.begin());
+	cmp(mp1, mp1); // 0
+	cmp(mp1, mp2); // 1
 
-        ft_erase(mp, mp.begin());
-        ft_erase(mp, --mp.end());
+	mp2['e'] = 6; mp2['f'] = 7; mp2['h'] = 8; mp2['h'] = 9;
 
-        ft_erase(mp, mp.begin(), ++(++(++mp.begin())));
-        ft_erase(mp, --(--(--mp.end())), --mp.end());
+	cmp(mp1, mp2); // 2
+	cmp(mp2, mp1); // 3
 
-        mp[10] = "Hello";
-        mp[11] = "Hi there";
-        printSize(mp);
-        ft_erase(mp, --(--(--mp.end())), mp.end());
+	(++(++mp1.begin()))->second = 42;
 
-        mp[12] = "ONE";
-        mp[13] = "TWO";
-        mp[14] = "THREE";
-        mp[15] = "FOUR";
-        printSize(mp);
-		mp.print_tree();
-        ft_erase(mp, mp.begin(), mp.end());
+        mp1.print_tree();
+	cmp(mp1, mp2); // 4
+	cmp(mp2, mp1); // 5
 
-        return (0);
+	swap(mp1, mp2);
+
+	cmp(mp1, mp2); // 6
+	cmp(mp2, mp1); // 7
+
+	return (0);
 }

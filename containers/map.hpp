@@ -83,20 +83,20 @@ template<
 	
 	/** ITERATORS **/
 		iterator begin() {
+			if (empty())
+				return (iterator(_tree.getFloatingEnd(FLOATING_END)));
 			return (iterator(_tree.getFirst(true)));
 		}
 		const_iterator begin() const {
+			if (empty())
+				return (iterator(_tree.getFloatingEnd(FLOATING_END)));
 			return (const_iterator(_tree.getFirst(true)));
 		}
 		iterator end() {
-			if (empty())
-				return (begin());
-			return (iterator(_tree.getLast(false)));
+			return (iterator(_tree.getFloatingEnd(FLOATING_END)));
 		}
 		const_iterator end() const {
-			if (empty())
-				return (begin());
-			return (const_iterator(_tree.getLast(false)));
+			return (const_iterator(_tree.getFloatingEnd(FLOATING_END)));
 		}
 
 		reverse_iterator rbegin(){
@@ -109,8 +109,8 @@ template<
 
     	reverse_iterator rend() {
 			if (size() == 1)
-				return (reverse_iterator(_tree.getFirst(true)));
-			return (reverse_iterator(_tree.getFirst(false)));
+				return (reverse_iterator(_tree.getFloatingEnd(FLOATING_BEG)));
+			return (reverse_iterator(_tree.getFloatingEnd(FLOATING_BEG)));
 		}
 
 		const_reverse_iterator rend() const {
@@ -171,6 +171,8 @@ template<
 	}
 
 	size_t erase (const key_type& k) {
+		if (!_tree.find_key(k))
+			return (0);
 		_tree.deleteNode(k);
 		return (1);
 	}
@@ -189,7 +191,6 @@ template<
 		for (size_t i = 0; i < size_it; i++) {
 			tmp = first;
 			first++;
-			std::cout << tmp->first << " OK\n";
 			_tree.deleteNode(tmp->first);
 		}
 	}
@@ -333,7 +334,7 @@ template<typename Key, typename Tp, typename Compare, typename Alloc>
 template<typename Key, typename Tp, typename Compare, typename Alloc>
 	inline bool operator<(const map<Key, Tp, Compare, Alloc>& x,
 		const map<Key, Tp, Compare, Alloc>& y)
-		{ return ft::lexicographical_compare(x.begin(), x.end(), y.begin(), x.end()); }
+		{ return ft::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end()); }
 
 template<typename Key, typename Tp, typename Compare, typename Alloc>
 	inline bool operator!=(const map<Key, Tp, Compare, Alloc>& x,

@@ -345,10 +345,8 @@ template<
 			}
 
 
-			if (z == NULL) {
-				std::cout << "Key not found in the tree." << std::endl;
-				return;
-			}
+			if (z == NULL)
+				return (insert_floating());
 
 			y = z;
 			int y_original_color = y->color;
@@ -506,6 +504,12 @@ template<
 
 			node_type	*getRoot() const {
 				return (_root);
+			}
+
+			node_type	*getFloatingEnd(int which) const {
+				if (which == FLOATING_BEG)
+					return (_floating_beg);
+				return (_floating_end);
 			}
 
 			node_type	*getLast(bool reversed) const {
