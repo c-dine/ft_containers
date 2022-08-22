@@ -72,7 +72,9 @@ template<
 			*this = x;
 		}
 
-		~map() {}
+		~map() {
+			delete _tree;
+		}
 
 	/** OPERATOR **/
 		map& operator= (const map& x) {
