@@ -299,7 +299,7 @@ template<
 	}
 
 	allocator_type get_allocator() const {
-		return(_tree.get_allocator());
+		return(_tree->get_allocator());
 	}
 };
 
