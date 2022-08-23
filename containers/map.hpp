@@ -35,15 +35,15 @@ template<
 		typedef	ft::rb_tree<key_type, mapped_type, key_compare, allocator_type>			Rep_type;
 
 	public:
-		typedef typename Pair_alloc_type::pointer         						pointer;
-		typedef typename Pair_alloc_type::const_pointer   						const_pointer;
-		typedef typename Pair_alloc_type::reference       						reference;
-		typedef typename Pair_alloc_type::const_reference 						const_reference;
+		typedef typename Pair_alloc_type::pointer         										pointer;
+		typedef typename Pair_alloc_type::const_pointer   										const_pointer;
+		typedef typename Pair_alloc_type::reference       										reference;
+		typedef typename Pair_alloc_type::const_reference 										const_reference;
 		typedef typename ft::map_iterator<key_type, mapped_type, key_compare>					iterator;
 		typedef typename ft::map_const_iterator<key_type, mapped_type, key_compare>				const_iterator;
-		typedef typename ft::reverse_iterator<iterator>			reverse_iterator;
-		typedef typename ft::reverse_iterator<const_iterator>	const_reverse_iterator;
-		typedef	typename Rep_type::value_compare		value_compare;
+		typedef typename ft::reverse_iterator<iterator>											reverse_iterator;
+		typedef typename ft::reverse_iterator<const_iterator>									const_reverse_iterator;
+		typedef	typename Rep_type::value_compare												value_compare;
 		// typedef typename Rep_type::size_type              						size_type;
 		// typedef typename Rep_type::difference_type        						difference_type;
 
@@ -296,6 +296,10 @@ template<
 
 	Rep_type	getTree() const {
 		return (_tree);
+	}
+
+	allocator_type get_allocator() const {
+		return(_tree.get_allocator());
 	}
 };
 

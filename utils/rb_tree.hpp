@@ -541,6 +541,9 @@ template<
 				return (_comp.getKey());
 			}
 		
+			allocator_type get_allocator() const {
+				return (_alloc_pair);
+			}
 
 			void print_tree_helper(node_type *n, int indent)
 			{
