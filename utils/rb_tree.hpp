@@ -366,10 +366,11 @@ template<
 				if (x && y->parent == z) {
 					x->parent = y;
 				}
-				else if (x) {
+				else {
 					rbTransplant(y, y->right);
 					y->right = z->right;
-					y->right->parent = y;
+					if (y->right)
+						y->right->parent = y;
 				}
 
 				rbTransplant(z, y);
