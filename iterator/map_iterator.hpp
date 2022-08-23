@@ -66,7 +66,7 @@ namespace ft {
 				}
 
 				bool	operator!=(const Self &x) const {
-					return (_current != x._current);
+					return (_current->data != x._current->data);
 				}
 
 				Self base() const {
@@ -134,11 +134,11 @@ namespace ft {
 				}
 
 				bool	operator==(const Self &x) const {
-					return (_current == x._current);
+					return (_current->data == x._current->data);
 				}
 
 				bool	operator!=(const Self &x) const {
-					return (_current != x._current);
+					return (_current->data != x._current->data);
 				}
 
 				node_type	*getNode() const {

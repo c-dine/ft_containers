@@ -113,11 +113,11 @@ template<
 		}
 
     	reverse_iterator rend() {
-			return (reverse_iterator(iterator(_tree->getFloatingEnd(FLOATING_BEG))));
+			return (reverse_iterator(iterator(_tree->getFirst(true))));
 		}
 
 		const_reverse_iterator rend() const {
-			return (const_reverse_iterator(_tree->getFloatingEnd(FLOATING_BEG)));
+			return (const_reverse_iterator(const_iterator(_tree->getFirst(true))));
 		}
 
 	/** CAPACITY **/

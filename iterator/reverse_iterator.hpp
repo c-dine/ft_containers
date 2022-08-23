@@ -105,7 +105,8 @@ template<typename T>
 		inline bool
 		operator==(const reverse_iterator<_Iterator>& left,
 				const reverse_iterator<_Iterator>& right)
-		{ return left.base() == right.base(); }
+		{ return left.base() == right.base(); 
+		}
 
 	template<typename _Iterator>
 		inline bool

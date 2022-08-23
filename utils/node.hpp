@@ -42,7 +42,7 @@ template <typename key_type, typename value_type, typename key_compare>
 
             s_node    *decrement() const {
 				s_node	*tmp = address;
-
+				
 				if (tmp->left && tmp->left->color == FLOATING_BEG)
 					return (tmp->left);
 				if (tmp->color == FLOATING_END)
