@@ -10,6 +10,7 @@
 # include "../utils/enable_if.hpp"
 # include "../utils/is_integral.hpp"
 # include "../utils/lexicographical_compare.hpp"
+# include "../iterator/reverse_iterator.hpp"
 
 namespace ft {
 
@@ -39,9 +40,9 @@ template<
 		typedef typename Pair_alloc_type::reference       						reference;
 		typedef typename Pair_alloc_type::const_reference 						const_reference;
 		typedef typename ft::map_iterator<key_type, mapped_type, key_compare>					iterator;
-		typedef typename ft::map_iterator<key_type, mapped_type, key_compare>					const_iterator;
-		typedef typename ft::map_reverse_iterator<key_type, mapped_type, key_compare>			reverse_iterator;
-		typedef typename ft::map_const_reverse_iterator<key_type, mapped_type, key_compare>	const_reverse_iterator;
+		typedef typename ft::map_const_iterator<key_type, mapped_type, key_compare>					const_iterator;
+		typedef typename ft::reverse_iterator<iterator>			reverse_iterator;
+		typedef typename ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 		typedef	typename Rep_type::value_compare		value_compare;
 		// typedef typename Rep_type::size_type              						size_type;
 		// typedef typename Rep_type::difference_type        						difference_type;
@@ -93,7 +94,7 @@ template<
 		}
 		const_iterator begin() const {
 			if (empty())
-				return (iterator(_tree->getFloatingEnd(FLOATING_END)));
+				return (const_iterator(_tree->getFloatingEnd(FLOATING_END)));
 			return (const_iterator(_tree->getFirst(true)));
 		}
 		iterator end() {
@@ -104,23 +105,23 @@ template<
 		}
 
 		reverse_iterator rbegin(){
-			return (reverse_iterator(_tree->getLast(true)));
+			return (reverse_iterator(iterator(_tree->getLast(true))));
 		}
 
 		const_reverse_iterator rbegin() const {
-			return (const_reverse_iterator(_tree->getLast(true)));
+			return (const_reverse_iterator(iterator(_tree->getLast(true))));
 		}
 
     	reverse_iterator rend() {
 			if (size() == 1)
-				return (reverse_iterator(_tree->getFloatingEnd(FLOATING_BEG)));
-			return (reverse_iterator(_tree->getFloatingEnd(FLOATING_BEG)));
+				return (reverse_iterator(iterator(_tree->getFloatingEnd(FLOATING_BEG))));
+			return (reverse_iterator(iterator(_tree->getFloatingEnd(FLOATING_BEG))));
 		}
 
 		const_reverse_iterator rend() const {
 			if (size() == 1)
-				return (const_reverse_iterator(_tree->getFirst(true)));
-			return (const_reverse_iterator(_tree->getFirst(false)));
+				return (const_reverse_iterator(iterator(_tree->getFirst(true))));
+			return (const_reverse_iterator(iterator(_tree->getFirst(false))));
 		}
 
 	/** CAPACITY **/
@@ -309,8 +310,8 @@ template<typename Key, typename Tp, typename Compare, typename Alloc>
 			if (x.size() != y.size())
 				return (false);
 
-			ft::map_iterator<Key, Tp, Compare>	x_it = x.begin();
-			for (ft::map_iterator<Key, Tp, Compare> y_it = y.begin(); y_it != y.end(); y_it++) {
+			ft::map_const_iterator<Key, Tp, Compare>	x_it = x.begin();
+			for (ft::map_const_iterator<Key, Tp, Compare> y_it = y.begin(); y_it != y.end(); y_it++) {
 				if (*x_it != *y_it || x_it == x.end())
 					return (false);
 				x_it++;
