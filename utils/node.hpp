@@ -62,7 +62,7 @@ template <typename key_type, typename value_type, typename key_compare>
 				}
 				if (tmp && (comp(tmp->data->first, data->first)))
 					return (tmp);
-				return (NULL);
+				return (getLast()->parent);
             }
 
             s_node    *increment() const {
@@ -87,7 +87,7 @@ template <typename key_type, typename value_type, typename key_compare>
 				}
 				if (tmp && (!comp(tmp->data->first, data->first)))
 					return (tmp);
-				return (NULL);
+				return (getFirst()->parent);
             }
 	};
 }

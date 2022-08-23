@@ -323,7 +323,7 @@ template<
 			if (size_tree() == 1 && _root->data->first == data) {
 				_root->color = EMPTY;
 				_alloc_pair.destroy(_root->data);
-				_alloc_pair.construct(_root->data, ft::pair<key_type, mapped_type>(key_type(),mapped_type()));
+				_alloc_pair.construct(_root->data, ft::pair<key_type, mapped_type>());
 			}
 			else
 	    		deleteNodeHelper(_root, ft::pair<key_type, mapped_type>(data, mapped_type()));

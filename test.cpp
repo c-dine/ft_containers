@@ -68,19 +68,21 @@ int		main(void)
 	// printPair(it.base());
 	// printPair(inc(it.base(), 1));
 
-	// std::cout << "TEST OFFSET" << std::endl;
-	// printPair(it);
+
+
+	std::cout << "TEST OFFSET" << std::endl;
+	printPair(it);
 	// --it;
 	// printPair(it);
 	// --it;
 	// printPair(it);
 	// printPair(it.base());
 
-	it = mp.rbegin(); ite = mp.rend();
-	while (it != ite) {
-		std::cout << it.base()->first << " et " << ite.base()->first << std::endl;
-		std::cout << "[rev] " << printPair(it++, false) << std::endl;
-		}
+	// it = mp.rbegin(); ite = mp.rend();
+	// while (it != ite) {
+	// 	std::cout << it.base()->first << " et " << ite.base()->first << std::endl;
+	// 	std::cout << "[rev] " << printPair(it++, false) << std::endl;
+	// 	}
 	// printReverse(mp);
 
 	return (0);
