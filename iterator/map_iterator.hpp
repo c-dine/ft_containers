@@ -28,8 +28,6 @@ namespace ft {
 			/** CONSTRUCTOR **/
 				map_iterator() : _current() {}
 				explicit map_iterator(node_type *x) : _current(x) {}
-				// map_iterator(const const_iterator &x) : _current(x.getNode()) {}
-				// map_iterator(const map_iterator &x) : _current(x.getNode()) {}
 			/** OPERATOR **/
 				reference	operator*() const {
 					return (*(_current->data));

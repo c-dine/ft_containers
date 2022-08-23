@@ -40,7 +40,7 @@ template<
 		typedef typename Pair_alloc_type::reference       						reference;
 		typedef typename Pair_alloc_type::const_reference 						const_reference;
 		typedef typename ft::map_iterator<key_type, mapped_type, key_compare>					iterator;
-		typedef typename ft::map_const_iterator<key_type, mapped_type, key_compare>					const_iterator;
+		typedef typename ft::map_const_iterator<key_type, mapped_type, key_compare>				const_iterator;
 		typedef typename ft::reverse_iterator<iterator>			reverse_iterator;
 		typedef typename ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 		typedef	typename Rep_type::value_compare		value_compare;
@@ -105,23 +105,19 @@ template<
 		}
 
 		reverse_iterator rbegin(){
-			return (reverse_iterator(iterator(_tree->getLast(true))));
+			return (reverse_iterator(iterator(_tree->getLast(false))));
 		}
 
 		const_reverse_iterator rbegin() const {
-			return (const_reverse_iterator(iterator(_tree->getLast(true))));
+			return (const_reverse_iterator(iterator(_tree->getLast(false))));
 		}
 
     	reverse_iterator rend() {
-			if (size() == 1)
-				return (reverse_iterator(iterator(_tree->getFloatingEnd(FLOATING_BEG))));
 			return (reverse_iterator(iterator(_tree->getFloatingEnd(FLOATING_BEG))));
 		}
 
 		const_reverse_iterator rend() const {
-			if (size() == 1)
-				return (const_reverse_iterator(iterator(_tree->getFirst(true))));
-			return (const_reverse_iterator(iterator(_tree->getFirst(false))));
+			return (const_reverse_iterator(_tree->getFloatingEnd(FLOATING_BEG)));
 		}
 
 	/** CAPACITY **/
