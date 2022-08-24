@@ -31,7 +31,7 @@ template<typename T>
 
 		/** CONSTRUCTORS **/
 		reverse_iterator( void ) : _current(0) {}
-		reverse_iterator(const reverse_iterator<pointer> &copy) : _current(copy.base()) {std::cout << "HEEEELP\n";}
+		reverse_iterator(const reverse_iterator<pointer> &copy) : _current(copy.base()) {}
 		reverse_iterator(const T &copy) : _current(copy) {}
 		template<typename _Iter>
 			reverse_iterator(const reverse_iterator<_Iter> &copy) : _current(copy.base()) {}

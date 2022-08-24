@@ -85,6 +85,8 @@ template<
 			}
 
 			void	clear() {
+				if (_root->color == EMPTY)
+					return ;
 				delete_floating();
 
 				free_nodes(_root);
