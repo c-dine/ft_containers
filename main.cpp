@@ -129,13 +129,16 @@ int	main() {
 		// tree.printTree();
 	}
 	{
-		// ft::map<int, int, std::greater<int> >	tab;
-		// ft::map<int, int, std::greater<int> >	tab1;
+		ft::map<int, int, std::greater<int> >	tab;
+		ft::map<int, int, std::greater<int> >	tab1;
 
 		// tab.insert(ft::make_pair(-1,3));
 		// tab.insert(ft::make_pair(-2,4));
 		// tab.insert(ft::make_pair(-3,4));
 		// tab.insert(ft::make_pair(-4,4));
+
+		std::cout << "MAX SIZE= " << tab.max_size() << std::endl;
+
 		// ft::map<int, int, std::greater<int> >::iterator	it = tab.begin();
 
 		// it++;

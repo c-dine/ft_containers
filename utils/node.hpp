@@ -13,11 +13,11 @@ template <typename key_type, typename value_type, typename key_compare>
 	{
 			s_node								*address;
 			ft::pair<key_type, value_type>		*data;
+			int 								color;
 			struct s_node						*parent;
 			struct s_node						*left;
 			struct s_node						*right;
-			int 								color;
-			key_compare						comp;
+			key_compare							comp;
 
 			s_node	*getRoot() const {
 				s_node	*tmp = address;
