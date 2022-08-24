@@ -190,9 +190,9 @@ template < class T, class Alloc = std::allocator<T> >
 			pointer			new_start;
 			pointer			new_finish;
 
-			if (capacity() == 0)
+			if (capacity() == 0 && !exact_size)
 				new_storage = n;
-			else {
+			else if (!exact_size) {
 				coeff_alloc = 2;
 				while (n > coeff_alloc * capacity()) 
 					coeff_alloc++;
@@ -229,16 +229,19 @@ template < class T, class Alloc = std::allocator<T> >
 				}
 				_finish = _start + n - 1;
 			}
-			if (n > capacity()) {
-				if (capacity() != 0 && n < size() * 2 && size() != 0)
-					reallocate(size() * 2, 1);
+			if (n >= capacity()) {
+				if (capacity() != 0 && n < size() * 2 && size() != 0) 
+					reserve(size() * 2);
 				else
-					reallocate(n, 1);
+					reserve(n);
 			}
 			if (n > size())
 			{
-				for (size_type i = 0; i < n - size(); i++) {
-					_alloc.construct(_finish + i + 1, val);
+				for (size_type i = 0; i < n - size() - 1; i++) {
+					if (!_finish)
+						_alloc.construct(_start + i + 1, val);
+					else
+						_alloc.construct(_finish + i + 1, val);
 				}
 				_finish = _start + n - 1;
 			}
@@ -444,6 +447,9 @@ template < class T, class Alloc = std::allocator<T> >
 
 		void	clear() {
 			pointer	tmp = _start;
+
+			if (!size())
+				return ;
 			for (size_type i = 0; i < size(); i++) {
 				_alloc.destroy(tmp);
 				tmp++;
