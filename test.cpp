@@ -11,24 +11,14 @@
 
 int		main(void)
 {
-	ft::vector<std::string> X;
-	ft::vector<std::string> Y;
+	ft::map<int, int>	tab;
 
-	X = Y;
-	Y = X;
-	Y.insert(Y.begin(), "y");
-
-	ft::vector<std::string>::iterator it = Y.begin();
-	ft::vector<std::string>::iterator it2 = it + 105;
-
-	Y.erase(it, it2);
-	X = Y;
-	Y = X;
-	Y.insert(Y.begin(), "y");
-	Y.insert(Y.begin(), "y");
-	Y.insert(Y.begin(), "y");
-	Y.insert(Y.begin(), "y");
-	Y.insert(Y.begin(), "y");
-	Y.erase(it, it2);
+	tab.insert(ft::make_pair(0,0));
+	tab.insert(ft::make_pair(1,0));
+	// for (int i = 0; i < 5; i++){
+	// 	tab.insert(ft::make_pair(i,i));
+	// }
+	tab.print_tree();
+	std::cout << tab.count(0) << std::endl;
 	return (0);
 }

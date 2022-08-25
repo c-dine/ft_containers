@@ -458,7 +458,7 @@ template<
 
 			if (!node || node->color == FLOATING_BEG || node->color == FLOATING_END)
 				return (NULL);
-			if (node->data->first == k)
+			if (node->data->first == k && node->color != EMPTY)
 				return (node);
 			tmp = search(node->right, k);
 			if (tmp)

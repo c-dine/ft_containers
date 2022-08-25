@@ -109,7 +109,7 @@ template<
 		}
 
 		const_reverse_iterator rbegin() const {
-			return (const_reverse_iterator(iterator(_tree->getLast(false))));
+			return (const_reverse_iterator(const_iterator(_tree->getLast(false))));
 		}
 
     	reverse_iterator rend() {
@@ -138,6 +138,7 @@ template<
 	/** MODIFIERS **/
 	ft::pair<iterator,bool> insert (const value_type& val) {
 		node_type	*tmp = _tree->find_key(val.first);
+
 		if (tmp)
 			return (ft::make_pair(iterator(tmp), false));
 		return (ft::make_pair(iterator(_tree->insert(val, NULL)), true));
