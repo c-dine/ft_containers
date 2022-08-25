@@ -101,7 +101,8 @@ template < class T, class Alloc = std::allocator<T> >
 
 		/** DESTRUCTOR **/
 		~vector() {
-			clear();
+			if (size())
+				clear();
 			_alloc.deallocate(_start, capacity());
 		}
 
@@ -237,13 +238,9 @@ template < class T, class Alloc = std::allocator<T> >
 			}
 			if (n > size())
 			{
-				for (size_type i = 0; i < n - size() - 1; i++) {
-					if (!_finish)
-						_alloc.construct(_start + i + 1, val);
-					else
-						_alloc.construct(_finish + i + 1, val);
-				}
-				_finish = _start + n - 1;
+				size_t	size_ = size();
+				for (size_type i = 0; i < n - size_; i++)
+					push_back(val);
 			}
 		}
 
@@ -448,8 +445,6 @@ template < class T, class Alloc = std::allocator<T> >
 		void	clear() {
 			pointer	tmp = _start;
 
-			if (!size())
-				return ;
 			for (size_type i = 0; i < size(); i++) {
 				_alloc.destroy(tmp);
 				tmp++;

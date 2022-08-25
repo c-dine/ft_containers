@@ -11,9 +11,8 @@
 
 int		main(void)
 {
-	ft::vector<std::string> vct(2, "hello");
+	ft::vector<std::string> vct;
 
-	vct.resize(287, "How did you get this scar?");
-	std::cout << vct.capacity() << std::endl;
+	vct = ft::vector<std::string>(345667987654324567, "HELLoo");
 	return (0);
 }
