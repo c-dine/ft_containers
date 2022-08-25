@@ -80,6 +80,29 @@ template<
 				_root->comp = _comp.getKey();
             }
 
+			void swap(rb_tree& x) {
+				node_type 			*tmp_root = _root;
+				value_compare		tmp_comp = _comp;
+				allocator_type		tmp_alloc_pair = _alloc_pair;
+				allocator_type_node	tmp_alloc = _alloc;
+				node_type			*tmp_floating_beg = _floating_beg;
+				node_type			*tmp_floating_end = _floating_end;
+
+				_root = x._root;
+				_comp = x._comp;
+				_alloc_pair = x._alloc_pair;
+				_alloc = x._alloc;
+				_floating_beg = x._floating_beg;
+				_floating_end = x._floating_end;
+
+				x._root = tmp_root;
+				x._comp = tmp_comp;
+				x._alloc_pair = tmp_alloc_pair;
+				x._alloc = tmp_alloc;
+				x._floating_beg = tmp_floating_beg;
+				x._floating_end = tmp_floating_end;
+			}
+			
 			~rb_tree() {
 				free_nodes(_root);
 			}
