@@ -24,8 +24,8 @@ template<
 
 		public:
 
-			typedef s_node<key_type, mapped_type, key_compare>							node_type;
-			typedef	ft::pair<const key_type, mapped_type>								value_type;
+			typedef	typename allocator_type::value_type									value_type;
+			typedef s_node<key_type, mapped_type, value_type, key_compare>				node_type;
 
 			class value_compare : public std::binary_function<mapped_type, mapped_type, bool> {
 				protected:
@@ -55,7 +55,7 @@ template<
 			rb_tree(const allocator_type& alloc = allocator_type(), const key_compare& comp = key_compare()) : _comp(value_compare(comp)), _alloc_pair(alloc) {
 				_root = _alloc.allocate(1);
 				_root->data = _alloc_pair.allocate(1);
-				_alloc_pair.construct(_root->data, ft::pair<key_type, mapped_type>());
+				_alloc_pair.construct(_root->data, value_type());
 				_root->address = _root;
 				_root->parent = NULL;
 				_floating_beg = add_floating_end(FLOATING_BEG);
@@ -66,7 +66,7 @@ template<
 				_root->comp = _comp.getKey();
 			}
 
-            rb_tree(ft::pair<key_type, mapped_type> element, const allocator_type& alloc = allocator_type(), const key_compare& comp = key_compare()) : _comp(value_compare(comp)), _alloc_pair(alloc) {
+            rb_tree(value_type element, const allocator_type& alloc = allocator_type(), const key_compare& comp = key_compare()) : _comp(value_compare(comp)), _alloc_pair(alloc) {
                 _root = _alloc.allocate(1);
 				_root->data = _alloc_pair.allocate(1);
 				_alloc_pair.construct(_root->data, element);
@@ -92,7 +92,7 @@ template<
 				free_nodes(_root);
 				_root = _alloc.allocate(1);
 				_root->data = _alloc_pair.allocate(1);
-				_alloc_pair.construct(_root->data, ft::pair<key_type, mapped_type>());
+				_alloc_pair.construct(_root->data, value_type());
 				_root->address = _root;
 				_root->parent = NULL;
 				_root->color = EMPTY;
@@ -119,7 +119,7 @@ template<
 
 			tmp = _alloc.allocate(1);
 			tmp->data = _alloc_pair.allocate(1);
-			_alloc_pair.construct(tmp->data, ft::pair<key_type, mapped_type>());
+			_alloc_pair.construct(tmp->data, value_type());
 			if (which == FLOATING_BEG)
 				tmp->color = FLOATING_BEG;
 			else if (which == FLOATING_END)
@@ -155,8 +155,8 @@ template<
 				_floating_end->parent = tmp_end;
 			_alloc_pair.destroy(_floating_beg->data);
 			_alloc_pair.destroy(_floating_end->data);
-			_alloc_pair.construct(_floating_beg->data, ft::pair<key_type, mapped_type>());
-			_alloc_pair.construct(_floating_end->data, ft::pair<key_type, mapped_type>());
+			_alloc_pair.construct(_floating_beg->data, value_type());
+			_alloc_pair.construct(_floating_end->data, value_type());
 		}
 
 		/** TOOLS **/
@@ -215,7 +215,7 @@ template<
 
 		/** INSERT **/
 
-		node_type *insert(ft::pair<key_type, mapped_type> key, ft::pair<key_type, mapped_type> *hint) {
+		node_type *insert(value_type key, value_type *hint) {
 			node_type *node = _alloc.allocate(1);
 		
 			node->data = _alloc_pair.allocate(1);
@@ -325,13 +325,13 @@ template<
 			if (size_tree() == 1 && _root->data->first == data) {
 				_root->color = EMPTY;
 				_alloc_pair.destroy(_root->data);
-				_alloc_pair.construct(_root->data, ft::pair<key_type, mapped_type>());
+				_alloc_pair.construct(_root->data, value_type());
 			}
 			else
-	    		deleteNodeHelper(_root, ft::pair<key_type, mapped_type>(data, mapped_type()));
+	    		deleteNodeHelper(_root, value_type(data, mapped_type()));
   		}
 
-		void deleteNodeHelper(node_type *node, ft::pair<key_type, mapped_type> key) {
+		void deleteNodeHelper(node_type *node, value_type key) {
 			node_type	*z = NULL;
 			node_type	*x, *y;
 

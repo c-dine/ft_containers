@@ -5,21 +5,21 @@
 
 namespace ft {
 	
-	template<typename key_type, typename mapped_type, typename value_compare>
+	template<typename key_type, typename mapped_type, typename value_type_, typename value_compare>
 		class map_const_iterator;
 
-	template<typename key_type, typename mapped_type, typename value_compare>
+	template<typename key_type, typename mapped_type, typename value_type_, typename value_compare>
 		class map_iterator {
 			public:
-				typedef	ft::pair<key_type, mapped_type>		value_type;
-				typedef value_type&							reference;
-				typedef value_type*							pointer;
+				typedef	value_type_								value_type;
+				typedef value_type_&							reference;
+				typedef value_type_*							pointer;
 				typedef std::bidirectional_iterator_tag		iterator_category;
 				typedef std::ptrdiff_t						difference_type;
 
-				typedef map_iterator<key_type, mapped_type, value_compare>			Self;
-				typedef map_const_iterator<key_type, mapped_type, value_compare>	const_iterator;
-				typedef ft::s_node<key_type, mapped_type, value_compare>		node_type;
+				typedef map_iterator<key_type, mapped_type, value_type_, value_compare>			Self;
+				typedef map_const_iterator<key_type, mapped_type, value_type_, value_compare>	const_iterator;
+				typedef ft::s_node<key_type, mapped_type, value_type_, value_compare>		node_type;
 
 			private:
 				node_type	*_current;
@@ -78,18 +78,18 @@ namespace ft {
 				}
 		};
 
-		template<typename key_type, typename mapped_type, typename value_compare>
+		template<typename key_type, typename mapped_type, typename value_type_, typename value_compare>
 		class map_const_iterator {
 			public:
-				typedef	ft::pair<key_type, mapped_type>				value_type;
-				typedef const value_type&							reference;
-				typedef const value_type*							pointer;
+				typedef	value_type_								value_type;
+				typedef const value_type_&							reference;
+				typedef const value_type_*							pointer;
 				typedef std::bidirectional_iterator_tag				iterator_category;
 				typedef std::ptrdiff_t								difference_type;
 
-				typedef map_iterator<key_type, mapped_type, value_compare>				iterator;
-				typedef map_const_iterator<key_type, mapped_type, value_compare>		Self;
-				typedef const ft::s_node<key_type, mapped_type, value_compare>		node_type;
+				typedef map_iterator<key_type, mapped_type, value_type_, value_compare>				iterator;
+				typedef map_const_iterator<key_type, mapped_type, value_type_, value_compare>		Self;
+				typedef const ft::s_node<key_type, mapped_type, value_type_, value_compare>		node_type;
 
 			private:
 				node_type	*_current;
@@ -150,16 +150,16 @@ namespace ft {
 				}				
 		};
 
-	template<typename key_type, typename mapped_type, typename value_compare>
+	template<typename key_type, typename mapped_type, typename value_type_, typename value_compare>
 		inline bool
-		operator==(const map_iterator<key_type, mapped_type, value_compare>& x,
-					const map_const_iterator<key_type, mapped_type, value_compare>& y)
+		operator==(const map_iterator<key_type, mapped_type, value_type_, value_compare>& x,
+					const map_const_iterator<key_type, mapped_type, value_type_, value_compare>& y)
 		{ return x.getNode() == y.getNode(); }
 
-	template<typename key_type, typename mapped_type, typename value_compare>
+	template<typename key_type, typename mapped_type, typename value_type_, typename value_compare>
 		inline bool
-		operator!=(const map_iterator<key_type, mapped_type, value_compare>& x,
-					const map_const_iterator<key_type, mapped_type, value_compare>& y)
+		operator!=(const map_iterator<key_type, mapped_type, value_type_, value_compare>& x,
+					const map_const_iterator<key_type, mapped_type, value_type_, value_compare>& y)
 		{ return x.getNode() != y.getNode(); }
 }
 #endif

@@ -8,11 +8,11 @@
 
 namespace ft {
 
-template <typename key_type, typename value_type, typename key_compare>
+template <typename key_type, typename mapped_type, typename value_type, typename key_compare>
 	struct s_node 
 	{
 			s_node								*address;
-			ft::pair<key_type, value_type>		*data;
+			value_type							*data;
 			int 								color;
 			struct s_node						*parent;
 			struct s_node						*left;

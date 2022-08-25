@@ -27,7 +27,7 @@ template<
 		typedef	T													mapped_type;
 		typedef	Compare												key_compare;
 		typedef	Alloc												allocator_type;
-		typedef ft::s_node<const key_type, mapped_type, key_compare>		node_type;
+		typedef ft::s_node<const key_type, mapped_type, value_type, key_compare>		node_type;
 	
 	private:
 		typedef typename Alloc::template rebind<value_type>::other						Pair_alloc_type;
@@ -38,8 +38,8 @@ template<
 		typedef typename Pair_alloc_type::const_pointer   										const_pointer;
 		typedef typename Pair_alloc_type::reference       										reference;
 		typedef typename Pair_alloc_type::const_reference 										const_reference;
-		typedef typename ft::map_iterator<const key_type, mapped_type, key_compare>					iterator;
-		typedef typename ft::map_const_iterator<const key_type, mapped_type, key_compare>				const_iterator;
+		typedef typename ft::map_iterator<const key_type, mapped_type, value_type, key_compare>					iterator;
+		typedef typename ft::map_const_iterator<const key_type, mapped_type, value_type, key_compare>				const_iterator;
 		typedef typename ft::reverse_iterator<iterator>											reverse_iterator;
 		typedef typename ft::reverse_iterator<const_iterator>									const_reverse_iterator;
 		typedef	typename Rep_type::value_compare												value_compare;
@@ -310,8 +310,8 @@ template<typename Key, typename Tp, typename Compare, typename Alloc>
 			if (x.size() != y.size())
 				return (false);
 
-			ft::map_const_iterator<const Key, Tp, Compare>	x_it = x.begin();
-			for (ft::map_const_iterator<const Key, Tp, Compare> y_it = y.begin(); y_it != y.end(); y_it++) {
+			ft::map_const_iterator<const Key, Tp, typename Alloc::value_type, Compare>	x_it = x.begin();
+			for (ft::map_const_iterator<const Key, Tp, typename Alloc::value_type, Compare> y_it = y.begin(); y_it != y.end(); y_it++) {
 				if (*x_it != *y_it || x_it == x.end())
 					return (false);
 				x_it++;
