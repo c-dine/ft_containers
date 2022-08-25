@@ -11,8 +11,6 @@ rb tree: https://www.programiz.com/dsa/red-black-tree
 	reserve -> n
 	asign -> n
 -	value compare friend quand clean
--	pas de new
--	norme de coplien
 -	test vitesse
 
 what i was doing: insert position

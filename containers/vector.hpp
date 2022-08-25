@@ -113,12 +113,20 @@ template < class T, class Alloc = std::allocator<T> >
 		/** OPERATOR **/
 
 		vector& operator= (const vector& x) {
+			bool	reallocate_;
+
 			if (this != &x && x.size()) {
+				if (x.size() > capacity())
+					reallocate_ = 1;
+				else
+					reallocate_ = 0;
 				if (_start) {
 					clear();
-					_alloc.deallocate(_start, capacity());
+					if (reallocate_)
+						_alloc.deallocate(_start, capacity());
 				}
-				_start = _alloc.allocate(x.size());
+				if (reallocate_)
+					_start = _alloc.allocate(x.size());
 				_finish = _start;
 				for (size_type i = 0; i < x.size(); i++)
 				{
@@ -128,7 +136,8 @@ template < class T, class Alloc = std::allocator<T> >
 				}
 				if (!x.size())
 					_finish = 0;
-				_end_of_storage = _finish;
+				if (reallocate_)
+					_end_of_storage = _finish;
 			}
 			else if (!x.size()) {
 				clear();
@@ -380,7 +389,10 @@ template < class T, class Alloc = std::allocator<T> >
 		void		insert (iterator position, size_type n, const value_type& val) {
 			if (size() + n > capacity()) {
 				size_type	position_iterator = static_cast<size_type>(position - begin());
-				reserve(size() + n);
+				if (capacity() != 0 && size() + n < size() * 2 && size() != 0) 
+					reserve(size() * 2);
+				else
+					reserve(size() + n);
 				position = begin() + position_iterator;
 			}
 			for (size_type i = 0; i < n; i++)
