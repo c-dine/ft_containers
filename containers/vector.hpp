@@ -56,15 +56,17 @@ template < class T, class Alloc = std::allocator<T> >
 			_finish(0),
 			_end_of_storage(0)
 		{
-			_start = _alloc.allocate(n);
-			_finish = _start;
-			for (size_type i = 0; i < n; i++)
-			{
-				_alloc.construct(_finish, val);
-				if (i < n - 1)
-					_finish++;
+			if (n) {
+				_start = _alloc.allocate(n);
+				_finish = _start;
+				for (size_type i = 0; i < n; i++)
+				{
+					_alloc.construct(_finish, val);
+					if (i < n - 1)
+						_finish++;
+				}
+				_end_of_storage = _finish;
 			}
-			_end_of_storage = _finish;
 		}
 
 		template <class InputIterator>
@@ -76,15 +78,17 @@ template < class T, class Alloc = std::allocator<T> >
 			_finish(0),
 			_end_of_storage(0)
 		{
-			_start = _alloc.allocate(distance_it(first, last));
-			_finish = _start;
-			for (InputIterator it = first; it != last; it++)
-			{
-				_alloc.construct(_finish, *it);
-				if (1 < distance_it(it, last))
-					_finish++;
+			if (distance_it(first, last)) {
+				_start = _alloc.allocate(distance_it(first, last));
+				_finish = _start;
+				for (InputIterator it = first; it != last; it++)
+				{
+					_alloc.construct(_finish, *it);
+					if (1 < distance_it(it, last))
+						_finish++;
+				}
+				_end_of_storage = _finish;
 			}
-			_end_of_storage = _finish;
 		}
 
 		vector (const vector& x)  :
@@ -101,8 +105,7 @@ template < class T, class Alloc = std::allocator<T> >
 
 		/** DESTRUCTOR **/
 		~vector() {
-			if (size())
-				clear();
+			clear();
 			_alloc.deallocate(_start, capacity());
 		}
 
@@ -110,7 +113,7 @@ template < class T, class Alloc = std::allocator<T> >
 		/** OPERATOR **/
 
 		vector& operator= (const vector& x) {
-			if (this != &x) {
+			if (this != &x && x.size()) {
 				if (_start) {
 					clear();
 					_alloc.deallocate(_start, capacity());
@@ -126,6 +129,9 @@ template < class T, class Alloc = std::allocator<T> >
 				if (!x.size())
 					_finish = 0;
 				_end_of_storage = _finish;
+			}
+			else if (!x.size()) {
+				clear();
 			}
 			return (*this);
 		}
@@ -411,7 +417,16 @@ template < class T, class Alloc = std::allocator<T> >
 		}
 
 		iterator erase (iterator first, iterator last) {
+
+			if (!size() || !_start)
+				return (first);
+			if (last > iterator(_finish))
+				last = iterator(_finish + 1);
+			if (first < iterator(_start))
+				first = iterator(_start);
+
 			iterator	tmp = first;
+			
 			for (iterator it = last; it != iterator(_finish + 1); it++) {
 				*tmp = *it;
 				tmp++;

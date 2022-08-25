@@ -11,8 +11,24 @@
 
 int		main(void)
 {
-	ft::vector<std::string> vct;
+	ft::vector<std::string> X;
+	ft::vector<std::string> Y;
 
-	vct = ft::vector<std::string>(345667987654324567, "HELLoo");
+	X = Y;
+	Y = X;
+	Y.insert(Y.begin(), "y");
+
+	ft::vector<std::string>::iterator it = Y.begin();
+	ft::vector<std::string>::iterator it2 = it + 105;
+
+	Y.erase(it, it2);
+	X = Y;
+	Y = X;
+	Y.insert(Y.begin(), "y");
+	Y.insert(Y.begin(), "y");
+	Y.insert(Y.begin(), "y");
+	Y.insert(Y.begin(), "y");
+	Y.insert(Y.begin(), "y");
+	Y.erase(it, it2);
 	return (0);
 }
