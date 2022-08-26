@@ -30,8 +30,10 @@ namespace ft {
 			/** CONSTRUCTORS **/
 			/******************/
 
-				map_iterator() : _current() {}
+				map_iterator(void) : _current() {}
 				explicit map_iterator(node_type *x) : _current(x) {}
+				map_iterator(const Self &x) : _current(x._current) {}
+				~map_iterator( void ) {}
 			
 			
 			/**************/
@@ -110,8 +112,9 @@ namespace ft {
 			/******************/
 				map_const_iterator() : _current() {}
 				explicit map_const_iterator(node_type *x) : _current(x) {}
-				map_const_iterator(const Self &x) : _current(x.getNode()) {}
+				map_const_iterator(const Self &x) : _current(x._current) {}
 				map_const_iterator(const iterator &x) : _current(x.getNode()) {}
+				~map_const_iterator( void ) {}
 			
 			
 			/**************/
@@ -171,12 +174,12 @@ namespace ft {
 		inline bool
 		operator==(const map_iterator<key_type, mapped_type, value_type_, value_compare>& x,
 					const map_const_iterator<key_type, mapped_type, value_type_, value_compare>& y)
-		{ return x.getNode() == y.getNode(); }
+		{ return (x.getNode() == y.getNode()); }
 
 	template<typename key_type, typename mapped_type, typename value_type_, typename value_compare>
 		inline bool
 		operator!=(const map_iterator<key_type, mapped_type, value_type_, value_compare>& x,
 					const map_const_iterator<key_type, mapped_type, value_type_, value_compare>& y)
-		{ return x.getNode() != y.getNode(); }
+		{ return (x.getNode() != y.getNode()); }
 }
 #endif
