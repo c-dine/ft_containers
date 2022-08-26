@@ -9,12 +9,9 @@ template<typename T, typename Container = ft::vector<T> >
 	class stack
 	{
 		public:
-			typedef typename Container::value_type				Container_value_type;
 			typedef typename Container::value_type				value_type;
-			typedef typename Container::reference				reference;
-			typedef typename Container::const_reference			const_reference;
-			typedef typename Container::size_type				size_type;
 			typedef          Container							container_type;
+			typedef typename Container::size_type				size_type;
 
 		template<typename T_, typename Container_>
 		  friend bool
@@ -28,10 +25,18 @@ template<typename T, typename Container = ft::vector<T> >
 			Container	_c;
 
 		public:
-		/** CONSTRUCTORS **/
+		
+		/******************/
+		/** CONSTRUCTOR **/
+		/******************/
+
 			explicit	stack(const container_type& ctnr = container_type()) : _c(ctnr) {}
 
+
+		/**********************/
 		/** MEMBER FUNCTIONS **/
+		/**********************/
+
 			bool	empty() const {
 				return (_c.empty());
 			}
@@ -40,11 +45,11 @@ template<typename T, typename Container = ft::vector<T> >
 				return (_c.size());
 			}
 
-			reference	top() {
+			value_type&	top() {
 				return (_c.back());
 			}
 
-			const_reference	top() const {
+			const value_type&	top() const {
 				return (_c.back());
 			}
 
@@ -56,36 +61,36 @@ template<typename T, typename Container = ft::vector<T> >
 				_c.pop_back();
 			}
 };
-/** COMPARISON OPERATOR **/
-	template<typename T, typename Container>
-		inline bool
-		operator==(const stack<T, Container>& left, const stack<T, Container>& right)
-		{ return left._c == right._c; }
 
-	template<typename T, typename Container>
-		inline bool
-		operator<(const stack<T, Container>& left, const stack<T, Container>& right)
-		{ return left._c < right._c; }
+template<typename T, typename Container>
+	inline bool
+	operator==(const stack<T, Container>& left, const stack<T, Container>& right)
+	{ return (left._c == right._c); }
 
-	template<typename T, typename Container>
-		inline bool
-		operator!=(const stack<T, Container>& left, const stack<T, Container>& right)
-		{ return !(left == right); }
+template<typename T, typename Container>
+	inline bool
+	operator<(const stack<T, Container>& left, const stack<T, Container>& right)
+	{ return (left._c < right._c); }
 
-	template<typename T, typename Container>
-		inline bool
-		operator>(const stack<T, Container>& left, const stack<T, Container>& right)
-		{ return right < left; }
+template<typename T, typename Container>
+	inline bool
+	operator!=(const stack<T, Container>& left, const stack<T, Container>& right)
+	{ return (!(left == right)); }
 
-	template<typename T, typename Container>
-		inline bool
-		operator<=(const stack<T, Container>& left, const stack<T, Container>& right)
-		{ return !(right < left); }
+template<typename T, typename Container>
+	inline bool
+	operator>(const stack<T, Container>& left, const stack<T, Container>& right)
+	{ return (right < left); }
 
-	template<typename T, typename Container>
-		inline bool
-		operator>=(const stack<T, Container>& left, const stack<T, Container>& right)
-		{ return !(left < right); }
+template<typename T, typename Container>
+	inline bool
+	operator<=(const stack<T, Container>& left, const stack<T, Container>& right)
+	{ return (!(right < left)); }
+
+template<typename T, typename Container>
+	inline bool
+	operator>=(const stack<T, Container>& left, const stack<T, Container>& right)
+	{ return (!(left < right)); }
 
 }
 

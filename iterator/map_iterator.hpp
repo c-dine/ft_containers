@@ -25,10 +25,19 @@ namespace ft {
 				node_type	*_current;
 
 			public:
-			/** CONSTRUCTOR **/
+
+			/******************/
+			/** CONSTRUCTORS **/
+			/******************/
+
 				map_iterator() : _current() {}
 				explicit map_iterator(node_type *x) : _current(x) {}
+			
+			
+			/**************/
 			/** OPERATOR **/
+			/**************/
+			
 				reference	operator*() const {
 					return (*(_current->data));
 				}
@@ -81,7 +90,7 @@ namespace ft {
 		template<typename key_type, typename mapped_type, typename value_type_, typename value_compare>
 		class map_const_iterator {
 			public:
-				typedef	value_type_								value_type;
+				typedef	const value_type_							value_type;
 				typedef const value_type_&							reference;
 				typedef const value_type_*							pointer;
 				typedef std::bidirectional_iterator_tag				iterator_category;
@@ -95,12 +104,20 @@ namespace ft {
 				node_type	*_current;
 
 			public:
-			/** CONSTRUCTOR **/
+
+			/******************/
+			/** CONSTRUCTORS **/
+			/******************/
 				map_const_iterator() : _current() {}
 				explicit map_const_iterator(node_type *x) : _current(x) {}
 				map_const_iterator(const Self &x) : _current(x.getNode()) {}
 				map_const_iterator(const iterator &x) : _current(x.getNode()) {}
+			
+			
+			/**************/
 			/** OPERATOR **/
+			/**************/
+			
 				reference	operator*() const {
 					return (*(_current->data));
 				}

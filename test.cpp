@@ -13,8 +13,8 @@
 
 int		main(void)
 {
-	ft::vector<TESTED_TYPE> vct(10);
-	ft::vector<TESTED_TYPE> vct2;
+	std::vector<TESTED_TYPE> vct(10);
+	std::vector<TESTED_TYPE> vct2;
 
 	for (unsigned long int i = 0; i < vct.size(); ++i)
 		vct[i] = (vct.size() - i) * 3;
@@ -22,6 +22,8 @@ int		main(void)
 	vct2.insert(vct2.end(), 42);
     std::cout << "test\n";
 	vct2.insert(vct2.begin(), 2, 21);
+	vct.data();
+
 	// printSize(vct2);
 
 	vct2.insert(vct2.end() - 2, 42);

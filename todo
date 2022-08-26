@@ -4,13 +4,6 @@ rb tree: https://www.programiz.com/dsa/red-black-tree
 	details -> delete node: https://www.programiz.com/dsa/deletion-from-a-red-black-tree
 			-> insert node: https://www.programiz.com/dsa/insertion-in-a-red-black-tree
 
--	allocate pas la bonne capacity
-	push back -> multiple
-	insert -> size() + n
-	resize -> n
-	reserve -> n
-	asign -> n
--	value compare friend quand clean
 -	test vitesse
 
 what i was doing: insert position

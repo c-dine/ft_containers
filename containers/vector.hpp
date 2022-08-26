@@ -41,7 +41,10 @@ template < class T, class Alloc = std::allocator<T> >
 
 	public:
 
-	/** CONSTRUCTOR**/
+	/*************************************/
+	/** CONSTRUCTORS - DESTRUCTOR - OP= **/
+	/*************************************/
+
 		explicit vector (const allocator_type& alloc = allocator_type()) :
 			_alloc(alloc),
 			_start(0),
@@ -103,14 +106,10 @@ template < class T, class Alloc = std::allocator<T> >
 			}
 		}
 
-		/** DESTRUCTOR **/
 		~vector() {
 			clear();
 			_alloc.deallocate(_start, capacity());
 		}
-
-		
-		/** OPERATOR **/
 
 		vector& operator= (const vector& x) {
 			bool	reallocate_;
@@ -145,7 +144,11 @@ template < class T, class Alloc = std::allocator<T> >
 			return (*this);
 		}
 
-		/** ITERATORS **/
+
+	/***************/
+	/** ITERATORS **/
+	/***************/
+
 		iterator begin() {
 			return (iterator(_start));
 		}
@@ -176,7 +179,10 @@ template < class T, class Alloc = std::allocator<T> >
 			return (const_reverse_iterator(begin()));
 		}
 
-		/** CAPACITY **/
+
+	/**************/
+	/** CAPACITY **/
+	/**************/
 
 		size_type size() const {
 			if (!_finish)
@@ -188,52 +194,6 @@ template < class T, class Alloc = std::allocator<T> >
 			return (_alloc.max_size());
 		}
 
-	private:
-		template <class InputIterator>
-			size_type	distance_it(InputIterator first, InputIterator last)
-			{
-				size_type	distance = 0;
-
-				for (InputIterator it = first; it != last; it++)
-					distance++;
-				return (distance);
-			}
-		void	reallocate(size_type n, bool exact_size)
-		{
-			allocator_type	new_alloc;
-			size_type		coeff_alloc;
-			size_type		new_storage;
-			pointer			new_start;
-			pointer			new_finish;
-
-			if (capacity() == 0 && !exact_size)
-				new_storage = n;
-			else if (!exact_size) {
-				coeff_alloc = 2;
-				while (n > coeff_alloc * capacity()) 
-					coeff_alloc++;
-				new_storage = coeff_alloc * capacity();
-			}
-			if (exact_size)
-				new_storage = n;
-			new_start = new_alloc.allocate(new_storage);
-			new_finish = new_start;
-			for (size_type i = 0; i < size(); i++){
-				new_alloc.construct(new_finish, _start[i]);
-				if (i < size() - 1)
-					new_finish++;
-			}
-			if (size() == 0)
-				new_finish = 0;
-			clear();
-			_finish = new_finish;
-			_alloc.deallocate(_start, capacity());
-			_alloc = new_alloc;
-			_start = new_start;
-			_end_of_storage = _start + new_storage - 1;
-		}
-
-	public:
 		void resize (size_type n, value_type val = value_type()) {
 			if (n < size())
 			{
@@ -276,7 +236,10 @@ template < class T, class Alloc = std::allocator<T> >
 				reallocate(n, 1);			
 		}
 
+
+	/********************/
 	/** ELEMENT ACCESS **/
+	/********************/
 
 		reference operator[] (size_type n) {
 			return (*(_start + n));
@@ -313,7 +276,11 @@ template < class T, class Alloc = std::allocator<T> >
 			return (*(_finish));
 		}
 
+
+	/***************/
 	/** MODIFIERS **/
+	/***************/
+
 		template <class InputIterator>
 			void assign (InputIterator first, InputIterator last,
 						 typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
@@ -363,7 +330,7 @@ template < class T, class Alloc = std::allocator<T> >
 		iterator	insert (iterator position, const value_type& val) {
 			if (size() + 1 >  capacity()) {
 				size_type	position_iterator = static_cast<size_type>(position - begin()); 
-				reserve(size() + 1);
+				reallocate(size() + 1, 1);
 				position = begin() + position_iterator;
 			}
 			if (size() == 0) {
@@ -390,9 +357,9 @@ template < class T, class Alloc = std::allocator<T> >
 			if (size() + n > capacity()) {
 				size_type	position_iterator = static_cast<size_type>(position - begin());
 				if (capacity() != 0 && size() + n < size() * 2 && size() != 0) 
-					reserve(size() * 2);
+					reallocate(size() * 2, 1);
 				else
-					reserve(size() + n);
+					reallocate(size() + n, 1);
 				position = begin() + position_iterator;
 			}
 			for (size_type i = 0; i < n; i++)
@@ -405,7 +372,7 @@ template < class T, class Alloc = std::allocator<T> >
 				size_type	position_iterator = static_cast<size_type>(position - begin());
 
 				if (size() + distance_it(first, last) > capacity())
-					reserve(size() + distance_it(first, last));
+					reallocate(size() + distance_it(first, last), 1);
 				position = begin() + position_iterator;
 				InputIterator	tmp = last;
 				tmp--;
@@ -479,9 +446,63 @@ template < class T, class Alloc = std::allocator<T> >
 			_finish = 0;
 		}
 
+
+	/***************/
 	/** ALLOCATOR **/
+	/***************/
+
 		allocator_type get_allocator() const {
 			return (_alloc);
+		}
+
+	
+	/***********/
+	/** UTILS **/
+	/***********/
+
+	private:
+		template <class InputIterator>
+			size_type	distance_it(InputIterator first, InputIterator last)
+			{
+				size_type	distance = 0;
+
+				for (InputIterator it = first; it != last; it++)
+					distance++;
+				return (distance);
+			}
+		void	reallocate(size_type n, bool exact_size)
+		{
+			allocator_type	new_alloc;
+			size_type		coeff_alloc;
+			size_type		new_storage;
+			pointer			new_start;
+			pointer			new_finish;
+
+			if (capacity() == 0 && !exact_size)
+				new_storage = n;
+			else if (!exact_size) {
+				coeff_alloc = 2;
+				while (n > coeff_alloc * capacity()) 
+					coeff_alloc++;
+				new_storage = coeff_alloc * capacity();
+			}
+			if (exact_size)
+				new_storage = n;
+			new_start = new_alloc.allocate(new_storage);
+			new_finish = new_start;
+			for (size_type i = 0; i < size(); i++){
+				new_alloc.construct(new_finish, _start[i]);
+				if (i < size() - 1)
+					new_finish++;
+			}
+			if (size() == 0)
+				new_finish = 0;
+			clear();
+			_finish = new_finish;
+			_alloc.deallocate(_start, capacity());
+			_alloc = new_alloc;
+			_start = new_start;
+			_end_of_storage = _start + new_storage - 1;
 		}
 };
 
